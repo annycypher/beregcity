@@ -29,12 +29,17 @@
       <span><b>БерегСити</b><small>микрорайон Южный берег · Красноярск</small></span>
     </a>
     <nav class="main">
-      <a href="/katalog">Каталог</a>
-      <a href="/news">Новости</a>
-      <a href="/afisha">Афиша</a>
-      <a href="/karta">Карта</a>
-      <a href="/reklama">Бизнесу</a>
-      <a href="/kabinet">Личный кабинет</a>
+      <?php
+      wp_nav_menu(
+        array(
+          'theme_location' => 'bc_primary',
+          'container'      => false,
+          'items_wrap'     => '%3$s',
+          'walker'         => new BC_Nav_Walker(),
+          'fallback_cb'    => 'bc_nav_fallback_primary',
+        )
+      );
+      ?>
     </nav>
     <div class="search">
       <input type="search" placeholder="Поиск по району…">
@@ -47,12 +52,16 @@
     <a class="btn btn-terra btn-cta" href="/dobavit">Добавить организацию</a>
   </div>
   <div class="mob-menu" id="mmenu">
-    <a href="/katalog">Каталог организаций</a>
-    <a href="/news">Новости</a>
-    <a href="/afisha">Афиша</a>
-    <a href="/karta">Карта района</a>
-    <a href="/reklama">Бизнесу</a>
-    <a href="/kabinet">Личный кабинет</a>
-    <a href="/dobavit">Добавить организацию</a>
+    <?php
+    wp_nav_menu(
+      array(
+        'theme_location' => 'bc_mobile',
+        'container'      => false,
+        'items_wrap'     => '%3$s',
+        'walker'         => new BC_Nav_Walker(),
+        'fallback_cb'    => 'bc_nav_fallback_mobile',
+      )
+    );
+    ?>
   </div>
 </div>

@@ -34,6 +34,7 @@
       <a href="/afisha">Афиша</a>
       <a href="/karta">Карта</a>
       <a href="/reklama">Бизнесу</a>
+      <a href="/kabinet">Личный кабинет</a>
     </nav>
     <div class="search">
       <input type="search" placeholder="Поиск по району…">
@@ -51,6 +52,7 @@
     <a href="/afisha">Афиша</a>
     <a href="/karta">Карта района</a>
     <a href="/reklama">Бизнесу</a>
+    <a href="/kabinet">Личный кабинет</a>
     <a href="/dobavit">Добавить организацию</a>
   </div>
 </div>

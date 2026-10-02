@@ -16,7 +16,7 @@
     <div class="box">
       <a class="logo" href="/">
         <span class="mark"><?php echo bc_logo_mark( 20 ); ?></span>
-        <span><b style="font-size:16px;font-weight:600">БерегСити</b></span>
+        <span><b style="font-size:16px;font-weight:600">БерегСити</b><small>микрорайон Южный берег · Красноярск</small></span>
       </a>
       <div class="f-links">
         <a href="/sitemap">Карта сайта</a>

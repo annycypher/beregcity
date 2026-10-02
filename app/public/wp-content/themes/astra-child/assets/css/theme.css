@@ -27,7 +27,7 @@ img,svg{display:block}
 .btn{position:relative;display:inline-flex;align-items:center;gap:9px;border-radius:var(--r-btn);
   font-weight:500;font-size:15px;padding:13px 26px;cursor:pointer;border:none;
   transition:transform .2s, box-shadow .25s, background .25s;
-  overflow:hidden;isolation:isolate}
+  overflow:hidden;isolation:isolate;white-space:nowrap}
 .btn>*{position:relative;z-index:1}
 .btn:hover{transform:translateY(-2px)}
 .btn:active{transform:translateY(0)}
@@ -90,8 +90,8 @@ h2.sec .pill:hover{background:rgba(255,255,255,.5)}
 .hdr{position:sticky;top:0;z-index:60;background:rgba(252,250,246,.70);
   backdrop-filter:blur(18px) saturate(1.2);-webkit-backdrop-filter:blur(18px) saturate(1.2);
   border-bottom:1px solid var(--line)}
-.hdr-in{display:flex;align-items:center;gap:16px;height:68px}
-.burger{width:44px;height:44px;border-radius:12px;border:1px solid var(--line);background:var(--glass);
+.hdr-in{display:flex;align-items:center;gap:11px;height:68px}
+.burger{padding:0;flex:none;width:44px;height:44px;border-radius:12px;border:1px solid var(--line);background:var(--glass);
   backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--ink)}
 .burger:hover{border-color:var(--terra);color:var(--terra-d)}
 .logo{display:flex;align-items:center;gap:10px;white-space:nowrap}
@@ -100,20 +100,20 @@ h2.sec .pill:hover{background:rgba(255,255,255,.5)}
   box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 4px 12px rgba(196,124,99,.25)}
 .logo b{font-size:18px;font-weight:600;color:var(--ink);display:block;line-height:1.15}
 .logo small{font-size:10.5px;font-weight:400;color:var(--muted);display:block}
-nav.main{display:flex;gap:2px;margin-left:8px}
-nav.main a{padding:9px 13px;border-radius:999px;font-size:14.5px;font-weight:500;color:var(--body)}
+nav.main{display:flex;gap:0;margin-left:6px}
+nav.main a{padding:9px 9px;border-radius:999px;font-size:14.5px;font-weight:500;color:var(--body)}
 nav.main a:hover{background:var(--glass-2);color:var(--terra-d)}
-.search{position:relative;flex:1;min-width:110px;max-width:400px;margin-left:auto}
+.search{position:relative;flex:1;min-width:90px;max-width:400px;margin-left:auto}
 .search input{width:100%;padding:11px 44px 11px 18px;border-radius:999px;border:1px solid rgba(255,255,255,.8);
   background:var(--glass);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
   font-size:14.5px;font-weight:400;color:var(--ink);outline:none;transition:.2s;
   box-shadow:inset 0 1px 0 rgba(255,255,255,.6)}
 .search input:focus{background:rgba(255,255,255,.75);border-color:var(--terra);box-shadow:0 0 0 4px rgba(201,141,117,.12)}
 .search .ico{position:absolute;right:15px;top:50%;transform:translateY(-50%);color:var(--muted)}
-.btn-cta{margin-left:4px;padding:12px 22px;font-size:14.5px}
+.btn-cta{flex:none;margin-left:4px;padding:12px 18px;font-size:14.5px}
 .hicons{display:flex;gap:2px}
 .hicons a{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10.5px;font-weight:500;
-  color:var(--icon);padding:7px 11px;border-radius:12px;transition:.2s}
+  color:var(--icon);padding:7px 9px;border-radius:12px;transition:.2s}
 .hicons a:hover{color:var(--terra-d);background:var(--glass-2)}
 .mob-menu{display:none;border-top:1px solid var(--line);background:rgba(255,255,255,.96);padding:10px 18px 16px}
 .mob-menu.open{display:block}
@@ -273,6 +273,10 @@ footer .f-links a:hover{color:var(--terra-d)}
 .soc .ico{width:19px;height:19px}
 
 /* ── Адаптив ── */
+/* Фикс 2.2a: CTA скрывается, а поиск сжимается раньше, чем ломается кнопка. */
+@media(max-width:1200px){
+  .btn-cta{display:none}
+}
 @media(max-width:1060px){
   nav.main{display:none}
   .qrow{grid-template-columns:1fr 1fr}
@@ -284,7 +288,6 @@ footer .f-links a:hover{color:var(--terra-d)}
   .hicons a span{display:none}.hicons a{padding:9px}
 }
 @media(max-width:680px){
-  .btn-cta{display:none}
   .search{max-width:none}
   .hicons{display:none}
   .qrow{grid-template-columns:1fr 1fr;gap:10px}
@@ -301,4 +304,4 @@ footer .f-links a:hover{color:var(--terra-d)}
   footer .box{flex-direction:column;align-items:flex-start}
   footer .f-links{margin-left:0}
 }
-@media(max-width:440px){.cats{grid-template-columns:repeat(2,1fr)}.qrow{grid-template-columns:1fr}}
+@media(max-width:440px){.cats{grid-template-columns:repeat(2,1fr)}.qrow{grid-template-columns:1fr}.hdr .logo small{display:none}}

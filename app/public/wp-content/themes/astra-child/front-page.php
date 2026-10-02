@@ -1,0 +1,188 @@
+<?php
+/** Front page — сборка по design/homepage.html v3.3. Классы = контракт. */
+get_header();
+?>
+<?php echo do_shortcode( '[bc_slider]' ); ?>
+
+<div class="wrap">
+
+  <!-- Быстрые карточки -->
+  <?php /* bc_quickcards: 4 карточки-заглушки (ссылки статикой) — оживление позже */ ?>
+  <div class="qrow">
+    <a class="qcard" href="/katalog">
+      <span class="qic g"><svg class="ico" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.5 3-5.5 6.5-5.5s6.5 2 6.5 5.5"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14.5c3 .3 5.5 2 5.5 5"/></svg></span>
+      <span><b>Жителям</b><span>Каталог, объявления и полезные телефоны района</span></span>
+      <svg class="ico arr" style="width:18px;height:18px" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+    <a class="qcard" href="/reklama">
+      <span class="qic t"><svg class="ico" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></span>
+      <span><b>Бизнесу</b><span>Тарифы, реклама и продвижение организации</span></span>
+      <svg class="ico arr" style="width:18px;height:18px" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+    <a class="qcard" href="/afisha">
+      <span class="qic g"><svg class="ico" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="3"/><path d="M8 2v4M16 2v4M3 10h18"/></svg></span>
+      <span><b>События</b><span>Афиша мероприятий на каждые выходные</span></span>
+      <svg class="ico arr" style="width:18px;height:18px" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+    <a class="qcard" href="/spravochnik">
+      <span class="qic t"><svg class="ico" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6"/></svg></span>
+      <span><b>Справочник</b><span>Телефоны УК, служб и расписания</span></span>
+      <svg class="ico arr" style="width:18px;height:18px" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+  </div>
+
+  <!-- Сторис -->
+  <?php /* bc_stories: заменить на [bc_stories] на Этапе 5 */ ?>
+  <div class="stories">
+    <a class="story" href="/stories/novosti"><span class="ring"><span class="in"><svg class="ico" viewBox="0 0 24 24"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-4 0V9"/><path d="M12 6h6M12 10h6M12 14h6"/></svg></span></span><b>Новости</b></a>
+    <a class="story" href="/stories/akcii"><span class="ring"><span class="in"><svg class="ico" viewBox="0 0 24 24"><path d="M20.59 13.41L11 3.83A2 2 0 0 0 9.59 3.24H4a1 1 0 0 0-1 1v5.59a2 2 0 0 0 .59 1.41l9.58 9.59a2 2 0 0 0 2.83 0l4.59-4.59a2 2 0 0 0 0-2.83z"/><circle cx="7.5" cy="7.5" r="1"/></svg></span></span><b>Акции</b></a>
+    <a class="story" href="/stories/novye"><span class="ring"><span class="in"><svg class="ico" viewBox="0 0 24 24"><path d="M12 2l2.4 6.2L21 9l-5 4.1 1.6 6.4L12 15.8 6.4 19.5 8 13.1 3 9l6.6-.8z"/></svg></span></span><b>Новые места</b></a>
+    <a class="story" href="/stories/afisha"><span class="ring"><span class="in"><svg class="ico" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="3"/><path d="M8 2v4M16 2v4M3 10h18"/></svg></span></span><b>Афиша</b></a>
+    <a class="story" href="/stories/obyavleniya"><span class="ring"><span class="in"><svg class="ico" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span></span><b>Объявления</b></a>
+    <a class="story" href="/stories/zhkh"><span class="ring"><span class="in"><svg class="ico" viewBox="0 0 24 24"><path d="M17.5 19a4.5 4.5 0 1 0-.44-8.98A7 7 0 1 0 4 14.9"/><path d="M12 12v9M8.5 17.5L12 21l3.5-3.5"/></svg></span></span><b>ЖКХ</b></a>
+    <a class="story" href="/stories/transport"><span class="ring"><span class="in"><svg class="ico" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="14" rx="3"/><path d="M4 10h16M8 21l1.5-4M16 21l-1.5-4"/></svg></span></span><b>Транспорт</b></a>
+  </div>
+
+  <!-- Реклама -->
+  <?php /* bc_banner: на Этапе 6.1 заменить на [bc_banner zone="wide"] и [bc_banner zone="duo-1|duo-2"] */ ?>
+  <div class="ad ad-wide">Баннер 970×90 — широкий слот</div>
+  <div class="ad-duo">
+    <div class="ad">Баннер 470×120 — слот 1</div>
+    <div class="ad">Баннер 470×120 — слот 2</div>
+  </div>
+
+  <!-- Категории -->
+  <?php echo do_shortcode( '[bc_cats]' ); ?>
+
+  <!-- Новости + Афиша -->
+  <?php /* bc_news / bc_events: живые данные из БД — Этап 4.3 */ ?>
+  <div class="duo">
+    <div class="panel">
+      <h2 class="sec">Новости района <a class="pill" href="/news">Все новости</a></h2>
+
+      <article class="news-item">
+        <div class="thumb"><svg class="ico" viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/></svg></div>
+        <div>
+          <span class="tag">Еда</span>
+          <time>сегодня, 09:15</time>
+          <h3><a href="#">На Южном берегу открылась пекарня «Хлеб и кофе»</a></h3>
+          <p>Свежая выпечка, кофе с собой и завтраки весь день. Первую неделю — круассан в подарок.</p>
+        </div>
+      </article>
+
+      <article class="news-item">
+        <div class="thumb"><svg class="ico" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
+        <div>
+          <span class="tag s">Стройка</span>
+          <time>вчера, 18:40</time>
+          <h3><a href="#">Ремонт набережной: что изменится к июлю</a></h3>
+          <p>Новые дорожки, освещение и спуск к воде — ответы на главные вопросы жителей.</p>
+        </div>
+      </article>
+
+      <article class="news-item">
+        <div class="thumb"><svg class="ico" viewBox="0 0 24 24"><path d="M20.59 13.41L11 3.83A2 2 0 0 0 9.59 3.24H4a1 1 0 0 0-1 1v5.59a2 2 0 0 0 .59 1.41l9.58 9.59a2 2 0 0 0 2.83 0l4.59-4.59a2 2 0 0 0 0-2.83z"/><circle cx="7.5" cy="7.5" r="1"/></svg></div>
+        <div>
+          <span class="tag">Акция · реклама</span>
+          <time>вчера, 12:10</time>
+          <h3><a href="#">Пиццерия «Мармелад»: −20% по пятницам</a></h3>
+          <p>По промокоду БС24, на самовывоз. Заказ принимают до 21:00.</p>
+        </div>
+      </article>
+    </div>
+
+    <div class="panel">
+      <h2 class="sec">Афиша событий <a class="pill" href="/afisha">Все события</a></h2>
+
+      <article class="ev">
+        <div class="dbox"><span>14</span><small>сб</small></div>
+        <div>
+          <h4><a href="#">Ярмарка выходного дня</a></h4>
+          <div class="meta">
+            <i><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> 10:00 – 14:00</i>
+            <i><svg class="ico" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> площадь у ДК</i>
+          </div>
+        </div>
+        <div class="thumb"><svg class="ico" viewBox="0 0 24 24"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><path d="M12 22V7M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7zM12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg></div>
+      </article>
+
+      <article class="ev">
+        <div class="dbox"><span>15</span><small>вс</small></div>
+        <div>
+          <h4><a href="#">Гончарный мастер-класс</a></h4>
+          <div class="meta">
+            <i><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> 12:00 · 600 ₽</i>
+            <i><svg class="ico" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> студия «Глина»</i>
+          </div>
+        </div>
+        <div class="thumb"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01"/></svg></div>
+      </article>
+
+      <article class="ev">
+        <div class="dbox"><span>15</span><small>вс</small></div>
+        <div>
+          <h4><a href="#">Дворовый концерт</a></h4>
+          <div class="meta">
+            <i><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> 18:00 · бесплатно</i>
+            <i><svg class="ico" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> двор ЖК «Волна»</i>
+          </div>
+        </div>
+        <div class="thumb"><svg class="ico" viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div>
+      </article>
+
+      <a class="green-banner" href="/dobavit-sobytie">
+        <svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 12.5l2.5 2.5L16 9.5"/></svg>
+        <span><b>Организуете событие в районе?</b>
+        <span>Анонс бесплатно — афиша живёт от ваших новостей</span></span>
+        <svg class="ico arr" style="width:18px;height:18px" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+    </div>
+  </div>
+
+  <!-- О районе + карта + контакты -->
+  <div class="trio">
+    <div>
+      <h3>О микрорайоне</h3>
+      <p>Южный берег — растущий микрорайон Советского района Красноярска: современные дворы, школы и детские сады, набережная и вся необходимая инфраструктура для комфортной жизни.</p>
+      <a class="btn btn-glass" href="/o-raione">Подробнее о районе</a>
+    </div>
+    <?php /* bc_map: Яндекс.Карта под флагом BC_MAP_ON (D11); сейчас SVG-заглушка из референса */ ?>
+    <div class="map-ph">
+      <svg viewBox="0 0 400 260" preserveAspectRatio="none">
+        <path d="M150 40 L260 30 L310 90 L290 180 L210 230 L130 190 L110 100 Z"
+              fill="rgba(201,141,117,.12)" stroke="rgba(176,117,92,.45)" stroke-width="2"/>
+        <text x="205" y="135" font-size="13" fill="#b0755c" text-anchor="middle" font-family="Arial">Южный берег</text>
+      </svg>
+      <a class="btn btn-glass" style="position:absolute;bottom:14px;left:14px" href="/karta">Открыть карту</a>
+    </div>
+    <div class="contacts">
+      <h3>Контакты</h3>
+      <div class="crow">
+        <svg class="ico" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        <span><b>+7 (000) 000-00-00</b><span>реклама и сотрудничество [ФАКТ-ПРОВЕРКА]</span></span>
+      </div>
+      <div class="crow">
+        <svg class="ico" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6l-10 7L2 6"/></svg>
+        <span><b>hello@beregcity.ru</b><span>ответим в течение дня</span></span>
+      </div>
+      <div class="crow">
+        <svg class="ico" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        <span><b>Красноярск, Советский район</b><span>микрорайон Южный берег</span></span>
+      </div>
+      <a class="btn btn-terra" href="/contacts" style="width:100%;justify-content:center">Написать нам</a>
+    </div>
+  </div>
+
+  <!-- CTA бизнес -->
+  <div class="cta">
+    <div>
+      <h3>У вас бизнес на Южном берегу?</h3>
+      <p>Бесплатная карточка в каталоге, платные пакеты продвижения и реклама на сайте.</p>
+    </div>
+    <a class="btn btn-terra" href="/dobavit">Добавить организацию →</a>
+  </div>
+
+<?php // .wrap закрывается в footer.php ?>
+<?php get_footer(); ?>
+
+

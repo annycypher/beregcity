@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#fcfaf6">
+<title>Еда на Южном берегу — каталог | БерегСити</title>
+<!-- SEO (Этап 3.3): Title «{Категория} на Южном берегу — каталог | БерегСити» (45–60 зн.);
+     Description 140–160 зн. с категорией + выгодой + районом. BreadcrumbList JSON-LD. -->
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%23dda38b'/><stop offset='1' stop-color='%23c48067'/></linearGradient></defs><circle cx='50' cy='50' r='48' fill='url(%23g)'/><path d='M18 60c10-12 20-12 30 0s22 12 34 0' stroke='white' stroke-width='8' fill='none' stroke-linecap='round'/></svg>">
+<style>
+/* ═══ ПАЛИТРА v3.3 «Северный светлый» — единая с homepage.html ═══ */
+:root{
+  --bg:#fcfaf6; --card:#ffffff;
+  --ink:#2b332e; --body:#4d564f; --muted:#8d968e; --icon:#5e685f;
+  --terra:#c98d75; --terra-d:#b0755c; --terra-l:#f9ece6;
+  --sage:#93ad89; --sage-d:#6f9165; --sage-l:#f1f5ec;
+  --line:rgba(43,51,46,.08);
+  --glass:rgba(255,255,255,.45); --glass-2:rgba(255,255,255,.75);
+  --r:14px; --r-lg:18px; --r-btn:12px;
+  --shadow:0 8px 24px rgba(90,75,60,.05);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,"Segoe UI",Roboto,Arial,sans-serif;font-weight:400;color:var(--body);line-height:1.6;
+  background:
+    radial-gradient(1000px 460px at 85% -150px, rgba(201,141,117,.05), transparent 62%),
+    radial-gradient(760px 400px at -130px 320px, rgba(147,173,137,.045), transparent 60%),
+    var(--bg)}
+a{color:inherit;text-decoration:none}
+img,svg{display:block}
+.wrap{max-width:1200px;margin:0 auto;padding:0 18px}
+.ico{width:24px;height:24px;stroke:currentColor;stroke-width:1.6;fill:none;stroke-linecap:round;stroke-linejoin:round;flex:none}
+
+/* ═══ КНОПКИ: ГЕЛЬ (btn-terra/btn-sage) + КРИСТАЛЛ (btn-glass) — контракт design/buttons.html ═══ */
+.btn{position:relative;display:inline-flex;align-items:center;gap:9px;border-radius:var(--r-btn);
+  font-weight:500;font-size:15px;padding:13px 26px;cursor:pointer;border:none;
+  transition:transform .2s, box-shadow .25s, background .25s;overflow:hidden;isolation:isolate;white-space:nowrap}
+.btn>*{position:relative;z-index:1}
+.btn:hover{transform:translateY(-2px)}
+.btn-terra{background:linear-gradient(165deg,rgba(240,150,110,.72),rgba(184,92,56,.62));
+  backdrop-filter:blur(18px) saturate(1.8);-webkit-backdrop-filter:blur(18px) saturate(1.8);
+  border:1px solid rgba(255,255,255,.65);color:#fff;
+  box-shadow:inset 0 2px 5px rgba(255,255,255,.6),inset 0 -10px 18px rgba(150,60,30,.28),
+    0 12px 30px rgba(184,92,56,.45)}
+.btn-terra:hover{box-shadow:inset 0 2px 5px rgba(255,255,255,.7),inset 0 -10px 18px rgba(150,60,30,.3),
+  0 16px 38px rgba(184,92,56,.55)}
+.btn-glass{background:rgba(255,255,255,.22);
+  backdrop-filter:blur(16px) saturate(1.5);-webkit-backdrop-filter:blur(16px) saturate(1.5);
+  color:var(--terra-d);font-weight:600}
+.btn-glass::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:1.5px;
+  background:linear-gradient(135deg,rgba(255,255,255,.95),rgba(232,138,94,.95),rgba(255,255,255,.35));
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none}
+.btn-glass::after{content:"";position:absolute;top:0;left:10%;right:10%;height:45%;border-radius:inherit;
+  background:linear-gradient(180deg,rgba(255,255,255,.55),rgba(255,255,255,0));pointer-events:none}
+.btn-glass:hover{background:rgba(255,255,255,.4)}
+.btn-sm{padding:9px 16px;font-size:13.5px}
+
+/* ═══ ШАПКА — контракт homepage.html; отступы по D23 (gap 11, menu 9px, search 90, burger 44) ═══ */
+.hdr{position:sticky;top:0;z-index:60;background:rgba(252,250,246,.70);
+  backdrop-filter:blur(18px) saturate(1.2);-webkit-backdrop-filter:blur(18px) saturate(1.2);
+  border-bottom:1px solid var(--line)}
+.hdr-in{display:flex;align-items:center;gap:11px;height:68px}
+.burger{width:44px;height:44px;flex:none;border-radius:12px;border:1px solid var(--line);background:var(--glass);
+  backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--ink)}
+.burger:hover{border-color:var(--terra);color:var(--terra-d)}
+.logo{display:flex;align-items:center;gap:10px;white-space:nowrap}
+.logo .mark{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(140deg,#dda38b,#c48067);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 4px 12px rgba(196,124,99,.25)}
+.logo b{font-size:18px;font-weight:600;color:var(--ink);display:block;line-height:1.15}
+.logo small{font-size:10.5px;font-weight:400;color:var(--muted);display:block}
+nav.main{display:flex;margin-left:8px}
+nav.main a{padding:9px;border-radius:999px;font-size:14.5px;font-weight:500;color:var(--body)}
+nav.main a:hover{background:var(--glass-2);color:var(--terra-d)}
+.search{position:relative;flex:1;min-width:90px;max-width:400px;margin-left:auto}
+.search input{width:100%;padding:11px 44px 11px 18px;border-radius:999px;border:1px solid rgba(255,255,255,.8);
+  background:var(--glass);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  font-size:14.5px;font-weight:400;color:var(--ink);outline:none;transition:.2s;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.6)}
+.search input:focus{background:rgba(255,255,255,.75);border-color:var(--terra);box-shadow:0 0 0 4px rgba(201,141,117,.12)}
+.search .ico{position:absolute;right:15px;top:50%;transform:translateY(-50%);color:var(--muted)}
+.btn-cta{margin-left:4px;padding:12px 18px;font-size:14.5px}
+.hicons{display:flex;gap:4px}
+.hicons a{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10.5px;font-weight:500;
+  color:var(--icon);padding:7px 9px;border-radius:12px;transition:.2s}
+.hicons a:hover{color:var(--terra-d);background:var(--glass-2)}
+.mob-menu{display:none;border-top:1px solid var(--line);background:rgba(255,255,255,.96);padding:10px 18px 16px}
+.mob-menu.open{display:block}
+.mob-menu a{display:block;padding:11px 4px;font-weight:500;color:var(--ink);border-bottom:1px solid var(--line)}
+.mob-menu a:last-child{border:none}
+
+/* ═══ Крошки ═══ */
+.crumbs{font-size:12.5px;color:var(--muted);margin-top:18px}
+.crumbs a:hover{color:var(--terra-d)}
+.crumbs i{font-style:normal;margin:0 6px;color:#c4bdb0}
+
+/* ═══ Шапка категории ═══ */
+.cat-head{margin-top:10px}
+.cat-head h1{font-size:32px;font-weight:300;letter-spacing:-.4px;color:var(--ink);line-height:1.15;
+  display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.cat-count{font-size:14px;color:var(--muted);font-weight:400}
+.cat-intro{font-size:14px;color:var(--body);max-width:760px;margin-top:8px}
+
+/* ═══ Layout: фильтры + сетка ═══ */
+.cat-layout{display:grid;grid-template-columns:260px 1fr;gap:24px;margin-top:24px;align-items:start}
+
+.filters{position:sticky;top:86px;background:var(--glass);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border:1px solid rgba(255,255,255,.85);border-radius:var(--r);box-shadow:var(--shadow);padding:18px}
+.f-group{margin-bottom:16px}
+.f-group:last-of-type{margin-bottom:0}
+.f-group>b{display:block;font-size:13px;font-weight:600;color:var(--ink);margin-bottom:8px}
+.f-check{display:flex;align-items:center;gap:8px;padding:5px 0;font-size:13.5px;cursor:pointer}
+.f-check input{accent-color:var(--terra);width:15px;height:15px;flex:none}
+.f-check .n{margin-left:auto;font-size:11.5px;color:var(--muted)}
+.f-btns{display:flex;gap:8px;margin-top:14px}
+.f-toggle{display:none;margin-bottom:10px}
+
+/* верх сетки */
+.cat-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px;flex-wrap:wrap}
+.found{font-size:13.5px;color:var(--muted)}
+.sort{display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--muted)}
+.sort select{padding:9px 14px;border-radius:10px;border:1px solid var(--line);background:var(--card);
+  font-size:13.5px;color:var(--ink);outline:none;font-family:inherit;cursor:pointer}
+
+/* ═══ Карточки организаций ═══ */
+.org-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+.org-card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;
+  box-shadow:var(--shadow);transition:.2s;display:flex;flex-direction:column}
+.org-card:hover{transform:translateY(-3px);border-color:var(--terra)}
+.org-card.is-premium{border-color:rgba(201,141,117,.45);box-shadow:0 10px 28px rgba(201,141,117,.14)}
+.org-cover{position:relative;aspect-ratio:16/9;background:linear-gradient(135deg,#ece5d9,#f4efe6);
+  display:flex;align-items:center;justify-content:center;color:#bfb29f}
+.org-cover .ico{width:40px;height:40px}
+.ribbon{position:absolute;top:10px;left:10px;font-size:10px;letter-spacing:.8px;text-transform:uppercase;
+  font-weight:700;color:#fff;background:linear-gradient(120deg,var(--terra),var(--terra-d));
+  padding:4px 10px;border-radius:6px}
+.vbadge{position:absolute;top:10px;right:10px;font-size:10px;font-weight:700;color:var(--sage-d);
+  background:rgba(255,255,255,.92);border:1px solid rgba(147,173,137,.4);border-radius:999px;
+  padding:3px 9px;display:flex;gap:4px;align-items:center}
+.vbadge svg{width:12px;height:12px;stroke:var(--sage-d);stroke-width:2.4;fill:none;stroke-linecap:round}
+.org-body{padding:14px 16px 16px;display:flex;flex-direction:column;gap:8px;flex:1}
+.org-body h3{font-size:16.5px;font-weight:500;color:var(--ink);line-height:1.3}
+.org-body h3 a:hover{color:var(--terra-d)}
+.org-sub{font-size:12px;color:var(--muted)}
+.org-feats{display:flex;gap:6px;flex-wrap:wrap}
+.feat{width:30px;height:30px;border-radius:9px;background:var(--sage-l);color:var(--sage-d);
+  display:flex;align-items:center;justify-content:center;cursor:help}
+.feat .ico{width:16px;height:16px}
+.feat.t{background:var(--terra-l);color:var(--terra-d)}
+.feat.more{width:auto;padding:0 8px;font-size:10.5px;font-weight:600;color:var(--muted);background:#f1ede4}
+.org-desc{font-size:13px;color:var(--muted);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.org-foot{margin-top:auto;display:flex;align-items:center;gap:10px;border-top:1px solid var(--line);padding-top:12px}
+.org-phone{font-weight:600;color:var(--ink);font-size:13px;display:flex;gap:6px;align-items:center;white-space:nowrap}
+.org-phone .ico{width:15px;height:15px;color:var(--terra-d)}
+.org-foot .btn{margin-left:auto;padding:9px 16px;font-size:13.5px}
+
+/* пагинация */
+.pager{display:flex;gap:6px;justify-content:center;margin-top:28px;flex-wrap:wrap}
+.pager a,.pager span{min-width:40px;height:40px;display:inline-flex;align-items:center;justify-content:center;
+  border-radius:10px;border:1px solid var(--line);background:var(--card);font-size:14px;color:var(--body);padding:0 8px}
+.pager .on{background:var(--terra);color:#fff;border-color:var(--terra);font-weight:700}
+.pager a:hover{border-color:var(--terra)}
+
+/* ═══ Подвал — контракт homepage.html ═══ */
+footer{margin:44px 0 26px}
+footer .box{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);
+  padding:24px 28px;display:flex;align-items:center;gap:24px;flex-wrap:wrap;font-size:13px}
+footer .f-links{display:flex;gap:22px;margin-left:auto;flex-wrap:wrap}
+footer .f-links a{color:var(--muted)}
+footer .f-links a:hover{color:var(--terra-d)}
+.soc{display:flex;gap:10px}
+.soc a{width:42px;height:42px;border-radius:50%;background:var(--glass);border:1px solid rgba(255,255,255,.85);
+  backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;color:var(--icon);transition:.2s}
+.soc a:hover{color:var(--terra-d);border-color:var(--terra)}
+.soc .ico{width:19px;height:19px}
+
+/* ═══ Адаптив ═══ */
+@media(max-width:1060px){
+  nav.main{display:none}
+  .hicons a span{display:none}.hicons a{padding:9px}
+}
+@media(max-width:960px){
+  .cat-layout{grid-template-columns:1fr}
+  .filters{position:static;display:none}
+  .filters.open{display:block}
+  .f-toggle{display:inline-flex}
+}
+@media(max-width:680px){
+  .btn-cta{display:none}
+  .search{max-width:none}
+  .hicons{display:none}
+}
+@media(max-width:640px){
+  .org-grid{grid-template-columns:1fr}
+  .cat-head h1{font-size:26px}
+}
+@media(max-width:440px){.hdr .logo small{display:none}}
+</style>
+</head>
+<body>
+
+<!-- Шапка — контракт design/homepage.html (в проде header.php; меню → wp_nav_menu, 2.5-а) -->
+<div class="hdr">
+  <div class="wrap hdr-in">
+    <button class="burger" id="burger" aria-label="Меню">
+      <svg class="ico" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+    <a class="logo" href="/">
+      <span class="mark"><svg width="22" height="22" viewBox="0 0 24 24" class="ico" style="stroke:#fff"><path d="M3 14c3-4 6-4 9 0s6 4 9 0"/></svg></span>
+      <span><b>БерегСити</b><small>микрорайон Южный берег · Красноярск</small></span>
+    </a>
+    <nav class="main">
+      <a href="/katalog">Каталог</a>
+      <a href="/news">Новости</a>
+      <a href="/afisha">Афиша</a>
+      <a href="/karta">Карта</a>
+      <a href="/reklama">Бизнесу</a>
+      <a href="/kabinet">Личный кабинет</a>
+    </nav>
+    <div class="search">
+      <input type="search" placeholder="Поиск по району…">
+      <svg class="ico" style="width:19px;height:19px" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+    </div>
+    <nav class="hicons">
+      <a href="/afisha"><svg class="ico" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="3"/><path d="M8 2v4M16 2v4M3 10h18"/></svg><span>Афиша</span></a>
+      <a href="/karta"><svg class="ico" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><span>Карта</span></a>
+    </nav>
+    <a class="btn btn-terra btn-cta" href="/dobavit">Добавить организацию</a>
+  </div>
+  <div class="mob-menu" id="mmenu">
+    <a href="/katalog">Каталог организаций</a>
+    <a href="/news">Новости</a>
+    <a href="/afisha">Афиша</a>
+    <a href="/karta">Карта района</a>
+    <a href="/obyavleniya">Объявления</a>
+    <a href="/reklama">Бизнесу</a>
+    <a href="/dobavit">Добавить организацию</a>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- Крошки: BreadcrumbList JSON-LD — Этап 3.3 -->
+  <div class="crumbs"><a href="/">Главная</a><i>›</i><a href="/katalog">Каталог</a><i>›</i>Еда</div>
+
+  <!-- Шапка категории. Для программатик-страниц /katalog/{cat}/{feature}/
+       h1 и интро генерируются по воротам D14 (нешаблонное интро ≥2 предложений) -->
+  <div class="cat-head">
+    <h1>Еда на Южном берегу <span class="cat-count">24 организации</span></h1>
+    <p class="cat-intro">Пекарни, кафе и доставка района. Собрали все места, где можно поесть рядом с домом, — с телефонами, графиком и отметками о доставке.</p>
+  </div>
+
+  <div class="cat-layout">
+
+    <!-- ═══ ФИЛЬТРЫ ═══
+         bc_filters (Этап 3.3): группы и пункты — из таксономии features
+         (канон — СПРАВОЧНИК §3), показывать только применимые к категории;
+         счётчики .n — живые из БД; применение — без перезагрузки (JS) или GET-параметры -->
+    <aside>
+      <button class="btn btn-glass btn-sm f-toggle" id="ftoggle">Фильтры</button>
+      <div class="filters" id="fl">
+        <div class="f-group"><b>Как заказывают</b>
+          <label class="f-check"><input type="checkbox"> Доставка <span class="n">12</span></label>
+          <label class="f-check"><input type="checkbox"> Самовывоз <span class="n">9</span></label>
+          <label class="f-check"><input type="checkbox"> Кофе с собой <span class="n">7</span></label>
+          <label class="f-check"><input type="checkbox"> Онлайн-оплата <span class="n">5</span></label>
+        </div>
+        <div class="f-group"><b>Режим</b>
+          <label class="f-check"><input type="checkbox"> Круглосуточно <span class="n">3</span></label>
+          <label class="f-check"><input type="checkbox"> Без выходных <span class="n">11</span></label>
+        </div>
+        <div class="f-group"><b>Комфорт</b>
+          <label class="f-check"><input type="checkbox"> Парковка <span class="n">6</span></label>
+          <label class="f-check"><input type="checkbox"> Детская комната <span class="n">2</span></label>
+          <label class="f-check"><input type="checkbox"> Летняя веранда <span class="n">4</span></label>
+        </div>
+        <div class="f-btns">
+          <button class="btn btn-terra btn-sm">Применить</button>
+          <button class="btn btn-glass btn-sm">Сбросить</button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ═══ СЕТКА ═══ -->
+    <div>
+      <div class="cat-top">
+        <span class="found">Найдено: 24</span>
+        <!-- bc_sort (Этап 3.3): premium↑ по умолчанию; живые опции -->
+        <label class="sort">Сортировка
+          <select><option>Сначала премиум</option><option>По названию</option><option>По рейтингу</option><option>Новые</option></select>
+        </label>
+      </div>
+
+      <!-- bc_grid (Этап 3.2/3.3): WP_Query категории; состав карточки зависит от тарифа:
+           free — БЕЗ снипетов и описания (только фото-плейсхолдер, название, адрес, телефон);
+           база — снипеты ≤7 + описание; премиум — лента .ribbon, .vbadge «Проверено»,
+           снипеты + «+N», класс .is-premium. Счётчики категорий — Этап 4.3. -->
+      <div class="org-grid">
+
+        <!-- 1. Премиум + проверено -->
+        <article class="org-card is-premium">
+          <div class="org-cover">
+            <span class="ribbon">Премиум</span>
+            <span class="vbadge"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>Проверено</span>
+            <svg class="ico" viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/></svg>
+          </div>
+          <div class="org-body">
+            <h3><a href="#">Пекарня «Хлеб и кофе»</a></h3>
+            <span class="org-sub">Пекарня · ул. Абрикосовая, 12</span>
+            <div class="org-feats">
+              <span class="feat t" title="Кофе с собой"><svg class="ico" viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/></svg></span>
+              <span class="feat" title="Самовывоз"><svg class="ico" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></span>
+              <span class="feat" title="Оплата картой"><svg class="ico" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></span>
+              <span class="feat" title="Круглосуточно"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+              <span class="feat more" title="Ещё снипеты">+3</span>
+            </div>
+            <p class="org-desc">Свежая выпечка каждое утро, кофе и завтраки весь день. Тесто ставим с ночи, круассаны — по французской технологии.</p>
+            <div class="org-foot">
+              <a class="org-phone" href="tel:+70000000000"><!-- ФАКТ-ПРОВЕРКА --><svg class="ico" viewBox="0 0 24 24"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></svg>+7 (000) 000-00-00</a>
+              <a class="btn btn-glass btn-sm" href="#">Подробнее</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- 2. Премиум + проверено -->
+        <article class="org-card is-premium">
+          <div class="org-cover">
+            <span class="ribbon">Премиум</span>
+            <span class="vbadge"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>Проверено</span>
+            <svg class="ico" viewBox="0 0 24 24"><path d="M3 11l9-8 9 8v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 21v-7h6v7"/></svg>
+          </div>
+          <div class="org-body">
+            <h3><a href="#">Ресторан «Южный берег»</a></h3>
+            <span class="org-sub">Ресторан · наб. Енисея, 5</span>
+            <div class="org-feats">
+              <span class="feat t" title="Банкеты"><svg class="ico" viewBox="0 0 24 24"><path d="M4 21V8l8-5 8 5v13"/><path d="M9 21v-6h6v6"/></svg></span>
+              <span class="feat" title="Парковка"><svg class="ico" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M9 16V8h4a3 3 0 0 1 0 6H9"/></svg></span>
+              <span class="feat" title="Wi-Fi"><svg class="ico" viewBox="0 0 24 24"><path d="M2 9a15 15 0 0 1 20 0M5.5 12.5a10 10 0 0 1 13 0M9 16a5 5 0 0 1 6 0"/><circle cx="12" cy="19.5" r="1"/></svg></span>
+              <span class="feat" title="Летняя веранда"><svg class="ico" viewBox="0 0 24 24"><path d="M12 3v18M5 8a7 7 0 0 1 14 0"/><path d="M3 21h18"/></svg></span>
+              <span class="feat more" title="Ещё снипеты">+4</span>
+            </div>
+            <p class="org-desc">Панорамный зал с видом на Енисей, детское меню и веранда. Банкеты до 60 человек.</p>
+            <div class="org-foot">
+              <a class="org-phone" href="tel:+70000000001"><!-- ФАКТ-ПРОВЕРКА --><svg class="ico" viewBox="0 0 24 24"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></svg>+7 (000) 000-00-01</a>
+              <a class="btn btn-glass btn-sm" href="#">Подробнее</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- 3. База -->
+        <article class="org-card">
+          <div class="org-cover">
+            <svg class="ico" viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/></svg>
+          </div>
+          <div class="org-body">
+            <h3><a href="#">Пиццерия «Мармелад»</a></h3>
+            <span class="org-sub">Пиццерия · ул. Пейзажная, 4</span>
+            <div class="org-feats">
+              <span class="feat t" title="Доставка"><svg class="ico" viewBox="0 0 24 24"><rect x="1" y="5" width="14" height="11" rx="2"/><path d="M15 9h4l3 3v4h-7z"/><circle cx="6" cy="18" r="1.6"/><circle cx="17.5" cy="18" r="1.6"/></svg></span>
+              <span class="feat" title="Онлайн-оплата"><svg class="ico" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></span>
+            </div>
+            <p class="org-desc">Пицца на дровяной поде, тесто на закваске. Доставка по району за 40 минут.</p>
+            <div class="org-foot">
+              <a class="org-phone" href="tel:+70000000002"><!-- ФАКТ-ПРОВЕРКА --><svg class="ico" viewBox="0 0 24 24"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></svg>+7 (000) 000-00-02</a>
+              <a class="btn btn-glass btn-sm" href="#">Подробнее</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- 4. База -->
+        <article class="org-card">
+          <div class="org-cover">
+            <svg class="ico" viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/></svg>
+          </div>
+          <div class="org-body">
+            <h3><a href="#">Кофейня «Тёплый пар»</a></h3>
+            <span class="org-sub">Кофейня · ул. Абрикосовая, 7</span>
+            <div class="org-feats">
+              <span class="feat t" title="Кофе с собой"><svg class="ico" viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/></svg></span>
+              <span class="feat" title="Wi-Fi"><svg class="ico" viewBox="0 0 24 24"><path d="M2 9a15 15 0 0 1 20 0M5.5 12.5a10 10 0 0 1 13 0M9 16a5 5 0 0 1 6 0"/><circle cx="12" cy="19.5" r="1"/></svg></span>
+              <span class="feat" title="Летняя веранда"><svg class="ico" viewBox="0 0 24 24"><path d="M12 3v18M5 8a7 7 0 0 1 14 0"/><path d="M3 21h18"/></svg></span>
+            </div>
+            <p class="org-desc">Зерно местной обжарки, десерты собственного производства, розетки у каждого стола.</p>
+            <div class="org-foot">
+              <a class="org-phone" href="tel:+70000000003"><!-- ФАКТ-ПРОВЕРКА --><svg class="ico" viewBox="0 0 24 24"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></svg>+7 (000) 000-00-03</a>
+              <a class="btn btn-glass btn-sm" href="#">Подробнее</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- 5. Free: без снипетов и описания (лимиты тарифа) -->
+        <article class="org-card">
+          <div class="org-cover">
+            <svg class="ico" viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/></svg>
+          </div>
+          <div class="org-body">
+            <h3><a href="#">Суши-бар «Нори»</a></h3>
+            <span class="org-sub">Суши · пр. Береговой, 3</span>
+            <div class="org-foot">
+              <a class="org-phone" href="tel:+70000000004"><!-- ФАКТ-ПРОВЕРКА --><svg class="ico" viewBox="0 0 24 24"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></svg>+7 (000) 000-00-04</a>
+              <a class="btn btn-glass btn-sm" href="#">Подробнее</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- 6. Free -->
+        <article class="org-card">
+          <div class="org-cover">
+            <svg class="ico" viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/></svg>
+          </div>
+          <div class="org-body">
+            <h3><a href="#">Столовая «Полдник»</a></h3>
+            <span class="org-sub">Столовая · ул. Пейзажная, 11</span>
+            <div class="org-foot">
+              <a class="org-phone" href="tel:+70000000005"><!-- ФАКТ-ПРОВЕРКА --><svg class="ico" viewBox="0 0 24 24"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></svg>+7 (000) 000-00-05</a>
+              <a class="btn btn-glass btn-sm" href="#">Подробнее</a>
+            </div>
+          </div>
+        </article>
+
+      </div>
+
+      <!-- bc_pager: пагинация WP_Query -->
+      <div class="pager">
+        <span class="on">1</span><a href="#">2</a><a href="#">3</a><a href="#">4</a><a href="#">Дальше →</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Подвал — контракт design/homepage.html (в проде footer.php) -->
+<footer>
+  <div class="wrap">
+    <div class="box">
+      <a class="logo" href="/">
+        <span class="mark"><svg width="20" height="20" viewBox="0 0 24 24" class="ico" style="stroke:#fff"><path d="M3 14c3-4 6-4 9 0s6 4 9 0"/></svg></span>
+        <span><b style="font-size:16px;font-weight:600">БерегСити</b><small>© 2025 · Все права защищены</small></span>
+      </a>
+      <div class="f-links">
+        <a href="/sitemap">Карта сайта</a>
+        <a href="/privacy">Политика конфиденциальности</a>
+        <a href="/reklama">Рекламодателям</a>
+      </div>
+      <div class="soc">
+        <a href="#" aria-label="ВКонтакте"><!-- ФАКТ-ПРОВЕРКА: реальные адреса соцсетей — СПРАВОЧНИК §9 --><svg class="ico" viewBox="0 0 24 24"><path d="M3 8c1.5 6 5 9.5 9 10v-4c2 .5 3.5 2 4.5 4H20c-.7-3-2.5-5-4-6 1.5-1.5 3-3.5 3.5-6h-3.3c-.8 2.3-2.3 4.3-4.2 5V6H9v7C6.5 11.5 5 9.5 4.5 8z"/></svg></a>
+        <a href="#" aria-label="Телеграм"><svg class="ico" viewBox="0 0 24 24"><path d="M21 4L3 11l5.5 2L10 19l3-3.5 4.5 3z"/><path d="M8.5 13L18 5.5"/></svg></a>
+        <a href="#" aria-label="WhatsApp"><svg class="ico" viewBox="0 0 24 24"><path d="M21 12a9 9 0 0 1-13.3 7.9L3 21l1.2-4.6A9 9 0 1 1 21 12z"/><path d="M8.5 9.5c.5 3 2.5 5 5.5 5.5l1-1.5 2 1"/></svg></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* Бургер (как в homepage.html) */
+const mm=document.getElementById('mmenu');
+document.getElementById('burger').onclick=()=>mm.classList.toggle('open');
+/* Фильтры на мобильных: открытие/закрытие панели */
+document.getElementById('ftoggle').onclick=()=>document.getElementById('fl').classList.toggle('open');
+</script>
+</body>
+</html>

@@ -11,3 +11,5 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Прямой доступ запрещён.
 }
+
+require_once get_stylesheet_directory() . '/includes/security.php';

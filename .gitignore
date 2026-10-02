@@ -1,0 +1,59 @@
+# ==========================================================
+#  Репозиторий проекта «БерегСити» (beregcity.ru)
+#
+#  В git хранится ТОЛЬКО наш проект:
+#    • документы  ПРОТОКОЛ.md, PROGRESS.md, DECISIONS.md, .clinerules
+#    • папки      docs/ и design/
+#    • тема       app/public/wp-content/themes/astra-child/
+#    • плагин     app/public/wp-content/plugins/bc-core/
+#
+#  Ядро WordPress, wp-config.php, uploads, бэкапы и служебные
+#  файлы Local (conf/, logs/) НЕ хранятся: обновления WP не засоряют
+#  репозиторий, секреты не утекают в GitHub.
+# ==========================================================
+
+# --- Служебные папки Local не в git ---
+/conf/
+/logs/
+
+# --- Игнорируем всё в корне... ---
+/*
+# --- ...кроме документов и референсов ---
+!/.gitignore
+!/.gitattributes
+!/.clinerules
+!/*.md
+!/design/
+!/docs/
+
+# --- Заходим внутрь app/public только за нашим кодом ---
+!/app/
+/app/*
+!/app/public/
+/app/public/*
+!/app/public/wp-content/
+/app/public/wp-content/*
+!/app/public/wp-content/themes/
+/app/public/wp-content/themes/*
+!/app/public/wp-content/themes/astra-child/
+!/app/public/wp-content/plugins/
+/app/public/wp-content/plugins/*
+!/app/public/wp-content/plugins/bc-core/
+
+# --- Секреты и служебное: запрет на всякий случай ---
+wp-config.php
+**/wp-config.php
+wp-config-sample.php
+*.env
+.env
+**/debug.log
+**/uploads/
+**/upgrade/
+**/backups/
+**/cache/
+*.sql
+*.sqlite
+**/local-xdebuginfo.php
+**/.htaccess
+.DS_Store
+Thumbs.db

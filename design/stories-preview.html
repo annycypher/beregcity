@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>БерегСити — как выглядят сторис (превью для владельца)</title>
+<style>
+:root{
+  --bg:#fcfaf6; --ink:#2b332e; --body:#4d564f; --muted:#8d968e;
+  --terra:#c98d75; --terra-d:#b0755c; --terra-l:#f9ece6;
+  --sage:#93ad89; --sage-d:#6f9165; --sage-l:#f1f5ec;
+  --r-btn:12px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,"Segoe UI",Roboto,Arial,sans-serif;font-weight:400;color:var(--body);
+  background:
+    radial-gradient(800px 400px at 85% -120px, rgba(201,141,117,.06), transparent 60%),
+    var(--bg);
+  line-height:1.55;padding:36px 18px 60px}
+.wrap{max-width:1000px;margin:0 auto}
+h1{font-size:28px;font-weight:300;color:var(--ink);letter-spacing:-.3px;margin-bottom:6px}
+.sub{font-size:14px;color:var(--muted);margin-bottom:30px}
+.note{font-size:13px;color:var(--muted);margin:14px 0 0}
+.row{display:flex;gap:26px;flex-wrap:wrap;justify-content:flex-start}
+
+/* ── Мини-вьюер: каждый «телефон» = готовый слайд ── */
+.phone{position:relative;width:270px;height:480px;border-radius:22px;overflow:hidden;
+  background:#1c2620;box-shadow:0 20px 50px rgba(40,35,30,.25);cursor:pointer;
+  transition:transform .2s;flex:none}
+.phone:hover{transform:translateY(-4px)}
+@media(max-width:640px){.phone{width:240px;height:427px}}
+
+/* слайд-слой: фон + контент */
+.sl{position:absolute;inset:0}
+
+/* ── СТОРИЯ 1: органическая (новость района) ── */
+.s1{background:
+  linear-gradient(180deg,rgba(25,35,28,.15) 0%,rgba(25,35,28,0) 30%,rgba(25,35,28,.05) 55%,rgba(20,28,22,.88) 100%),
+  linear-gradient(150deg,#7fa06f 0%,#5c8a52 40%,#3f5a48 100%)}
+/* декоративная «фотография» — силуэты двора */
+.s1 .art{position:absolute;inset:0;opacity:.5}
+.s1 .sun{position:absolute;width:130px;height:130px;border-radius:50%;right:-30px;top:60px;
+  background:radial-gradient(circle,rgba(250,245,230,.85),rgba(250,245,230,0) 70%)}
+.s1 .ground{position:absolute;left:-10%;right:-10%;bottom:26%;height:14%;border-radius:50%;
+  background:rgba(40,60,35,.35)}
+.s1 .tree1{position:absolute;left:14%;bottom:28%;width:14px;height:120px;background:rgba(35,52,30,.55);border-radius:8px}
+.s1 .tree1::before{content:"";position:absolute;top:-52px;left:-26px;width:66px;height:66px;border-radius:50%;
+  background:radial-gradient(circle,rgba(52,74,44,.75),rgba(52,74,44,.2) 75%)}
+.s1 .tree2{position:absolute;right:20%;bottom:29%;width:11px;height:88px;background:rgba(35,52,30,.5);border-radius:8px}
+.s1 .tree2::before{content:"";position:absolute;top:-40px;left:-22px;width:54px;height:54px;border-radius:50%;
+  background:radial-gradient(circle,rgba(52,74,44,.7),rgba(52,74,44,.2) 75%)}
+/* шапка сторис */
+.hdr-s{position:absolute;top:44px;left:14px;right:14px;display:flex;align-items:center;gap:10px;z-index:4}
+.hdr-s .av{width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.22);
+  backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.4);display:flex;align-items:center;justify-content:center}
+.hdr-s .av svg{width:20px;height:20px;stroke:#fff;stroke-width:1.7;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.hdr-s b{color:#fff;font-size:13px;font-weight:600;display:block;line-height:1.2}
+.hdr-s span{color:rgba(255,255,255,.75);font-size:10.5px;display:block}
+/* заголовок и текст на слайде */
+.s1 .kicker{position:absolute;left:18px;right:18px;bottom:170px;z-index:4;
+  display:inline-block;font-size:10px;letter-spacing:1.2px;text-transform:uppercase;
+  color:#fff;background:rgba(111,145,101,.7);backdrop-filter:blur(6px);
+  padding:5px 11px;border-radius:999px;width:fit-content}
+.s1 h3{position:absolute;left:18px;right:18px;bottom:104px;z-index:4;color:#fff;
+  font-size:22px;font-weight:300;line-height:1.25;letter-spacing:-.2px;
+  text-shadow:0 1px 8px rgba(0,0,0,.35)}
+/* прогресс-бары */
+.bars{position:absolute;top:10px;left:10px;right:10px;display:flex;gap:4px;z-index:5}
+.bar{flex:1;height:3px;border-radius:2px;background:rgba(255,255,255,.3);overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:#fff}
+.bar.on i{width:62%}
+.bar.done i{width:100%}
+/* кнопка — ГЕЛЬ (№1) */
+.gel-btn{position:absolute;left:14px;right:14px;bottom:18px;z-index:5;display:flex;
+  align-items:center;justify-content:center;gap:8px;height:50px;border-radius:var(--r-btn);
+  background:linear-gradient(165deg,rgba(240,150,110,.8),rgba(184,92,56,.68));
+  backdrop-filter:blur(14px) saturate(1.6);-webkit-backdrop-filter:blur(14px) saturate(1.6);
+  border:1px solid rgba(255,255,255,.6);color:#fff;font-weight:500;font-size:14.5px;
+  box-shadow:inset 0 2px 5px rgba(255,255,255,.55),inset 0 -9px 16px rgba(150,60,30,.3),
+    0 10px 24px rgba(0,0,0,.32)}
+.gel-btn svg{width:16px;height:16px;stroke:#fff;stroke-width:2;fill:none;stroke-linecap:round}
+
+/* ── СТОРИЯ 2: рекламная (организация) ── */
+.s2{background:
+  linear-gradient(180deg,rgba(30,20,14,.2) 0%,rgba(30,20,14,0) 32%,rgba(28,18,12,.92) 100%),
+  linear-gradient(155deg,#e8b98a 0%,#d98f74 45%,#8a4f33 100%)}
+.s2 .art{position:absolute;inset:0;opacity:.55}
+.s2 .pizza{position:absolute;width:210px;height:210px;border-radius:50%;right:-55px;top:120px;
+  background:radial-gradient(circle,#f2d3a0 0 54%,#c96f3a 55% 62%,#f2d3a0 63% 66%,#c96f3a 67% 74%,#f2d3a0 75% 78%,#b35a2f 79%);
+  box-shadow:0 14px 40px rgba(90,40,15,.4)}
+.s2 .disc{position:absolute;left:-14px;top:190px;width:120px;height:120px;border-radius:50%;
+  background:radial-gradient(circle,#fff 0 38%,rgba(255,255,255,0) 39%);
+  display:flex;align-items:center;justify-content:center;flex-direction:column;
+  transform:rotate(-12deg);box-shadow:0 8px 24px rgba(90,40,15,.3)}
+.s2 .disc b{font-size:30px;font-weight:600;color:#b3552e;line-height:1}
+.s2 .disc span{font-size:10.5px;color:#b3552e;font-weight:600}
+.s2 .badge{position:absolute;top:44px;right:12px;z-index:5;font-size:9px;letter-spacing:1.2px;
+  text-transform:uppercase;color:#fff;background:rgba(176,117,92,.9);backdrop-filter:blur(6px);
+  padding:4px 10px;border-radius:6px}
+.s2 .orgline{position:absolute;left:18px;bottom:150px;right:18px;z-index:4;color:#fff}
+.s2 .orgline b{font-size:12.5px;font-weight:600;display:block;opacity:.9}
+.s2 h3{position:absolute;left:18px;right:18px;bottom:96px;z-index:4;color:#fff;
+  font-size:24px;font-weight:300;line-height:1.2;letter-spacing:-.2px;text-shadow:0 1px 8px rgba(0,0,0,.3)}
+.s2 h3 em{font-style:normal;font-weight:600}
+/* подпись снизу над кнопкой */
+.mini{position:absolute;left:18px;right:18px;bottom:76px;z-index:4;color:rgba(255,255,255,.85);
+  font-size:11.5px;display:flex;align-items:center;gap:6px}
+.mini svg{width:13px;height:13px;stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round}
+
+/* подписи под телефонами */
+.cap2{text-align:center;margin-top:14px;font-size:13.5px;color:var(--ink);font-weight:600}
+.cap2 span{display:block;font-weight:400;font-size:12px;color:var(--muted);margin-top:3px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Как будут выглядеть сторис</h1>
+  <div class="sub">Два реальных примера контента. Механика (тап, свайп, пауза, автоплей) — в файле design/stories.html; здесь — внешний вид слайдов.</div>
+
+  <div class="row">
+
+    <!-- СТОРИЯ 1: органическая новость -->
+    <div>
+      <div class="phone" onclick="alert('Здесь откроется вьюер: тап-зоны, свайпы, автоплей 6 сек. Механика — design/stories.html')">
+        <div class="sl s1">
+          <div class="art">
+            <div class="sun"></div>
+            <div class="ground"></div>
+            <div class="tree1"></div><div class="tree2"></div>
+          </div>
+          <div class="bars"><span class="bar done"><i></i></span><span class="bar on"><i></i></span><span class="bar"><i></i></span></div>
+          <div class="hdr-s">
+            <span class="av"><svg viewBox="0 0 24 24"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-4 0V9"/><path d="M12 6h6M12 10h6M12 14h6"/></svg></span>
+            <span><b>БерегСити · Новости</b><span>2 ч назад</span></span>
+          </div>
+          <span class="kicker">Новое место</span>
+          <h3>Пекарня «Хлеб и кофе» открылась на Абрикосовой</h3>
+          <a class="gel-btn">Читать новость
+            <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        </div>
+      </div>
+      <div class="cap2">Органическая стория<span>новость района · бесплатно · без плашки «Реклама»</span></div>
+    </div>
+
+    <!-- СТОРИЯ 2: рекламная (премиум-организация) -->
+    <div>
+      <div class="phone" onclick="alert('Рекламная стория организации. Плашка «Реклама» + erid в админке. Продукт: 500–1500 ₽/нед')">
+        <div class="sl s2">
+          <div class="art">
+            <div class="pizza"></div>
+            <div class="disc"><b>−20%</b><span>по пятницам</span></div>
+          </div>
+          <div class="bars"><span class="bar done"><i></i></span><span class="bar done"><i></i></span><span class="bar on"><i></i></span></div>
+          <span class="badge">Реклама</span>
+          <div class="hdr-s">
+            <span class="av" style="font-weight:600;color:#fff;font-size:15px">М</span>
+            <span><b>Пиццерия «Мармелад»</b><span>Южный берег · доставка</span></span>
+          </div>
+          <h3>Пятница —<br>день <em>двойного теста</em></h3>
+          <div class="mini">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+            по промокоду БС24 · самовывоз до 21:00
+          </div>
+          <a class="gel-btn">Забрать промокод
+            <svg viewBox="0 0 24 24"><path d="M20.59 13.41L11 3.83A2 2 0 0 0 9.59 3.24H4a1 1 0 0 0-1 1v5.59a2 2 0 0 0 .59 1.41l9.58 9.59a2 2 0 0 0 2.83 0l4.59-4.59a2 2 0 0 0 0-2.83z"/></svg></a>
+        </div>
+      </div>
+      <div class="cap2">Рекламная стория<span>премиум-организация · плашка «Реклама» + erid</span></div>
+    </div>
+
+  </div>
+
+  <p class="note">В проде вместо рисованных фонов — фото организаций 1080×1920 (загружают в личном кабинете), аватар — логотип из карточки, «М» — первая буква, пока логотипа нет. Тексты, кнопка и плашка — из полей CPT: title, caption, btn_text, is_ad.</p>
+</div>
+</body>
+</html>

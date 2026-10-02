@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>БерегСити — библиотека стеклянных кнопок</title>
+<style>
+:root{
+  --bg:#fcfaf6; --ink:#2b332e; --muted:#8d968e;
+  --brick:#b85c38; --brick-l:#e88a5e; --brick-xl:#f6e3d8;
+  --green:#5c8a52; --green-l:#8fb37e; --green-xl:#e7f0e0;
+  --r:14px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,"Segoe UI",Roboto,Arial,sans-serif;font-weight:400;color:var(--ink);
+  background:var(--bg);line-height:1.5;padding:40px 20px 80px}
+.wrap{max-width:1100px;margin:0 auto}
+h1{font-size:30px;font-weight:300;letter-spacing:-.4px;margin-bottom:8px}
+.sub{color:var(--muted);font-size:15px;margin-bottom:36px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+
+/* ── Карточка варианта ── */
+.card{background:#fff;border:1px solid rgba(43,51,46,.07);border-radius:var(--r);
+  box-shadow:0 6px 20px rgba(90,75,60,.05);padding:20px}
+.card h2{font-size:17px;font-weight:600;margin-bottom:4px}
+.card .desc{font-size:12.5px;color:var(--muted);margin-bottom:16px;min-height:34px}
+.card .tech{font-size:11px;color:#b8ab9d;font-family:ui-monospace,monospace;margin-top:12px}
+
+/* ── Сцена: цветные пятна за кнопкой, чтобы стекло читалось ── */
+.stage{position:relative;height:118px;border-radius:12px;overflow:hidden;
+  background:linear-gradient(135deg,#f3ede2,#e9eef5);
+  display:flex;align-items:center;justify-content:center;gap:18px;flex-wrap:wrap;padding:10px}
+.stage::before{content:"";position:absolute;width:190px;height:190px;border-radius:50%;
+  left:-30px;top:-60px;background:radial-gradient(circle,rgba(232,138,94,.75),rgba(232,138,94,0) 70%)}
+.stage::after{content:"";position:absolute;width:220px;height:220px;border-radius:50%;
+  right:-40px;bottom:-90px;background:radial-gradient(circle,rgba(143,179,126,.7),rgba(143,179,126,0) 70%)}
+.stage .blob{position:absolute;width:120px;height:120px;border-radius:50%;
+  left:44%;top:-40px;background:radial-gradient(circle,rgba(230,190,110,.55),rgba(230,190,110,0) 70%)}
+
+/* ── База кнопок ── */
+.btn{position:relative;display:inline-flex;align-items:center;gap:9px;border-radius:12px;
+  font-weight:500;font-size:15px;padding:13px 26px;cursor:pointer;border:none;
+  transition:transform .2s, box-shadow .25s, background .25s;overflow:hidden;isolation:isolate}
+.btn:hover{transform:translateY(-2px)}
+.btn:active{transform:translateY(0)}
+.btn svg{width:17px;height:17px;stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+
+/* ═══ 1. ГЕЛЬ — сочная полупрозрачная заливка, мягкий купол ═══ */
+.b-gel{background:linear-gradient(165deg,rgba(240,150,110,.72),rgba(184,92,56,.62));
+  backdrop-filter:blur(18px) saturate(1.8);-webkit-backdrop-filter:blur(18px) saturate(1.8);
+  border:1px solid rgba(255,255,255,.65);color:#fff;
+  box-shadow:inset 0 2px 5px rgba(255,255,255,.6),inset 0 -10px 18px rgba(150,60,30,.28),
+    0 12px 30px rgba(184,92,56,.45)}
+.b-gel:hover{box-shadow:inset 0 2px 5px rgba(255,255,255,.7),inset 0 -10px 18px rgba(150,60,30,.3),
+  0 16px 38px rgba(184,92,56,.55)}
+.b-gel.g{background:linear-gradient(165deg,rgba(150,190,130,.72),rgba(80,130,68,.62));
+  box-shadow:inset 0 2px 5px rgba(255,255,255,.6),inset 0 -10px 18px rgba(45,85,38,.28),
+    0 12px 30px rgba(92,138,82,.45)}
+
+/* ═══ 2. КАРАМЕЛЬ — глянцевый купол, «конфета» ═══ */
+.b-candy{background:linear-gradient(180deg,rgba(245,168,130,.92),rgba(184,92,56,.88));
+  border:1px solid rgba(255,255,255,.55);color:#fff;
+  box-shadow:inset 0 2px 4px rgba(255,255,255,.7),inset 0 -4px 8px rgba(115,48,22,.35),
+    0 14px 30px rgba(184,92,56,.45)}
+.b-candy::before{content:"";position:absolute;top:7%;left:9%;right:9%;height:40%;border-radius:999px;
+  background:linear-gradient(180deg,rgba(255,255,255,.9),rgba(255,255,255,.05))}
+.b-candy:hover{box-shadow:inset 0 2px 4px rgba(255,255,255,.8),inset 0 -4px 8px rgba(115,48,22,.35),
+  0 18px 38px rgba(184,92,56,.55)}
+.b-candy.g{background:linear-gradient(180deg,rgba(160,198,140,.92),rgba(82,128,68,.88));
+  box-shadow:inset 0 2px 4px rgba(255,255,255,.7),inset 0 -4px 8px rgba(38,72,30,.35),
+    0 14px 30px rgba(92,138,82,.45)}
+
+/* ═══ 3. КРИСТАЛЛ — прозрачное тело + градиентная кромка ═══ */
+.b-crystal{background:rgba(255,255,255,.22);
+  backdrop-filter:blur(16px) saturate(1.5);-webkit-backdrop-filter:blur(16px) saturate(1.5);
+  color:var(--brick);font-weight:600}
+.b-crystal::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:1.5px;
+  background:linear-gradient(135deg,rgba(255,255,255,.95),rgba(232,138,94,.95),rgba(255,255,255,.35));
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none}
+.b-crystal::after{content:"";position:absolute;top:0;left:10%;right:10%;height:45%;border-radius:inherit;
+  background:linear-gradient(180deg,rgba(255,255,255,.55),rgba(255,255,255,0));pointer-events:none}
+.b-crystal:hover{background:rgba(255,255,255,.4)}
+.b-crystal.g{color:var(--green)}
+.b-crystal.g::before{background:linear-gradient(135deg,rgba(255,255,255,.95),rgba(143,179,126,.95),rgba(255,255,255,.35))}
+
+/* ═══ 4. НЕОН — светящийся ободок ═══ */
+.b-neon{background:rgba(184,92,56,.13);
+  backdrop-filter:blur(14px) saturate(1.4);-webkit-backdrop-filter:blur(14px) saturate(1.4);
+  border:1px solid rgba(232,138,94,.7);color:#a34e2a;font-weight:600;
+  box-shadow:0 0 0 1px rgba(232,138,94,.25),0 0 26px rgba(232,138,94,.4),inset 0 0 16px rgba(232,138,94,.18)}
+.b-neon:hover{background:rgba(184,92,56,.22);
+  box-shadow:0 0 0 1px rgba(232,138,94,.4),0 0 38px rgba(232,138,94,.55),inset 0 0 22px rgba(232,138,94,.28)}
+.b-neon.g{background:rgba(92,138,82,.12);border-color:rgba(143,179,126,.7);color:#3f6b35;
+  box-shadow:0 0 0 1px rgba(143,179,126,.25),0 0 26px rgba(143,179,126,.4),inset 0 0 16px rgba(143,179,126,.18)}
+.b-neon.g:hover{background:rgba(92,138,82,.2);
+  box-shadow:0 0 0 1px rgba(143,179,126,.4),0 0 38px rgba(143,179,126,.55),inset 0 0 22px rgba(143,179,126,.28)}
+
+/* ═══ 5. ЛЁД — молочное матовое стекло, цветной текст ═══ */
+.b-ice{background:rgba(255,255,255,.55);
+  backdrop-filter:blur(26px) saturate(1.3);-webkit-backdrop-filter:blur(26px) saturate(1.3);
+  border:1px solid rgba(255,255,255,.95);color:var(--brick);font-weight:600;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,1),inset 0 -6px 14px rgba(232,138,94,.10),
+    0 10px 28px rgba(120,90,70,.14)}
+.b-ice:hover{background:rgba(255,255,255,.72)}
+.b-ice.g{color:var(--green);box-shadow:inset 0 1px 0 rgba(255,255,255,1),
+  inset 0 -6px 14px rgba(143,179,126,.12),0 10px 28px rgba(80,100,70,.14)}
+
+/* ═══ 6. ГЛУБИНА — плотное цветное стекло, макс. читаемость ═══ */
+.b-deep{background:linear-gradient(160deg,rgba(199,110,72,.88),rgba(167,74,45,.85));
+  backdrop-filter:blur(12px) saturate(1.4);-webkit-backdrop-filter:blur(12px) saturate(1.4);
+  border:1px solid rgba(255,255,255,.45);color:#fff;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.55),inset 0 -3px 8px rgba(90,35,15,.35),
+    0 12px 30px rgba(167,74,45,.5)}
+.b-deep:hover{background:linear-gradient(160deg,rgba(209,122,84,.92),rgba(177,80,50,.9))}
+.b-deep.g{background:linear-gradient(160deg,rgba(103,148,90,.88),rgba(70,110,60,.85));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.55),inset 0 -3px 8px rgba(25,55,20,.35),
+    0 12px 30px rgba(92,138,82,.5)}
+.b-deep.g:hover{background:linear-gradient(160deg,rgba(115,160,100,.92),rgba(78,120,66,.9))}
+
+/* ═══ 7. ДЫМ — тёмное стекло для фото ═══ */
+.b-smoke{background:rgba(35,40,36,.48);
+  backdrop-filter:blur(18px) saturate(1.25);-webkit-backdrop-filter:blur(18px) saturate(1.25);
+  border:1px solid rgba(255,255,255,.3);color:#fff;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 12px 28px rgba(25,30,25,.3)}
+.b-smoke:hover{background:rgba(35,40,36,.62);border-color:rgba(255,255,255,.45)}
+.b-smoke.g{background:rgba(28,42,26,.5)}
+.b-smoke.g:hover{background:rgba(28,42,26,.65)}
+
+/* ═══ 8. ПРИЗМА — перламутровый перелив ═══ */
+.b-prism{background:linear-gradient(120deg,rgba(232,138,104,.6),rgba(226,180,120,.5),rgba(200,140,160,.5));
+  backdrop-filter:blur(16px) saturate(1.8);-webkit-backdrop-filter:blur(16px) saturate(1.8);
+  border:1px solid rgba(255,255,255,.6);color:#fff;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.6),inset 0 -1px 0 rgba(255,255,255,.2),
+    0 12px 30px rgba(210,140,110,.4)}
+.b-prism:hover{filter:hue-rotate(-10deg) brightness(1.06)}
+.b-prism.g{background:linear-gradient(120deg,rgba(143,179,126,.6),rgba(180,200,130,.5),rgba(120,170,160,.5));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.6),inset 0 -1px 0 rgba(255,255,255,.2),
+    0 12px 30px rgba(110,150,100,.4)}
+
+@media(max-width:760px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Библиотека стеклянных кнопок</h1>
+  <div class="sub">8 приёмов × 2 цвета (кирпич / зелень). Кнопки стоят на цветных пятнах — как на живом сайте поверх фото и акцентов. Наведите курсор на каждую.</div>
+
+  <div class="grid">
+
+    <div class="card">
+      <h2>1 · Гель</h2>
+      <div class="desc">Сочная полупрозрачная заливка + внутренняя цветная подсветка снизу. Универсальная primary-кнопка.</div>
+      <div class="stage"><span class="blob"></span>
+        <button class="btn b-gel">Открыть каталог <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+        <button class="btn b-gel g">Смотреть афишу</button>
+      </div>
+      <div class="tech">blur(18) saturate(1.8) · inset-подсветка · цветная тень</div>
+    </div>
+
+    <div class="card">
+      <h2>2 · Карамель</h2>
+      <div class="desc">Глянцевый купол-блик сверху, как у леденца. Самая «вкусная» — хороша для CTA «Добавить организацию».</div>
+      <div class="stage"><span class="blob"></span>
+        <button class="btn b-candy">Добавить организацию</button>
+        <button class="btn b-candy g">Записаться</button>
+      </div>
+      <div class="tech">градиент 180° + ::before-купол rgba(255,255,255,.9)</div>
+    </div>
+
+    <div class="card">
+      <h2>3 · Кристалл</h2>
+      <div class="desc">Прозрачное тело и градиентная кромка (техника mask-composite). Изящная secondary-кнопка.</div>
+      <div class="stage"><span class="blob"></span>
+        <button class="btn b-crystal">Новости района</button>
+        <button class="btn b-crystal g">Все события</button>
+      </div>
+      <div class="tech">::before + mask-composite:xor — градиентная рамка 1.5px</div>
+    </div>
+
+    <div class="card">
+      <h2>4 · Неон</h2>
+      <div class="desc">Светящийся ободок вокруг полупрозрачного тела. Для акцентов и плашек «Реклама».</div>
+      <div class="stage"><span class="blob"></span>
+        <button class="btn b-neon">Акции недели</button>
+        <button class="btn b-neon g">Бесплатно</button>
+      </div>
+      <div class="tech">box-shadow: кольцо + glow 26px + inset-свечение</div>
+    </div>
+
+    <div class="card">
+      <h2>5 · Лёд</h2>
+      <div class="desc">Молочное матовое стекло, цветной текст. Самая читаемая на светлом фоне secondary.</div>
+      <div class="stage"><span class="blob"></span>
+        <button class="btn b-ice">Подробнее о районе</button>
+        <button class="btn b-ice g">Расписание</button>
+      </div>
+      <div class="tech">blur(26) · белая заливка .55 · цвет передаётся текстом</div>
+    </div>
+
+    <div class="card">
+      <h2>6 · Глубина</h2>
+      <div class="desc">Плотное цветное стекло — почти не просвечивает, но остаётся стеклом. Когда читаемость важнее эффектности.</div>
+      <div class="stage"><span class="blob"></span>
+        <button class="btn b-deep">Оплатить тариф</button>
+        <button class="btn b-deep g">Подтвердить</button>
+      </div>
+      <div class="tech">заливка .85–.88 · blur(12) · двойная inset-тень</div>
+    </div>
+
+    <div class="card">
+      <h2>7 · Дым</h2>
+      <div class="desc">Тёмное стекло для слайдера поверх фотографий. Белый текст без текст-shadow.</div>
+      <div class="stage"><span class="blob"></span>
+        <button class="btn b-smoke">Смотреть афишу</button>
+        <button class="btn b-smoke g">Как добраться</button>
+      </div>
+      <div class="tech">тёмная заливка .48 · blur(18) · светлая кромка .3</div>
+    </div>
+
+    <div class="card">
+      <h2>8 · Призма</h2>
+      <div class="desc">Перламутровый перелив трёх оттенков, ховер сдвигает оттенок. Для промо-слайдов и сторис-кнопок.</div>
+      <div class="stage"><span class="blob"></span>
+        <button class="btn b-prism">Скидки дня</button>
+        <button class="btn b-prism g">Новинки</button>
+      </div>
+      <div class="tech">3-стоповый градиент 120° + hue-rotate на ховере</div>
+    </div>
+
+  </div>
+</div>
+</body>
+</html>

@@ -37,12 +37,13 @@
 - [✅] 1б.2 XML-RPC off (403), `DISALLOW_FILE_EDIT`, wp-login переименован в `/bc-office-3184/`, users-endpoint закрыт (404), `?author` заблокирован
 - [⏳] 1б.3 Honeypot + время заполнения + rate-limit — **отложено** до Этапа 3а (формы регистрации организаций ещё нет)
 - [⏳] 1б.4 UpdraftPlus 1.26.8 установлен и активен; расписание + Яндекс.Диск — **настроить владельцу** (ADMINGUIDE §10)
-- [ ] 1б.2-фикс: убрать шум login в `debug.log` (переименование входа из 1б.2) — микро-шаг между 2.1b и 2.2a
+- [✅] 1б.2-фикс: убран шум login в `debug.log` (в `security.php` переменные `$user_login`/`$error`/`$errors` заданы до подключения wp-login.php)
 
 ## Этап 2. Главная по референсу (design/homepage.html v3.3)
 - [✅] 2.1a Каркас темы: тонкий `functions.php` + `includes/setup.php`, `includes/assets.php` (enqueue CSS/JS с `filemtime()`)
 - [✅] 2.1b Ассеты: `assets/css/theme.css` (дизайн-система из `design/homepage.html` — перенесена полностью), `assets/js/theme.js` (слайдер + бургер)
-- [ ] 2.2 Шапка/подвал: `header.php`, `footer.php` по референсу
+- [✅] 2.2a Шапка: `header.php` по референсу (`.hdr`, `.burger`, `.logo`, `nav.main`, `.search`, `.hicons`, `.btn-cta`, `.mob-menu`; меню статикой)
+- [ ] 2.2b Подвал: `footer.php` по референсу
 - [ ] 2.3 Главная: `front-page.php` — слайдер, кружки-заглушки (`bc_stories`-якорь), рекламные слоты (`bc_banner`-якорь), категории, сетки-заглушки, карта, CTA
 - [ ] 2.4 bc-core: шорткоды `[bc_slider]`, `[bc_cats]`
 - [ ] 2.5 Меню → `wp_nav_menu` (walker под `nav.main`; сейчас меню статикой)
@@ -54,4 +55,4 @@
 ## Этап 8. Деплой (8б харднинг) — ❌ не начато
 
 ## Следующий шаг
-Микро-шаг «1б.2-фикс» (шум login в `debug.log`), затем шаг **2.2a** — `header.php` по референсу (`design/homepage.html`: `.hdr/.burger/.logo/nav.main/.search/.hicons/.mob-menu`).
+Шаг **2.2b** — `footer.php` по референсу (`design/homepage.html`: `footer .box` + `.logo`, `.f-links`, `.soc`).

@@ -1,0 +1,267 @@
+!DOCTYPE html
+html lang=ru
+head
+meta charset=UTF-8
+meta name=viewport content=width=device-width, initial-scale=1.0, user-scalable=no
+meta name=theme-color content=#fcfaf6
+titleБерегСити — сторис микрорайона (вьюер, референс)title
+style
+ ═══ ПАЛИТРА v3.3 «Северный» — правится только здесь ═══ 
+root{
+  --bg#fcfaf6; --panel#ffffff;
+  --ink#2b332e; --body#4d564f; --muted#8d968e; --icon#5e685f;
+  --terra#c98d75; --terra-d#b0755c; --terra-l#f9ece6;
+  --sage#93ad89; --sage-d#6f9165; --sage-l#f1f5ec;
+  --linergba(43,51,46,.08);
+  --r14px; --r-btn12px;
+  --shadow0 8px 24px rgba(90,75,60,.05);
+}
+{margin0;padding0;box-sizingborder-box}
+body{font-family-apple-system,Segoe UI,Roboto,Arial,sans-serif;font-weight400;
+  colorvar(--body);line-height1.6;
+  background
+    radial-gradient(900px 420px at 85% -140px, rgba(201,141,117,.05), transparent 62%),
+    radial-gradient(700px 380px at -120px 300px, rgba(147,173,137,.045), transparent 60%),
+    var(--bg)}
+.wrap{max-width1100px;margin0 auto;padding36px 18px}
+h1{font-size28px;font-weight300;letter-spacing-.3px;colorvar(--ink);margin-bottom6px}
+.sub{font-size14px;colorvar(--muted);margin-bottom24px}
+.ico{width24px;height24px;strokecurrentColor;stroke-width1.6;fillnone;stroke-linecapround;stroke-linejoinround}
+
+ ── Кружки сторис (ряд на главной) ── 
+.stories{displayflex;gap20px;overflow-xauto;padding10px 4px 6px;scrollbar-widthnone}
+.stories-webkit-scrollbar{displaynone}
+.story{displayflex;flex-directioncolumn;align-itemscenter;gap8px;flexnone;width84px;cursorpointer;transition.2s}
+.storyhover{transformscale(1.06)}
+.story .ring{width72px;height72px;border-radius50%;padding3px;
+  backgroundconic-gradient(from 210deg,var(--terra),#eed3c5,var(--terra))}
+.story.seen .ring{backgroundconic-gradient(from 210deg,#e0d9cd,#ece7de,#e0d9cd)}
+.story .in{width100%;height100%;border-radius50%;background#fff centercover;
+  displayflex;align-itemscenter;justify-contentcenter;colorvar(--icon);transition.2s}
+.storyhover .in{colorvar(--terra-d)}
+.story .in .ico{width26px;height26px}
+.story b{font-size11.5px;font-weight500;colorvar(--ink);text-aligncenter;line-height1.25}
+
+ ═══ ВЬЮЕР ═══ 
+.overlay{positionfixed;inset0;backgroundrgba(30,36,32,.94);z-index100;
+  displaynone;align-itemscenter;justify-contentcenter}
+.overlay.open{displayflex}
+.viewer{positionrelative;widthmin(420px,100vw);heightmin(92vh,177.8vw);
+  aspect-ratio916;background#1c2620;border-radius16px;overflowhidden;touch-actionnone;
+  box-shadow0 24px 60px rgba(0,0,0,.4)}
+.slide-img{positionabsolute;inset0;width100%;height100%;object-fitcover;
+  user-selectnone;-webkit-user-dragnone}
+
+ прогресс-бары 
+.bars{positionabsolute;top10px;left10px;right10px;displayflex;gap4px;z-index5}
+.bar{flex1;height3px;border-radius2px;backgroundrgba(255,255,255,.28);overflowhidden}
+.bar i{displayblock;height100%;width0;backgroundvar(--terra-l)}
+.bar.done i{width100%}
+
+ плашка «Реклама» 
+.ad-tag{positionabsolute;top24px;left12px;z-index5;font-size9.5px;letter-spacing1px;
+  text-transformuppercase;color#fff;backgroundrgba(176,117,92,.85);backdrop-filterblur(6px);
+  padding4px 10px;border-radius6px;displaynone}
+
+ закрыть 
+.close{positionabsolute;top18px;right10px;z-index6;width38px;height38px;border-radius50%;
+  border1px solid rgba(255,255,255,.25);backgroundrgba(20,28,24,.5);color#fff;
+  font-size18px;cursorpointer;displayflex;align-itemscenter;justify-contentcenter}
+
+ подпись 
+.caption{positionabsolute;left16px;right16px;bottom92px;z-index4;color#fff;font-size15px;
+  font-weight400;text-shadow0 1px 6px rgba(0,0,0,.55);displaynone}
+
+ кнопка «Узнать больше» — ГЕЛЬ кирпич (designbuttons.html №1) 
+.slide-btn{positionabsolute;left14px;right14px;bottom20px;z-index5;displaynone;
+  align-itemscenter;justify-contentcenter;gap9px;height52px;border-radiusvar(--r-btn);
+  backgroundlinear-gradient(165deg,rgba(240,150,110,.78),rgba(184,92,56,.66));
+  backdrop-filterblur(16px) saturate(1.7);-webkit-backdrop-filterblur(16px) saturate(1.7);
+  border1px solid rgba(255,255,255,.6);color#fff;font-weight500;font-size15px;text-decorationnone;
+  box-shadowinset 0 2px 5px rgba(255,255,255,.55),inset 0 -9px 16px rgba(150,60,30,.3),
+    0 10px 26px rgba(0,0,0,.35);transition.2s}
+.slide-btnhover{box-shadowinset 0 2px 5px rgba(255,255,255,.65),inset 0 -9px 16px rgba(150,60,30,.32),
+  0 14px 32px rgba(0,0,0,.42)}
+.slide-btn svg{width17px;height17px;stroke#fff;stroke-width2;fillnone;stroke-linecapround;stroke-linejoinround}
+
+ зоны тапа 
+.zone{positionabsolute;top0;bottom0;z-index3}
+.zone.l{left0;width30%}.zone.r{right0;width70%}
+
+@media(max-width480px){.viewer{border-radius0;height100vh;aspect-ratioauto}}
+style
+head
+body
+
+div class=wrap
+  h1Сторис микрорайонаh1
+  div class=subКружок — открыть. В вьюере тап справа — вперёд, слева — назад, свайп вниз — закрыть, удержание — пауза. Просмотренные сереют.div
+
+  !-- Кружки рендерятся скриптом из данных STORIES --
+  div class=stories id=rowdiv
+div
+
+!-- ═══ ВЬЮЕР ═══ --
+div class=overlay id=ov
+  div class=viewer id=vw
+    div class=bars id=barsdiv
+    span class=ad-tag id=adTagРекламаspan
+    button class=close id=btnClose aria-label=Закрыть✕button
+    img class=slide-img id=img alt=
+    div class=caption id=capdiv
+    a class=slide-btn id=btn target=_blank rel=nofollow noopener
+      svg viewBox=0 0 24 24path d=M10 14a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1.5 1.5path d=M14 10a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1.5-1.5svg
+      span id=btnTextУзнать большеspan
+    a
+    div class=zone l id=zldiv
+    div class=zone r id=zrdiv
+  div
+div
+
+script
+ ═══════════════════════════════════════════════════════════════
+   ДАННЫЕ — в продакшене этот массив печатает PHP (bc-core) из БД
+   CPT «сторис» + ACF repeater (image, link_url, btn_text, caption, is_ad).
+   Структура элемента слайда обязательна
+   { img, caption, link, btn, ad }
+   ═══════════════════════════════════════════════════════════════ 
+
+ заглушки-картинки для референса (в проде — реальные фото 1080×1920 WebP) 
+function ph(c1,c2,label){
+  const s=`svg xmlns='httpwww.w3.org2000svg' width='720' height='1280'defslinearGradient id='g' x1='0' y1='0' x2='1' y2='1'stop offset='0' stop-color='${c1}'stop offset='1' stop-color='${c2}'linearGradientdefsrect width='720' height='1280' fill='url(#g)'text x='50%' y='50%' fill='white' font-size='36' font-family='Arial' text-anchor='middle' opacity='.85'${label}textsvg`;
+  return 'dataimagesvg+xml;utf8,'+encodeURIComponent(s);
+}
+
+const STORIES=[
+  {id1,title'Новости района',slides[
+    {imgph('#3f5a48','#6f9165','Открытие пекарни'),
+     caption'Пекарня «Хлеб и кофе» открылась на Абрикосовой, 12',
+     link'httpsberegcity.localnewspekarnya',btn'Читать новость'},
+    {imgph('#44503f','#83996e','Ремонт набережной'),
+     caption'Что изменится на набережной к июлю',
+     link'httpsberegcity.localnewsnaberezhnaya',btn'Узнать больше'}
+  ]},
+  {id2,title'Акции',slides[
+    {imgph('#6b4430','#c98d75','Пицца −20% по пятницам'),
+     caption'Пиццерия «Мармелад» · промокод БС24',
+     link'httpsberegcity.localakciipizza',btn'Забрать промокод',adtrue},
+    {imgph('#5a4038','#b0755c','Стрижка + уход 1 800 ₽'),
+     caption'Салон «Лоза» · до конца недели',
+     link'httpsberegcity.localakciiloza',btn'Записаться',adtrue}
+  ]},
+  {id3,title'Афиша',slides[
+    {imgph('#3c4d33','#93ad89','Ярмарка · сб 1000'),
+     caption'Площадь у ДК · вход свободный',
+     link'httpsberegcity.localafishayarmarka',btn'Подробнее'}
+  ]}
+];
+
+ ═══ РЕНДЕР КРУЖКОВ ═══ 
+const row=document.getElementById('row'),
+      seen=JSON.parse(localStorage.getItem('bc_seen')'[]');
+STORIES.forEach((s,i)={
+  const el=document.createElement('div');
+  el.className='story'+(seen.includes(s.id)' seen''');
+  el.innerHTML=`span class=ringspan class=in${s.title[0]}spanspanb${s.title}b`;
+  el.onclick=()=openStory(i);
+  row.appendChild(el);
+});
+
+ ═══ ЛОГИКА ВЬЮЕРА ═══ 
+const DUR=6000, ov=document.getElementById('ov'), vw=document.getElementById('vw'),
+      bars=document.getElementById('bars'), img=document.getElementById('img'),
+      cap=document.getElementById('cap'), btn=document.getElementById('btn'),
+      btnText=document.getElementById('btnText'), adTag=document.getElementById('adTag');
+let si=0, pi=0, prog=0, last=0, playing=false;
+
+function openStory(i){
+  si=i; pi=0; build(); show(0);
+  ov.classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function close(){
+  ov.classList.remove('open'); document.body.style.overflow='';
+  if(!seen.includes(STORIES[si].id)){
+    seen.push(STORIES[si].id);
+    localStorage.setItem('bc_seen',JSON.stringify(seen));
+    row.children[si].classList.add('seen');
+  }
+}
+function build(){
+  bars.innerHTML='';
+  STORIES[si].slides.forEach(()={ 
+    const b=document.createElement('div');
+    b.className='bar'; b.innerHTML='ii'; 
+    bars.appendChild(b);
+  });
+}
+function show(j){
+  const st=STORIES[si]; pi=j; prog=0; playing=true;
+  const sl=st.slides[j];
+  img.src=sl.img; img.alt=st.title;
+  cap.textContent=sl.caption''; cap.style.display=sl.caption'block''none';
+  btn.href=sl.link'#';
+  btnText.textContent=sl.btn'Узнать больше';
+  btn.style.display=sl.link'flex''none';
+  adTag.style.display=sl.ad'block''none';
+  [...bars.children].forEach((b,k)={
+    b.classList.toggle('done',kj);
+    b.querySelector('i').style.width='0%';
+  });
+  const nx=st.slides[j+1]; 
+  if(nx){ const im=new Image(); im.src=nx.img; }  предзагрузка 
+}
+function next(){
+  const st=STORIES[si];
+  if(pi+1st.slides.length) show(pi+1);
+  else if(si+1STORIES.length) openStory(si+1);
+  else close();
+}
+function prev(){
+  if(pi0) show(pi-1);
+  else if(si0){ const st=STORIES[si-1]; openStory(si-1); show(st.slides.length-1); }
+  else { prog=0; playing=true; }
+}
+
+ автолистание 
+requestAnimationFrame(function tick(t){
+  if(ov.classList.contains('open')&&playing){
+    prog+=t-last;
+    if(prog=DUR) next();
+    else bars.children[pi].querySelector('i').style.width=(progDUR100)+'%';
+  }
+  last=t;
+  requestAnimationFrame(tick);
+});
+
+ тапы, свайпы, удержание 
+let px=0,py=0,moved=false;
+vw.addEventListener('pointerdown',e={
+  if(e.target.closest('a,button'))return;
+  px=e.clientX;py=e.clientY;moved=false;playing=false;  удержание = пауза 
+});
+vw.addEventListener('pointermove',e={
+  if(Math.abs(e.clientX-px)10Math.abs(e.clientY-py)10)moved=true;
+});
+vw.addEventListener('pointerup',e={
+  if(e.target.closest('a,button'))return;
+  const dx=e.clientX-px,dy=e.clientY-py;
+  playing=true;
+  if(!moved){
+    (e.clientXvw.getBoundingClientRect().left+vw.clientWidth.3)next()prev();
+  }
+  else if(dx-40) next();
+  else if(dx40) prev();
+  else if(dy80) close();  свайп вниз 
+});
+
+btnClose.onclick=close;
+document.addEventListener('keydown',e={
+  if(!ov.classList.contains('open'))return;
+  if(e.key==='Escape')close();
+  if(e.key==='ArrowRight')next();
+  if(e.key==='ArrowLeft')prev();
+});
+script
+body
+html

@@ -43,7 +43,7 @@
 - [✅] 2.1a Каркас темы: тонкий `functions.php` + `includes/setup.php`, `includes/assets.php` (enqueue CSS/JS с `filemtime()`)
 - [✅] 2.1b Ассеты: `assets/css/theme.css` (дизайн-система из `design/homepage.html` — перенесена полностью), `assets/js/theme.js` (слайдер + бургер)
 - [✅] 2.2a Шапка: `header.php` по референсу (`.hdr`, `.burger`, `.logo`, `nav.main`, `.search`, `.hicons`, `.btn-cta`, `.mob-menu`; меню статикой)
-- [ ] 2.2b Подвал: `footer.php` по референсу
+- [✅] 2.2b Подвал: `footer.php` по референсу (`footer .box` + `.logo`/© + `.f-links` + `.soc`; wp_footer() перед `</body>`)
 - [ ] 2.3 Главная: `front-page.php` — слайдер, кружки-заглушки (`bc_stories`-якорь), рекламные слоты (`bc_banner`-якорь), категории, сетки-заглушки, карта, CTA
 - [ ] 2.4 bc-core: шорткоды `[bc_slider]`, `[bc_cats]`
 - [ ] 2.5 Меню → `wp_nav_menu` (walker под `nav.main`; сейчас меню статикой)
@@ -55,4 +55,4 @@
 ## Этап 8. Деплой (8б харднинг) — ❌ не начато
 
 ## Следующий шаг
-Шаг **2.2b** — `footer.php` по референсу (`design/homepage.html`: `footer .box` + `.logo`, `.f-links`, `.soc`).
+Шаг **2.4** — плагин `bc-core` (шорткоды `[bc_slider]`, `[bc_cats]`), затем **2.3** — `front-page.php`.

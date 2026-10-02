@@ -25,7 +25,7 @@
       <svg class="ico" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
     </button>
     <a class="logo" href="/">
-      <span class="mark"><svg width="22" height="22" viewBox="0 0 24 24" class="ico" style="stroke:#fff"><path d="M3 14c3-4 6-4 9 0s6 4 9 0"/></svg></span>
+      <span class="mark"><?php echo bc_logo_mark( 22 ); ?></span>
       <span><b>БерегСити</b><small>микрорайон Южный берег · Красноярск</small></span>
     </a>
     <nav class="main">

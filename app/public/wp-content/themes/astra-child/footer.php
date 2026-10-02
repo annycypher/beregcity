@@ -15,8 +15,8 @@
   <footer>
     <div class="box">
       <a class="logo" href="/">
-        <span class="mark"><svg width="20" height="20" viewBox="0 0 24 24" class="ico" style="stroke:#fff"><path d="M3 14c3-4 6-4 9 0s6 4 9 0"/></svg></span>
-        <span><b style="font-size:16px;font-weight:600">БерегСити</b><small>© <?php echo esc_html( date( 'Y' ) ); ?> · Все права защищены</small></span>
+        <span class="mark"><?php echo bc_logo_mark( 20 ); ?></span>
+        <span><b style="font-size:16px;font-weight:600">БерегСити</b></span>
       </a>
       <div class="f-links">
         <a href="/sitemap">Карта сайта</a>

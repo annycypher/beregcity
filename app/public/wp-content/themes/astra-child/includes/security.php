@@ -134,6 +134,12 @@ if ( defined( 'BC_LOGIN_SLUG' ) && BC_LOGIN_SLUG ) {
 
 			// Запрос к новому адресу входа — отдаём стандартную форму wp-login.php.
 			if ( '' !== $path && ( $path === $slug || 0 === strpos( $path, $slug . '/' ) ) ) {
+				// wp-login.php рассчитан на запуск отдельным скриптом: при раннем
+				// подключении через init его переменные $user_login / $error ещё не
+				// заданы. Определяем заранее, чтобы не сыпать предупреждения в debug.log.
+				$user_login    = '';
+				$error         = '';
+				$errors        = new WP_Error();
 				$_GET[ $slug ] = 1;
 				require_once ABSPATH . 'wp-login.php';
 				exit;

@@ -11,7 +11,15 @@ get_header();
 $bc_term  = get_queried_object();
 $bc_feat  = isset( $_GET['feat'] ) ? array_filter( array_map( 'absint', (array) $_GET['feat'] ) ) : array();
 $bc_sort  = isset( $_GET['sort'] ) ? sanitize_key( $_GET['sort'] ) : 'premium';
-$bc_order = function_exists( 'bc_sort_args' ) ? bc_sort_args( $bc_sort ) : array( 'orderby' => 'date', 'order' => 'DESC' );
+$bc_order     = function_exists( 'bc_sort_args' ) ? bc_sort_args( $bc_sort ) : array( 'orderby' => 'date', 'order' => 'DESC' );
+$bc_feat_q    = get_query_var( 'bc_feature' );
+$bc_feat_term = false;
+if ( $bc_feat_q ) {
+	$bc_feat_term = get_term_by( 'name', $bc_feat_q, 'features' );
+	if ( ! $bc_feat_term || is_wp_error( $bc_feat_term ) ) {
+		$bc_feat_term = get_term_by( 'slug', rawurldecode( $bc_feat_q ), 'features' );
+	}
+}
 $bc_n    = (int) $bc_term->count;
 $bc_w    = 'организаций';
 if ( $bc_n % 10 === 1 && $bc_n % 100 !== 11 ) {
@@ -22,12 +30,28 @@ if ( $bc_n % 10 === 1 && $bc_n % 100 !== 11 ) {
 ?>
 <div class="wrap">
 
-	<div class="crumbs"><a href="/">Главная</a><i>›</i><a href="/katalog">Каталог</a><i>›</i><?php echo esc_html( $bc_term->name ); ?></div>
+	<div class="crumbs"><a href="/">Главная</a><i>›</i><a href="/katalog">Каталог</a><i>›</i><?php echo esc_html( $bc_term->name ); ?><?php if ( $bc_feat_term ) : ?><i>›</i><?php echo esc_html( $bc_feat_term->name ); ?><?php endif; ?></div>
+	<?php
+	$bc_crumbs = array(
+		array( 'name' => 'Главная', 'url' => home_url( '/' ) ),
+		array( 'name' => 'Каталог', 'url' => home_url( '/katalog/' ) ),
+		array( 'name' => $bc_term->name, 'url' => get_term_link( $bc_term ) ),
+	);
+	if ( $bc_feat_term ) {
+		$bc_crumbs[] = array( 'name' => $bc_feat_term->name, 'url' => null );
+	}
+	echo function_exists( 'bc_breadcrumb_jsonld' ) ? bc_breadcrumb_jsonld( $bc_crumbs ) : '';
+	?>
 
 	<div class="cat-head">
-		<h1><?php echo esc_html( $bc_term->name ); ?> на Южном берегу <span class="cat-count"><?php echo $bc_n . ' ' . $bc_w; ?></span></h1>
-		<?php $bc_intro = term_description( $bc_term ); if ( $bc_intro ) : ?>
-		<p class="cat-intro"><?php echo esc_html( $bc_intro ); ?></p>
+		<?php if ( $bc_feat_term ) : ?>
+			<h1><?php echo esc_html( $bc_feat_term->name ); ?> — <?php echo esc_html( $bc_term->name ); ?> на Южном берегу <span class="cat-count"><?php echo $bc_n . ' ' . $bc_w; ?></span></h1>
+			<p class="cat-intro">Организации категории «<?php echo esc_html( $bc_term->name ); ?>» со снипетом «<?php echo esc_html( $bc_feat_term->name ); ?>» в микрорайоне Южный берег. Подобрали места с телефонами, адресами и графиком — выбирайте рядом с домом.</p>
+		<?php else : ?>
+			<h1><?php echo esc_html( $bc_term->name ); ?> на Южном берегу <span class="cat-count"><?php echo $bc_n . ' ' . $bc_w; ?></span></h1>
+			<?php $bc_intro = term_description( $bc_term ); if ( $bc_intro ) : ?>
+			<p class="cat-intro"><?php echo esc_html( $bc_intro ); ?></p>
+			<?php endif; ?>
 		<?php endif; ?>
 	</div>
 
@@ -104,30 +128,7 @@ if ( $bc_n % 10 === 1 && $bc_n % 100 !== 11 ) {
 			?>
 
 			<?php
-			if ( $bc_query->max_num_pages > 1 ) :
-				$bc_links = paginate_links(
-					array(
-						'base'      => str_replace( 999999999, '%#%', esc_url( get_pagenum_link( 999999999 ) ) ),
-						'format'    => '?paged=%#%',
-						'current'   => $bc_paged,
-						'total'     => $bc_query->max_num_pages,
-						'prev_text' => '←',
-						'next_text' => '→',
-						'type'      => 'array',
-					)
-				);
-				if ( $bc_links ) :
-					echo '<div class="pager">';
-					foreach ( $bc_links as $bc_link ) {
-						if ( strpos( $bc_link, 'current' ) !== false ) {
-							echo '<span class="on">' . esc_html( wp_strip_all_tags( $bc_link ) ) . '</span>';
-						} else {
-							echo $bc_link; // phpcs:ignore — ссылки пагинации WP
-						}
-					}
-					echo '</div>';
-				endif;
-			endif;
+			echo function_exists( 'bc_pager' ) ? bc_pager( $bc_query, $bc_paged ) : '';
 			?>
 		</div>
 

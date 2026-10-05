@@ -21,6 +21,14 @@ if ( $bc_n % 10 === 1 && $bc_n % 100 !== 11 ) {
 <div class="wrap">
 
 	<div class="crumbs"><a href="/">Главная</a><i>›</i>Каталог</div>
+	<?php
+	echo function_exists( 'bc_breadcrumb_jsonld' ) ? bc_breadcrumb_jsonld(
+		array(
+			array( 'name' => 'Главная', 'url' => home_url( '/' ) ),
+			array( 'name' => 'Каталог', 'url' => home_url( '/katalog/' ) ),
+		)
+	) : '';
+	?>
 
 	<div class="cat-head">
 		<h1>Каталог организаций <span class="cat-count"><?php echo $bc_n . ' ' . $bc_w; ?></span></h1>
@@ -92,30 +100,7 @@ if ( $bc_n % 10 === 1 && $bc_n % 100 !== 11 ) {
 			?>
 
 			<?php
-			if ( $bc_query->max_num_pages > 1 ) :
-				$bc_links = paginate_links(
-					array(
-						'base'      => str_replace( 999999999, '%#%', esc_url( get_pagenum_link( 999999999 ) ) ),
-						'format'    => '?paged=%#%',
-						'current'   => $bc_paged,
-						'total'     => $bc_query->max_num_pages,
-						'prev_text' => '←',
-						'next_text' => '→',
-						'type'      => 'array',
-					)
-				);
-				if ( $bc_links ) :
-					echo '<div class="pager">';
-					foreach ( $bc_links as $bc_link ) {
-						if ( strpos( $bc_link, 'current' ) !== false ) {
-							echo '<span class="on">' . esc_html( wp_strip_all_tags( $bc_link ) ) . '</span>';
-						} else {
-							echo $bc_link; // phpcs:ignore — ссылки пагинации WP
-						}
-					}
-					echo '</div>';
-				endif;
-			endif;
+			echo function_exists( 'bc_pager' ) ? bc_pager( $bc_query, $bc_paged ) : '';
 			?>
 		</div>
 

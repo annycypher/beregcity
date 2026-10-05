@@ -105,3 +105,60 @@ function bc_sort_args( $sort ) {
 			return array( 'orderby' => 'date', 'order' => 'DESC' );
 	}
 }
+
+/**
+ * Пагинация .pager по референсу (design/catalog.html).
+ *
+ * @param WP_Query $query Запрос.
+ * @param int      $paged Текущая страница.
+ * @return string HTML.
+ */
+function bc_pager( $query, $paged ) {
+	$max = (int) $query->max_num_pages;
+	if ( $max <= 1 ) {
+		return '';
+	}
+	$out = '<div class="pager">';
+	for ( $i = 1; $i <= $max; $i++ ) {
+		if ( $i === $paged ) {
+			$out .= '<span class="on">' . $i . '</span>';
+		} else {
+			$out .= '<a href="' . esc_url( get_pagenum_link( $i ) ) . '">' . $i . '</a>';
+		}
+	}
+	if ( $paged < $max ) {
+		$out .= '<a href="' . esc_url( get_pagenum_link( $paged + 1 ) ) . '">Дальше →</a>';
+	}
+	$out .= '</div>';
+	return $out;
+}
+
+/**
+ * BreadcrumbList JSON-LD.
+ *
+ * @param array[] $items Массив array( 'name' => string, 'url' => string|null ).
+ * @return string <script>.
+ */
+function bc_breadcrumb_jsonld( $items ) {
+	$list = array();
+	$pos  = 1;
+	foreach ( $items as $it ) {
+		$entry = array(
+			'@type'    => 'ListItem',
+			'position' => $pos,
+			'name'     => $it['name'],
+		);
+		if ( ! empty( $it['url'] ) ) {
+			$entry['item'] = $it['url'];
+		}
+		$list[] = $entry;
+		$pos++;
+	}
+	return '<script type="application/ld+json">' . wp_json_encode(
+		array(
+			'@context'        => 'https://schema.org',
+			'@type'           => 'BreadcrumbList',
+			'itemListElement' => $list,
+		)
+	) . '</script>';
+}

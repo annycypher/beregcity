@@ -60,7 +60,11 @@
 - [✅] 3.2 Списки: `archive-organizations.php` (`/katalog/`) + `taxonomy-bc_cat.php` (`/katalog/{cat}/`) + `template-parts/org-card.php` — **вёрстка по `design/catalog.html`**; стили каталога/карточки в `theme.css`
 - [✅] 3.2б Карточка организации: `single-organizations.php` — **вёрстка по `design/org-card.html`** (галерея, `.org-side`, описание, сторис-заглушка, отзывы-заглушка, карта-заглушка, «Похожие рядом», callbar)
 - [✅] 3.2а Автостатус графика на карточке: `bc_schedule_status()` (`includes/schedule.php`) — открыто/закрыто/«откроется в», особые дни приоритетны, таймзона сайта (задана `Asia/Krasnoyarsk`) — §19 cabinet.md
-- [ ] 3.3 Фильтры — **вёрстка по `design/catalog.html`**: `bc_filters` (таксономия features + живые счётчики), `bc_sort`, `bc_grid` (WP_Query + тарифная логика состава карточки + ItemList JSON-LD), `bc_pager`, BreadcrumbList JSON-LD, программатик-интро (ворота D14); rewrite `/katalog/{cat}/{feature}/`; JS (кнопка фильтров на мобильном — в референсе)
+- [✅] 3.3a Программатик-rewrite `/katalog/{cat}/{feature}/` + ворота D14 (≥3 организации, 404 пустых) — `bc-core/includes/rewrite.php`
+- [ ] 3.3b `bc_filters` (панель features + живые счётчики) + `bc_sort`
+- [ ] 3.3c `bc_grid` (тарифная логика состава карточки + ItemList JSON-LD)
+- [ ] 3.3d `bc_pager` + BreadcrumbList JSON-LD + программатик-интро (D14)
+- [ ] 3.3e JS фильтров (мобильная кнопка `#ftoggle`) + применение без перезагрузки
 - [ ] 3.4 Тарифы в выдаче: `BC_Plans::can`, бейджи, лимиты (фото/описание/снипеты)
 - [ ] 3.4а QR-код карточки в ЛК: генерация PHP, PNG-выгрузка, шаблон наклейки A6 — §18 cabinet.md
 - [ ] 3.5 Админ-экраны `bc-core`: «Утверждение карточек» (D24), «Платежи и счета» (D25), дашборд «БерегСити» (§16)
@@ -76,4 +80,4 @@
 - [ ] 8.x Правообладание: добавить в **Политику конфиденциальности** (копирайт в подвале убран — D31); юр. оговорка на Этап 8
 
 ## Следующий шаг
-Шаг **3.3** — фильтры по снипетам: `bc_filters` (features + счётчики), `bc_sort`, `bc_grid` (тарифная логика карточки + ItemList JSON-LD), `bc_pager`, BreadcrumbList JSON-LD, программатик-интро (D14), rewrite `/katalog/{cat}/{feature}/`.
+Шаг **3.3b** — `bc_filters` (панель снипетов `features` с живыми счётчиками по категории) + `bc_sort` — в `taxonomy-bc_cat.php` и `archive-organizations.php`.

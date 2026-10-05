@@ -56,8 +56,9 @@
 - [✅] 2.5-б Favicon: inline SVG через `wp_head` (`setup.php`, `bc_favicon_svg`) — **форма владельца** из `design/favicon.svg` (знак + волна) под общий стиль сайта: терракотовый градиент `#dda38b→#c48067` + белый знак; не дублируется, если задан WP Site Icon
 - [✅] 2.5-в Логотип/подвал: знак (форма владельца из `design/favicon.svg`) перенесён в шапку (22px) и подвал (20px) через `bc_logo_mark()`; копирайт в подвале убран отовсюду, включая референс (по решению владельца)
 ## Этап 3. Каталог организаций (3а кабинет, 3б снипеты/SEO, 3в 2FA кабинета)
-- [ ] 3.1 Данные `bc-core`: CPT `bc_org`, таксономии `bc_cat`/`features`, ACF-поля (карта данных), `BC_Plans`
-- [ ] 3.2 Шаблоны: архив категории + карточка организации — **вёрстка по `design/catalog.html`** и `design/org-card.html` (оба референса на месте)
+- [✅] 3.1 Данные `bc-core`: CPT `organizations` (rewrite `/katalog/organization/`, `has_archive` `/katalog/`), таксономии `bc_cat`/`features` (34 снипета, 6 групп), ACF-поля (17, ключи `field_bc_*`), сид терминов (D32/D33)
+- [✅] 3.2 Списки: `archive-organizations.php` (`/katalog/`) + `taxonomy-bc_cat.php` (`/katalog/{cat}/`) + `template-parts/org-card.php` — **вёрстка по `design/catalog.html`**; стили каталога/карточки в `theme.css`
+- [ ] 3.2б Карточка организации: `single-organizations.php` — **вёрстка по `design/org-card.html`** (галерея, `.org-side`, описание, сторис-заглушка, отзывы-заглушка, карта-заглушка, «Похожие рядом», callbar)
 - [ ] 3.2а Автостатус графика на карточке (открыто/закрыто, особые дни, таймзона) — §19 cabinet.md
 - [ ] 3.3 Фильтры — **вёрстка по `design/catalog.html`**: `bc_filters` (таксономия features + живые счётчики), `bc_sort`, `bc_grid` (WP_Query + тарифная логика состава карточки + ItemList JSON-LD), `bc_pager`, BreadcrumbList JSON-LD, программатик-интро (ворота D14); rewrite `/katalog/{cat}/{feature}/`; JS (кнопка фильтров на мобильном — в референсе)
 - [ ] 3.4 Тарифы в выдаче: `BC_Plans::can`, бейджи, лимиты (фото/описание/снипеты)
@@ -75,4 +76,4 @@
 - [ ] 8.x Правообладание: добавить в **Политику конфиденциальности** (копирайт в подвале убран — D31); юр. оговорка на Этап 8
 
 ## Следующий шаг
-Шаг **2.5-б** — favicon → WP Site Icon (SVG из референса → PNG 512 → `wp media import` → `site_icon`). Затем хвосты: 3 «Каталог» (жду референсы) или пауза.
+Шаг **3.2б** — карточка организации `single-organizations.php` по `design/org-card.html` (галерея, `.org-side`, описание, сторис-заглушка, отзывы-заглушка, карта-заглушка, «Похожие рядом», callbar).

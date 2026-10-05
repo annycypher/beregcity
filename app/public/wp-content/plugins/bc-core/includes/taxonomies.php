@@ -31,7 +31,7 @@ function bc_register_cpt_organizations() {
 			'menu_icon'    => 'dashicons-store',
 			'supports'     => array( 'title', 'editor', 'thumbnail', 'author' ),
 			'rewrite'      => array( 'slug' => 'katalog/organization', 'with_front' => false ),
-			'has_archive'  => false,
+			'has_archive'  => 'katalog',
 		)
 	);
 }

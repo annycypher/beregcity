@@ -8,7 +8,10 @@
 
 get_header();
 
-$bc_term = get_queried_object();
+$bc_term  = get_queried_object();
+$bc_feat  = isset( $_GET['feat'] ) ? array_filter( array_map( 'absint', (array) $_GET['feat'] ) ) : array();
+$bc_sort  = isset( $_GET['sort'] ) ? sanitize_key( $_GET['sort'] ) : 'premium';
+$bc_order = function_exists( 'bc_sort_args' ) ? bc_sort_args( $bc_sort ) : array( 'orderby' => 'date', 'order' => 'DESC' );
 $bc_n    = (int) $bc_term->count;
 $bc_w    = 'организаций';
 if ( $bc_n % 10 === 1 && $bc_n % 100 !== 11 ) {
@@ -31,36 +34,51 @@ if ( $bc_n % 10 === 1 && $bc_n % 100 !== 11 ) {
 	<div class="cat-layout">
 
 		<aside>
-			<button class="btn btn-glass btn-sm f-toggle" id="ftoggle">Фильтры</button>
-			<div class="filters" id="fl">
-				<?php /* bc_filters: Этап 3.3 — группы/пункты из features, счётчики живые */ ?>
-			</div>
+			<button class="btn btn-glass btn-sm f-toggle" id="ftoggle" type="button">Фильтры</button>
+			<form method="get" action="<?php echo esc_url( get_term_link( $bc_term ) ); ?>">
+				<?php echo function_exists( 'bc_filters' ) ? bc_filters( $bc_term->term_id ) : ''; ?>
+			</form>
 		</aside>
 
 		<div>
 			<div class="cat-top">
 				<span class="found">Найдено: <?php echo $bc_n; ?></span>
-				<label class="sort">Сортировка
-					<select><option>Сначала премиум</option><option>По названию</option><option>По рейтингу</option><option>Новые</option></select>
-				</label>
+				<form method="get" action="<?php echo esc_url( get_term_link( $bc_term ) ); ?>" style="margin:0">
+					<label class="sort">Сортировка
+						<select name="sort" onchange="this.form.submit()">
+							<option value="premium"<?php selected( $bc_sort, 'premium' ); ?>>Сначала премиум</option>
+							<option value="name"<?php selected( $bc_sort, 'name' ); ?>>По названию</option>
+							<option value="rating"<?php selected( $bc_sort, 'rating' ); ?>>По рейтингу</option>
+							<option value="new"<?php selected( $bc_sort, 'new' ); ?>>Новые</option>
+						</select>
+						<?php foreach ( $bc_feat as $bc_fid ) { echo '<input type="hidden" name="feat[]" value="' . (int) $bc_fid . '">'; } ?>
+					</label>
+				</form>
 			</div>
 
 			<div class="org-grid">
 			<?php
 			$bc_paged = max( 1, (int) get_query_var( 'paged' ) );
+			$bc_tax   = array(
+				array(
+					'taxonomy' => 'bc_cat',
+					'field'    => 'term_id',
+					'terms'    => $bc_term->term_id,
+				),
+			);
+			if ( $bc_feat ) {
+				$bc_tax[]           = array( 'taxonomy' => 'features', 'field' => 'term_id', 'terms' => array_values( $bc_feat ) );
+				$bc_tax['relation'] = 'AND';
+			}
 			$bc_query = new WP_Query(
 				array(
 					'post_type'      => 'organizations',
 					'post_status'    => 'publish',
 					'posts_per_page' => 12,
 					'paged'          => $bc_paged,
-					'tax_query'      => array(
-						array(
-							'taxonomy' => 'bc_cat',
-							'field'    => 'term_id',
-							'terms'    => $bc_term->term_id,
-						),
-					),
+					'tax_query'      => $bc_tax,
+					'orderby'        => $bc_order['orderby'],
+					'order'          => $bc_order['order'],
 				)
 			);
 			if ( $bc_query->have_posts() ) :

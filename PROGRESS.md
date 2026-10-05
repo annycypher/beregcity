@@ -61,7 +61,7 @@
 - [✅] 3.2б Карточка организации: `single-organizations.php` — **вёрстка по `design/org-card.html`** (галерея, `.org-side`, описание, сторис-заглушка, отзывы-заглушка, карта-заглушка, «Похожие рядом», callbar)
 - [✅] 3.2а Автостатус графика на карточке: `bc_schedule_status()` (`includes/schedule.php`) — открыто/закрыто/«откроется в», особые дни приоритетны, таймзона сайта (задана `Asia/Krasnoyarsk`) — §19 cabinet.md
 - [✅] 3.3a Программатик-rewrite `/katalog/{cat}/{feature}/` + ворота D14 (≥3 организации, 404 пустых) — `bc-core/includes/rewrite.php`
-- [ ] 3.3b `bc_filters` (панель features + живые счётчики) + `bc_sort`
+- [✅] 3.3b `bc_filters` (панель features + живые счётчики через SQL) + `bc_sort` — интегрировано в `taxonomy-bc_cat.php` и `archive-organizations.php`
 - [ ] 3.3c `bc_grid` (тарифная логика состава карточки + ItemList JSON-LD)
 - [ ] 3.3d `bc_pager` + BreadcrumbList JSON-LD + программатик-интро (D14)
 - [ ] 3.3e JS фильтров (мобильная кнопка `#ftoggle`) + применение без перезагрузки
@@ -80,4 +80,4 @@
 - [ ] 8.x Правообладание: добавить в **Политику конфиденциальности** (копирайт в подвале убран — D31); юр. оговорка на Этап 8
 
 ## Следующий шаг
-Шаг **3.3b** — `bc_filters` (панель снипетов `features` с живыми счётчиками по категории) + `bc_sort` — в `taxonomy-bc_cat.php` и `archive-organizations.php`.
+Шаг **3.3c** — `bc_grid` (тарифная логика состава карточки: free/стандарт/премиум по D15 + ItemList JSON-LD).

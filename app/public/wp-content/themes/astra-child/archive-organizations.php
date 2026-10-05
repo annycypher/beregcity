@@ -72,9 +72,7 @@ if ( $bc_n % 10 === 1 && $bc_n % 100 !== 11 ) {
 				'order'          => $bc_order['order'],
 			);
 			if ( $bc_feat ) {
-				$bc_args['tax_query'] = array(
-					array( 'taxonomy' => 'features', 'field' => 'term_id', 'terms' => array_values( $bc_feat ) ),
-				);
+				$bc_args['tax_query'] = function_exists( 'bc_catalog_tax_query' ) ? bc_catalog_tax_query( 0, $bc_feat ) : array();
 			}
 			$bc_query = new WP_Query( $bc_args );
 			if ( $bc_query->have_posts() ) :

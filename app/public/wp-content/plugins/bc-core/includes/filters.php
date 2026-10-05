@@ -118,16 +118,32 @@ function bc_pager( $query, $paged ) {
 	if ( $max <= 1 ) {
 		return '';
 	}
+	// Сохраняем GET-параметры фильтрации/сортировки в ссылках пагинации.
+	$keep = array();
+	if ( ! empty( $_GET['feat'] ) ) {
+		$keep['feat'] = array_map( 'absint', (array) $_GET['feat'] );
+	}
+	if ( ! empty( $_GET['sort'] ) ) {
+		$keep['sort'] = sanitize_key( $_GET['sort'] );
+	}
 	$out = '<div class="pager">';
 	for ( $i = 1; $i <= $max; $i++ ) {
 		if ( $i === $paged ) {
 			$out .= '<span class="on">' . $i . '</span>';
 		} else {
-			$out .= '<a href="' . esc_url( get_pagenum_link( $i ) ) . '">' . $i . '</a>';
+			$url = get_pagenum_link( $i );
+			if ( $keep ) {
+				$url = add_query_arg( $keep, $url );
+			}
+			$out .= '<a href="' . esc_url( $url ) . '">' . $i . '</a>';
 		}
 	}
 	if ( $paged < $max ) {
-		$out .= '<a href="' . esc_url( get_pagenum_link( $paged + 1 ) ) . '">Дальше →</a>';
+		$url = get_pagenum_link( $paged + 1 );
+		if ( $keep ) {
+			$url = add_query_arg( $keep, $url );
+		}
+		$out .= '<a href="' . esc_url( $url ) . '">Дальше →</a>';
 	}
 	$out .= '</div>';
 	return $out;
@@ -162,3 +178,67 @@ function bc_breadcrumb_jsonld( $items ) {
 		)
 	) . '</script>';
 }
+
+/**
+ * Tax-запрос каталога с логикой D34: AND внутри группы, OR между группами.
+ *
+ * @param int   $cat_id   ID категории bc_cat (0 — без).
+ * @param int[] $feat_ids Выбранные снипеты.
+ * @return array WP_Tax_Query.
+ */
+function bc_catalog_tax_query( $cat_id, $feat_ids ) {
+	$tax = array();
+	if ( $cat_id ) {
+		$tax[] = array( 'taxonomy' => 'bc_cat', 'field' => 'term_id', 'terms' => (int) $cat_id );
+	}
+
+	$groups = array();
+	foreach ( (array) $feat_ids as $fid ) {
+		$g = (string) get_term_meta( (int) $fid, 'bc_group', true );
+		$g = $g ? $g : 'other';
+		$groups[ $g ][] = (int) $fid;
+	}
+
+	$clauses = array();
+	foreach ( $groups as $fids ) {
+		if ( 1 === count( $fids ) ) {
+			$clauses[] = array( 'taxonomy' => 'features', 'field' => 'term_id', 'terms' => $fids[0] );
+		} else {
+			$clauses[] = array( 'taxonomy' => 'features', 'field' => 'term_id', 'terms' => $fids, 'operator' => 'AND' );
+		}
+	}
+
+	if ( $clauses ) {
+		$tax[] = ( 1 === count( $clauses ) ) ? $clauses[0] : array_merge( array( 'relation' => 'OR' ), $clauses );
+	}
+	if ( count( $tax ) > 1 ) {
+		$tax['relation'] = 'AND';
+	}
+	return $tax;
+}
+
+/**
+ * SEO каталога: canonical на чистый URL + noindex для фильтрованных выборок.
+ */
+function bc_catalog_seo_head() {
+	if ( ! is_tax( 'bc_cat' ) && ! is_post_type_archive( 'organizations' ) ) {
+		return;
+	}
+	if ( ! empty( $_GET['feat'] ) ) {
+		echo '<meta name="robots" content="noindex,follow">' . "\n";
+	}
+	$canonical = '';
+	if ( is_tax( 'bc_cat' ) ) {
+		$term    = get_queried_object();
+		$feature = get_query_var( 'bc_feature' );
+		$canonical = $feature
+			? home_url( '/katalog/' . $term->slug . '/' . rawurlencode( $feature ) . '/' )
+			: get_term_link( $term );
+	} elseif ( is_post_type_archive( 'organizations' ) ) {
+		$canonical = home_url( '/katalog/' );
+	}
+	if ( $canonical && ! is_wp_error( $canonical ) ) {
+		echo '<link rel="canonical" href="' . esc_url( $canonical ) . '">' . "\n";
+	}
+}
+add_action( 'wp_head', 'bc_catalog_seo_head' );

@@ -83,17 +83,7 @@ if ( $bc_n % 10 === 1 && $bc_n % 100 !== 11 ) {
 			<div class="org-grid">
 			<?php
 			$bc_paged = max( 1, (int) get_query_var( 'paged' ) );
-			$bc_tax   = array(
-				array(
-					'taxonomy' => 'bc_cat',
-					'field'    => 'term_id',
-					'terms'    => $bc_term->term_id,
-				),
-			);
-			if ( $bc_feat ) {
-				$bc_tax[]           = array( 'taxonomy' => 'features', 'field' => 'term_id', 'terms' => array_values( $bc_feat ) );
-				$bc_tax['relation'] = 'AND';
-			}
+			$bc_tax   = function_exists( 'bc_catalog_tax_query' ) ? bc_catalog_tax_query( $bc_term->term_id, $bc_feat ) : array();
 			$bc_query = new WP_Query(
 				array(
 					'post_type'      => 'organizations',

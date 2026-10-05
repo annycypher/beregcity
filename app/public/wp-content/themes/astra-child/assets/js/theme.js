@@ -48,4 +48,11 @@
 	if (burger && mm) {
 		burger.onclick = function () { mm.classList.toggle('open'); };
 	}
+
+	/* ── Фильтры каталога (мобильная кнопка #ftoggle) ── */
+	var ft = document.getElementById('ftoggle');
+	var fl = document.getElementById('fl');
+	if (ft && fl) {
+		ft.onclick = function () { fl.classList.toggle('open'); };
+	}
 }());

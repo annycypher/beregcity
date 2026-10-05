@@ -14,3 +14,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 require_once plugin_dir_path( __FILE__ ) . 'includes/shortcodes.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/taxonomies.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/fields.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/seed.php';
+
+register_activation_hook( __FILE__, 'bc_seed_catalog' );

@@ -71,8 +71,12 @@ while ( have_posts() ) :
 			</div>
 			<?php endif; ?>
 
-			<?php /* 3.2а: автостатус графика — сейчас статичная заглушка */ ?>
-			<div class="sched"><span class="dot"></span>Сейчас открыто · до 21:00</div>
+			<?php
+			$bc_sched = function_exists( 'bc_schedule_status' ) ? bc_schedule_status( get_the_ID() ) : array( 'open' => false, 'text' => '' );
+			if ( ! empty( $bc_sched['text'] ) ) :
+			?>
+			<div class="sched<?php echo ! empty( $bc_sched['open'] ) ? '' : ' closed'; ?>"><span class="dot"></span><?php echo esc_html( $bc_sched['text'] ); ?></div>
+			<?php endif; ?>
 
 			<?php if ( $bc_phone ) : ?>
 				<a class="btn btn-terra" href="tel:<?php echo esc_attr( $bc_tel_uri ); ?>"><?php echo esc_html( $bc_phone ); ?></a>

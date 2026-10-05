@@ -20,5 +20,6 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/seed.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/schedule.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/rewrite.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/filters.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/plans.php';
 
 register_activation_hook( __FILE__, 'bc_seed_catalog' );

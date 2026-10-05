@@ -94,6 +94,16 @@ if ( $bc_n % 10 === 1 && $bc_n % 100 !== 11 ) {
 			</div>
 
 			<?php
+			$bc_list = array();
+			foreach ( (array) $bc_query->posts as $bc_p ) {
+				$bc_list[] = array( '@type' => 'ListItem', 'position' => count( $bc_list ) + 1, 'url' => get_permalink( $bc_p->ID ) );
+			}
+			if ( $bc_list ) {
+				echo '<script type="application/ld+json">' . wp_json_encode( array( '@context' => 'https://schema.org', '@type' => 'ItemList', 'itemListElement' => $bc_list ) ) . '</script>';
+			}
+			?>
+
+			<?php
 			if ( $bc_query->max_num_pages > 1 ) :
 				$bc_links = paginate_links(
 					array(

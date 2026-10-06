@@ -25,10 +25,13 @@ add_action( 'admin_menu', 'bc_admin_menu' );
  */
 function bc_dashboard_page() {
 	$pending = (int) wp_count_posts( 'organizations' )->pending;
-	// ФАКТ-ПРОВЕРКА: платежи/сторис/отзывы — CPT и таблицы на Этапах 4/5/6а, пока 0.
+	global $wpdb;
 	$payments = 0;
-	$stories  = 0;
-	$reviews  = 0;
+	if ( function_exists( 'bc_payments_table' ) ) {
+		$payments = (int) $wpdb->get_var( "SELECT COUNT(*) FROM " . bc_payments_table() . " WHERE status = 'created'" );
+	}
+	$stories = 0;
+	$reviews = 0;
 	$total    = $pending + $payments + $stories + $reviews;
 
 	$cards = array(

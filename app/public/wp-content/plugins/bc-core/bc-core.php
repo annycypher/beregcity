@@ -27,5 +27,10 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/lk-routes.php';
 require_once plugin_dir_path( __FILE__ ) . 'admin/class-bc-admin.php';
 require_once plugin_dir_path( __FILE__ ) . 'admin/class-bc-approval.php';
 require_once plugin_dir_path( __FILE__ ) . 'admin/class-bc-payments.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/db.php';
 
-register_activation_hook( __FILE__, 'bc_seed_catalog' );
+function bc_activate() {
+	bc_seed_catalog();
+	bc_create_payments_table();
+}
+register_activation_hook( __FILE__, 'bc_activate' );

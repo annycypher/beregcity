@@ -26,6 +26,7 @@ function bc_create_payments_table() {
 		amount int NOT NULL DEFAULT 0,
 		method varchar(20) NOT NULL DEFAULT 'manual',
 		yk_payment_id varchar(100) DEFAULT NULL,
+		token varchar(64) DEFAULT NULL,
 		status varchar(20) NOT NULL DEFAULT 'created',
 		created_at datetime NOT NULL,
 		activated_at datetime DEFAULT NULL,

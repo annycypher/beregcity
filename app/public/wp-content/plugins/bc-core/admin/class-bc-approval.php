@@ -50,6 +50,9 @@ function bc_approval_page() {
 				bc_notify_org( $post_id, 'draft' );
 			} elseif ( 'reject' === $action ) {
 				wp_update_post( array( 'ID' => $post_id, 'post_status' => 'trash' ) );
+				if ( function_exists( 'bc_record_rejected_ip' ) ) {
+					bc_record_rejected_ip( $post_id );
+				}
 				bc_notify_org( $post_id, 'rejected', $reason );
 			}
 			echo '<div class="notice notice-success is-dismissible"><p>Действие выполнено.</p></div>';
@@ -59,11 +62,12 @@ function bc_approval_page() {
 	$q = new WP_Query( array( 'post_type' => 'organizations', 'post_status' => 'pending', 'posts_per_page' => 50, 'orderby' => 'date', 'order' => 'DESC' ) );
 
 	echo '<div class="wrap"><h1>Утверждение карточек</h1>';
+	bc_info_block( 'approval' );
 	if ( ! $q->have_posts() ) {
 		echo '<p>Очередь пуста — новых карточек на утверждении нет.</p>';
 	} else {
 		echo '<p>Карточки просматриваются целиком в предпросмотре «как на сайте». Одобрение — по одной, массового одобрения нет (D24).</p>';
-		echo '<table class="widefat striped"><thead><tr><th>Название</th><th>Категория</th><th>Тариф</th><th>Действия</th></tr></thead><tbody>';
+		echo '<table class="widefat striped"><thead><tr><th>Название</th><th>Категория</th><th>Тариф</th><th>Фрод</th><th>Действия</th></tr></thead><tbody>';
 		while ( $q->have_posts() ) {
 			$q->the_post();
 			$id   = get_the_ID();
@@ -72,10 +76,12 @@ function bc_approval_page() {
 			$plan = function_exists( 'bc_plan' ) ? bc_plan( $id ) : 'free';
 			$url  = admin_url( 'admin.php?page=bc-approval' );
 			$n    = wp_create_nonce( 'bc_approve' );
-			echo '<tr>';
+			$row_style = function_exists( 'bc_fraud_has_red' ) && bc_fraud_has_red( $id ) ? ' style="background:#fbeae5"' : '';
+			echo '<tr' . $row_style . '>';
 			echo '<td><strong>' . esc_html( get_the_title() ) . '</strong><br><a href="' . esc_url( get_preview_post_link( $id ) ) . '" target="_blank">предпросмотр «как на сайте»</a></td>';
 			echo '<td>' . esc_html( $cat ) . '</td>';
 			echo '<td>' . esc_html( $plan ) . '</td>';
+			echo '<td>' . ( function_exists( 'bc_fraud_badges' ) ? bc_fraud_badges( $id ) : '—' ) . '</td>';
 			echo '<td>';
 			echo '<a class="button button-primary" href="' . esc_url( add_query_arg( array( 'bc_action' => 'approve', 'post' => $id, '_wpnonce' => $n ), $url ) ) . '">Одобрить</a> ';
 			echo '<a class="button" href="' . esc_url( add_query_arg( array( 'bc_action' => 'draft', 'post' => $id, '_wpnonce' => $n ), $url ) ) . '">На доработку</a> ';

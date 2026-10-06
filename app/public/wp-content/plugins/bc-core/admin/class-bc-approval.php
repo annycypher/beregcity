@@ -41,6 +41,9 @@ function bc_approval_page() {
 		if ( 'organizations' === get_post_type( $post_id ) ) {
 			if ( 'approve' === $action ) {
 				wp_update_post( array( 'ID' => $post_id, 'post_status' => 'publish' ) );
+				if ( class_exists( 'BC_Plans' ) && method_exists( 'BC_Plans', 'start_trial' ) ) {
+					BC_Plans::start_trial( $post_id );
+				}
 				bc_notify_org( $post_id, 'approved' );
 			} elseif ( 'draft' === $action ) {
 				wp_update_post( array( 'ID' => $post_id, 'post_status' => 'draft' ) );

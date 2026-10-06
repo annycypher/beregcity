@@ -75,6 +75,11 @@ class BC_Plans {
 		'premium'  => array( 'photos' => 25, 'desc' => 5000, 'features' => -1, 'social' => true, 'promo' => 8, 'keywords' => 15 ),
 	);
 
+	// Цены и периоды (СПРАВОЧНИК §2; скидки [ФАКТ-ПРОВЕРКА период]).
+	const PRICES         = array( 'standard' => 1290, 'premium' => 3690 );
+	const PERIODS        = array( 'month' => 1, 'quarter' => 3, 'year' => 12 );
+	const PERIOD_DISCOUNT = array( 'month' => 0, 'quarter' => 0.05, 'year' => 0.10 );
+
 	public static function limit( $plan, $key ) {
 		return isset( self::LIMITS[ $plan ][ $key ] ) ? self::LIMITS[ $plan ][ $key ] : 0;
 	}
@@ -89,7 +94,66 @@ class BC_Plans {
 		}
 		return (int) $count <= (int) $limit;
 	}
+
+	/**
+	 * Сумма за период (с учётом скидки).
+	 */
+	public static function price( $plan, $period ) {
+		$base     = isset( self::PRICES[ $plan ] ) ? self::PRICES[ $plan ] : 0;
+		$months   = isset( self::PERIODS[ $period ] ) ? self::PERIODS[ $period ] : 1;
+		$discount = isset( self::PERIOD_DISCOUNT[ $period ] ) ? self::PERIOD_DISCOUNT[ $period ] : 0;
+		return (int) round( $base * $months * ( 1 - $discount ) );
+	}
+
+	/**
+	 * Единая точка активации тарифа (D8/D25): plan_until = max(today, текущий) + период.
+	 */
+	public static function activate( $org_id, $plan, $period, $payment_id = 0 ) {
+		$months  = isset( self::PERIODS[ $period ] ) ? self::PERIODS[ $period ] : 1;
+		$current = get_field( 'field_bc_plan_until', $org_id );
+		$now     = current_time( 'Y-m-d' );
+		$base    = ( $current && $current > $now ) ? $current : $now;
+		$until   = date( 'Y-m-d', strtotime( $base . ' +' . $months . ' months' ) );
+		update_field( 'field_bc_plan', $plan, $org_id );
+		update_field( 'field_bc_plan_until', $until, $org_id );
+		update_field( 'field_bc_trial_until', '', $org_id );
+		return $until;
+	}
+
+	/**
+	 * Триал: trial_until = дата одобрения +7 дней (D15).
+	 */
+	public static function start_trial( $org_id ) {
+		$until = date( 'Y-m-d', strtotime( current_time( 'Y-m-d' ) . ' +7 days' ) );
+		update_field( 'field_bc_plan', 'trial', $org_id );
+		update_field( 'field_bc_trial_until', $until, $org_id );
+		update_field( 'field_bc_plan_until', '', $org_id );
+		return $until;
+	}
 }
+
+/**
+ * Проверка лимитов ДО сохранения (ACF): превышение → ошибка со ссылкой на тариф.
+ */
+function bc_validate_limits() {
+	if ( ! isset( $_POST['_acf_post_id'] ) ) {
+		return;
+	}
+	$pid = sanitize_text_field( wp_unslash( $_POST['_acf_post_id'] ) );
+	if ( 'new' === $pid || 'new_post' === $pid || '' === $pid ) {
+		return;
+	}
+	$post_id = (int) $pid;
+	if ( 'organizations' !== get_post_type( $post_id ) ) {
+		return;
+	}
+	$plan  = bc_plan( $post_id );
+	$feats = count( get_the_terms( $post_id, 'features' ) ?: array() );
+	if ( ! BC_Plans::can( $plan, 'features', $feats ) ) {
+		acf_add_validation_error( '', 'Превышен лимит снипетов для вашего тарифа. <a href="/kabinet/billing/">Повысить тариф</a>' );
+	}
+}
+add_filter( 'acf/validate_save_post', 'bc_validate_limits' );
 
 /**
  * Сортировка premium↑: orderby 'bc_plan' → приоритет тарифа.

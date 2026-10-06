@@ -42,3 +42,17 @@ $prog = function_exists( 'bc_progress' ) ? bc_progress( $org_id ) : array( 'perc
 	}
 	?>
 </div>
+
+	<?php if ( function_exists( 'bc_qr_svg' ) && in_array( bc_plan( $org_id ), array( 'standard', 'premium' ), true ) ) : ?>
+	<div class="panel">
+		<h2>QR-код вашей карточки</h2>
+		<div class="qr-block">
+			<div class="qr-img"><?php echo bc_qr_svg( get_permalink( $org_id ) ); ?></div>
+			<div class="qr-txt">
+				<b>Найдите нас на beregcity.ru</b>
+				<p>Отсканируйте телефоном — откроется ваша карточка. Доступно на тарифе Стандарт+.</p>
+				<a class="btn btn-glass btn-sm" href="/qr/<?php echo (int) $org_id; ?>/">Скачать PNG</a>
+			</div>
+		</div>
+	</div>
+	<?php endif; ?>

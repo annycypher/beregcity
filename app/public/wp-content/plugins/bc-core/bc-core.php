@@ -30,6 +30,7 @@ require_once plugin_dir_path( __FILE__ ) . 'admin/class-bc-payments.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/db.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/invoice.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/stats.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/qr.php';
 
 function bc_activate() {
 	bc_seed_catalog();

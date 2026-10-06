@@ -70,7 +70,7 @@ $promos = get_posts(
 	<?php if ( $err ) : ?><div style="background:#fbeae5;border-radius:10px;padding:10px 14px;margin-bottom:14px;font-size:13px;color:#b0755c"><?php echo wp_kses_post( $err ); ?></div><?php endif; ?>
 	<?php if ( $ok ) : ?><div style="background:#f1f5ec;border-radius:10px;padding:10px 14px;margin-bottom:14px;font-size:13px;color:#2b332e"><?php echo esc_html( $ok ); ?></div><?php endif; ?>
 	<form method="post">
-		<div class="f"><label>Заголовок акции</label><input name="promo_title" required></div>
+		<div class="f"><label>Заголовок акции</label><input name="promo_title" required><div class="hint">Коротко и ясно: что предлагаете и какая выгода для жителя.</div></div>
 		<div class="f"><label>Описание</label><textarea name="promo_content" rows="4"></textarea><div class="hint">Акция появится в ленте с пометкой «Реклама» после проверки редакцией</div></div>
 		<?php wp_nonce_field( 'bc_promo', 'bc_promo_nonce' ); ?>
 		<button class="btn btn-terra" type="submit">Отправить на модерацию</button>

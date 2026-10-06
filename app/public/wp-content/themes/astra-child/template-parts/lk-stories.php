@@ -58,8 +58,8 @@ $my_stories = get_posts( array( 'post_type' => 'stories', 'author' => $user->ID,
 	<?php else : ?>
 		<p class="gal-lim">Подайте заявку — редакция соберёт сторию из ваших материалов (фото приложите в описании или передайте редакции).</p>
 		<form method="post">
-			<div class="f"><label>Название стории</label><input name="story_title" required></div>
-			<div class="f"><label>Что показать (описание)</label><textarea name="story_desc" rows="3"></textarea></div>
+			<div class="f"><label>Название стории</label><input name="story_title" required><div class="hint">Внутреннее название — что будет в стории.</div></div>
+			<div class="f"><label>Что показать (описание)</label><textarea name="story_desc" rows="3"></textarea><div class="hint"><?php echo esc_html( bc_hint( 'story_slide' ) ); ?>. Опишите идею — редакция соберёт сторию.</div></div>
 			<?php wp_nonce_field( 'bc_story', 'bc_story_nonce' ); ?>
 			<button class="btn btn-terra" type="submit">Подать заявку</button>
 		</form>

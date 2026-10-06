@@ -29,6 +29,8 @@ $until = ( $org_id && function_exists( 'get_field' ) ) ? get_field( 'field_bc_pl
 		<?php if ( $until ) : ?><span class="until">тариф до <?php echo esc_html( $until ); ?></span><?php endif; ?>
 	</div>
 
+	<?php if ( function_exists( 'bc_reminders_org' ) ) { bc_reminders_org( $org_id ); } ?>
+
 	<div class="lk">
 		<nav class="lk-nav">
 			<a class="<?php echo 'card' === $tab ? 'on' : ''; ?>" href="/kabinet/card/">Моя карточка</a>
@@ -49,11 +51,11 @@ $until = ( $org_id && function_exists( 'get_field' ) ) ? get_field( 'field_bc_pl
 			<?php elseif ( 'card' === $tab ) : ?>
 				<?php get_template_part( 'template-parts/lk-card' ); ?>
 			<?php elseif ( 'photo' === $tab ) : ?>
-				<div class="panel"><h2>Фото</h2><p>Загрузка фотографий — в следующем шаге.</p></div>
+				<div class="panel"><h2>Фото</h2><div class="hint"><?php echo esc_html( bc_hint( 'org_photo' ) ); ?>. Горизонтальные, первое — обложка.</div><p>Загрузка фотографий — в следующем шаге.</p></div>
 			<?php elseif ( 'promo' === $tab ) : ?>
 				<?php get_template_part( 'template-parts/lk-promo' ); ?>
 			<?php elseif ( 'billing' === $tab ) : ?>
-				<div class="panel"><h2>Тариф и оплата</h2><p>Платежи и счета — в шаге 3а.5.</p></div>
+				<div class="panel"><h2>Тариф и оплата</h2><div class="hint">Здесь будут счета и продление тарифа. Пока оплата — по договорённости с редакцией.</div><p>Платежи и счета — в шаге 3а.5.</p></div>
 			<?php elseif ( 'stats' === $tab ) : ?>
 				<?php get_template_part( 'template-parts/lk-stats' ); ?>
 			<?php elseif ( 'stories' === $tab ) : ?>

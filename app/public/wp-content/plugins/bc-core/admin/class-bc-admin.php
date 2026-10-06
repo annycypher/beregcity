@@ -53,6 +53,8 @@ function bc_dashboard_page() {
 			</div>
 			<?php endforeach; ?>
 		</div>
+		<?php bc_info_block( 'dashboard' ); ?>
+		<?php bc_reminders_admin(); ?>
 	</div>
 	<?php
 }

@@ -56,6 +56,7 @@ function bc_stories_moderation_page() {
 	$q = new WP_Query( array( 'post_type' => 'stories', 'post_status' => 'pending', 'posts_per_page' => 50, 'orderby' => 'date', 'order' => 'DESC' ) );
 
 	echo '<div class="wrap"><h1>Сторис — модерация</h1>';
+	bc_info_block( 'stories' );
 	if ( ! $q->have_posts() ) {
 		echo '<p>Очередь пуста — сторий на модерации нет.</p>';
 	} else {

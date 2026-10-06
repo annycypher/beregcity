@@ -39,6 +39,7 @@ function bc_payments_page() {
 	$rows = $wpdb->get_results( "SELECT * FROM {$table} WHERE status = 'created' ORDER BY created_at DESC LIMIT 100" );
 
 	echo '<div class="wrap"><h1>Платежи и счета</h1>';
+	bc_info_block( 'payments' );
 	if ( ! $rows ) {
 		echo '<p>Очередь пуста — платежей к подтверждению нет.</p>';
 	} else {

@@ -47,8 +47,7 @@ $until = ( $org_id && function_exists( 'get_field' ) ) ? get_field( 'field_bc_pl
 			<?php elseif ( 'photo' === $tab ) : ?>
 				<div class="panel"><h2>Фото</h2><p>Загрузка фотографий — в следующем шаге.</p></div>
 			<?php elseif ( 'promo' === $tab ) : ?>
-				<?php /* bc_promo: акции организации — каркас; запись включится на Этапе 4 */ ?>
-				<div class="panel"><h2>Акции</h2><p>Акции появятся после запуска (Этап 4).</p></div>
+				<?php get_template_part( 'template-parts/lk-promo' ); ?>
 			<?php elseif ( 'billing' === $tab ) : ?>
 				<div class="panel"><h2>Тариф и оплата</h2><p>Платежи и счета — в шаге 3а.5.</p></div>
 			<?php elseif ( 'stats' === $tab ) : ?>

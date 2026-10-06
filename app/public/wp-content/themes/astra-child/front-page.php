@@ -32,16 +32,7 @@ get_header();
   </div>
 
   <!-- Сторис -->
-  <?php /* bc_stories: заменить на [bc_stories] на Этапе 5 */ ?>
-  <div class="stories">
-    <a class="story" href="/stories/novosti"><span class="ring"><span class="in"><svg class="ico" viewBox="0 0 24 24"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-4 0V9"/><path d="M12 6h6M12 10h6M12 14h6"/></svg></span></span><b>Новости</b></a>
-    <a class="story" href="/stories/akcii"><span class="ring"><span class="in"><svg class="ico" viewBox="0 0 24 24"><path d="M20.59 13.41L11 3.83A2 2 0 0 0 9.59 3.24H4a1 1 0 0 0-1 1v5.59a2 2 0 0 0 .59 1.41l9.58 9.59a2 2 0 0 0 2.83 0l4.59-4.59a2 2 0 0 0 0-2.83z"/><circle cx="7.5" cy="7.5" r="1"/></svg></span></span><b>Акции</b></a>
-    <a class="story" href="/stories/novye"><span class="ring"><span class="in"><svg class="ico" viewBox="0 0 24 24"><path d="M12 2l2.4 6.2L21 9l-5 4.1 1.6 6.4L12 15.8 6.4 19.5 8 13.1 3 9l6.6-.8z"/></svg></span></span><b>Новые места</b></a>
-    <a class="story" href="/stories/afisha"><span class="ring"><span class="in"><svg class="ico" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="3"/><path d="M8 2v4M16 2v4M3 10h18"/></svg></span></span><b>Афиша</b></a>
-    <a class="story" href="/stories/obyavleniya"><span class="ring"><span class="in"><svg class="ico" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span></span><b>Объявления</b></a>
-    <a class="story" href="/stories/zhkh"><span class="ring"><span class="in"><svg class="ico" viewBox="0 0 24 24"><path d="M17.5 19a4.5 4.5 0 1 0-.44-8.98A7 7 0 1 0 4 14.9"/><path d="M12 12v9M8.5 17.5L12 21l3.5-3.5"/></svg></span></span><b>ЖКХ</b></a>
-    <a class="story" href="/stories/transport"><span class="ring"><span class="in"><svg class="ico" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="14" rx="3"/><path d="M4 10h16M8 21l1.5-4M16 21l-1.5-4"/></svg></span></span><b>Транспорт</b></a>
-  </div>
+  <?php echo do_shortcode( '[bc_stories]' ); ?>
 
   <!-- Реклама -->
   <?php /* bc_banner: на Этапе 6.1 заменить на [bc_banner zone="wide"] и [bc_banner zone="duo-1|duo-2"] */ ?>

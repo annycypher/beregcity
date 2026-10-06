@@ -118,12 +118,7 @@ while ( have_posts() ) :
 	<!-- Стории компании (Этап 5.4в — якорь) -->
 	<section>
 		<h2 class="sec">Стории компании</h2>
-		<div class="org-stories">
-			<?php /* bc_org_stories: заменить на живые стории на Этапе 5 */ ?>
-			<div class="story"><span class="ring"><span class="in">Х</span></span><small>Новинки</small></div>
-			<div class="story"><span class="ring"><span class="in">К</span></span><small>Заходите</small></div>
-			<div class="story"><span class="ring"><span class="in">А</span></span><small>Акции</small></div>
-		</div>
+		<?php echo do_shortcode( '[bc_stories org="' . get_the_ID() . '"]' ); ?>
 	</section>
 
 	<!-- Отзывы (Этап 4 — якорь) -->

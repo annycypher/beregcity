@@ -41,6 +41,7 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/forms.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/map.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/notify.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/seo.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/patterns.php';
 
 function bc_activate() {
 	bc_seed_catalog();

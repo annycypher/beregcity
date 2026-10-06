@@ -84,7 +84,7 @@
 - [✅] 4.1 Данные: CPT `news` (тип/is_pinned/erid) + CPT `events` (дата/место/цена/is_free) + ACF — `cpt-news.php`
 - [✅] 4.2 Шаблоны: `archive-news.php`/`single-news.php` + `archive-events.php`/`single-events.php` (фильтр по датам предстоящие/прошедшие/все) + JSON-LD Event
 - [✅] 4.3 Живые блоки главной: «Новости района» (3 последних news) и «Афиша» (3 предстоящих events) из БД в `front-page.php`
-- [✅] 4.4 Вкладка ЛК «Акции»: создание акции (news тип promo) + лимит тарифа (`BC_Plans::can` promo) + модерация (pending→publish). Гутенберг-паттерны статей — отложено (нужны паттерны от владельца)
+- [✅] 4.4 Вкладка ЛК «Акции» (создание акции + лимит + модерация) + Гутенберг-паттерны (3 шаблона статей организаций: статья / фото+текст / акция с CTA) — `patterns.php`
 ## Этап 5. Сторис
 - [✅] 5.1 Данные: CPT `stories` + ACF (repeater слайдов: image/caption/btn_text/link_url/is_ad/erid, show_until, sort_order) — `cpt-stories.php`
 - [✅] 5.2 Вывод: `[bc_stories]`/`[bc_stories org="ID"]` (данные STORIES) + вьюер `stories.js` (5.3 КБ ≤40, bc_seen, жесты/автоплей 6с) + стили вьюера

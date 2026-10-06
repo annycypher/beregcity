@@ -21,6 +21,8 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/schedule.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/rewrite.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/filters.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/plans.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/roles.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/register.php';
 require_once plugin_dir_path( __FILE__ ) . 'admin/class-bc-admin.php';
 require_once plugin_dir_path( __FILE__ ) . 'admin/class-bc-approval.php';
 require_once plugin_dir_path( __FILE__ ) . 'admin/class-bc-payments.php';

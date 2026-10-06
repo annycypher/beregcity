@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Личный кабинет организации | БерегСити</title>
+<style>
+/* ═══ v3.3 «Северный светлый» — единая с homepage.html ═══ */
+:root{
+  --bg:#fcfaf6; --card:#fff; --ink:#2b332e; --body:#4d564f; --muted:#8d968e; --icon:#5e685f;
+  --terra:#c98d75; --terra-d:#b0755c; --terra-l:#f9ece6;
+  --sage:#93ad89; --sage-d:#6f9165; --sage-l:#f1f5ec;
+  --line:rgba(43,51,46,.08); --glass:rgba(255,255,255,.5);
+  --r:14px; --r-btn:12px; --shadow:0 8px 24px rgba(90,75,60,.05);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,"Segoe UI",Roboto,Arial,sans-serif;font-weight:400;color:var(--body);line-height:1.6;background:var(--bg)}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1140px;margin:0 auto;padding:0 18px}
+.ico{width:24px;height:24px;stroke:currentColor;stroke-width:1.6;fill:none;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.btn{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:var(--r-btn);font-weight:500;font-size:14.5px;padding:12px 22px;cursor:pointer;border:none;transition:.2s;overflow:hidden;isolation:isolate;white-space:nowrap}
+.btn>*{position:relative;z-index:1}
+.btn:hover{transform:translateY(-2px)}
+.btn-terra{background:linear-gradient(165deg,rgba(240,150,110,.72),rgba(184,92,56,.62));backdrop-filter:blur(18px) saturate(1.8);-webkit-backdrop-filter:blur(18px) saturate(1.8);border:1px solid rgba(255,255,255,.65);color:#fff;box-shadow:inset 0 2px 5px rgba(255,255,255,.6),inset 0 -10px 18px rgba(150,60,30,.28),0 12px 30px rgba(184,92,56,.45)}
+.btn-glass{background:rgba(255,255,255,.22);backdrop-filter:blur(16px) saturate(1.5);-webkit-backdrop-filter:blur(16px) saturate(1.5);color:var(--terra-d);font-weight:600}
+.btn-glass::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:1.5px;background:linear-gradient(135deg,rgba(255,255,255,.95),rgba(232,138,94,.95),rgba(255,255,255,.35));-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none}
+.btn-sm{padding:9px 16px;font-size:13px}
+.btn[disabled]{opacity:.45;cursor:not-allowed;transform:none!important}
+
+/* ── Шапка ЛК ── */
+.lk-hdr{margin-top:20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.lk-hdr h1{font-size:26px;font-weight:300;color:var(--ink);letter-spacing:-.3px}
+.lk-hdr .status{font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:#fff;background:linear-gradient(120deg,var(--terra),var(--terra-d));padding:4px 12px;border-radius:999px}
+.lk-hdr .until{font-size:13px;color:var(--muted)}
+
+/* ── Каркас: вкладки + контент ── */
+.lk{display:grid;grid-template-columns:230px 1fr;gap:22px;margin-top:20px;align-items:start}
+.lk-nav{position:sticky;top:86px;background:var(--glass);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border:1px solid rgba(255,255,255,.85);border-radius:var(--r);box-shadow:var(--shadow);padding:12px}
+.lk-nav a{display:flex;align-items:center;gap:10px;padding:11px 14px;border-radius:10px;font-size:14px;font-weight:500;color:var(--body)}
+.lk-nav a:hover{background:rgba(255,255,255,.7);color:var(--terra-d)}
+.lk-nav a.on{background:var(--terra-l);color:var(--terra-d);font-weight:600}
+.lk-nav a .n{margin-left:auto;font-size:11px;background:var(--terra);color:#fff;border-radius:999px;padding:1px 8px}
+.lk-nav a.off{opacity:.45;cursor:default}
+.lk-content{min-width:0}
+.tab{display:none}.tab.on{display:block}
+@media(max-width:860px){
+  .lk{grid-template-columns:1fr}
+  .lk-nav{position:static;display:flex;overflow-x:auto;gap:4px;padding:8px}
+  .lk-nav a{white-space:nowrap;padding:9px 13px}
+  .lk-nav a span{display:none} /* иконки без подписей */
+}
+
+/* ── Прогресс ── */
+.prog{display:flex;gap:18px;align-items:center;background:var(--card);border:1px solid var(--line);
+  border-radius:var(--r);box-shadow:var(--shadow);padding:18px;margin-bottom:16px}
+.prog-ring{width:84px;height:84px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;
+  background:conic-gradient(var(--terra) 0 40%,#eee7db 40% 100%);position:relative}
+.prog-ring::before{content:"";position:absolute;inset:9px;border-radius:50%;background:#fff}
+.prog-ring b{position:relative;font-size:20px;font-weight:600;color:var(--ink)}
+.prog-txt b{display:block;color:var(--ink);font-size:14.5px;margin-bottom:4px;font-weight:600}
+.prog-txt p{font-size:13px;color:var(--muted)}
+.prog-list{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.prog-list a{font-size:12px;font-weight:600;color:var(--terra-d);background:var(--terra-l);border-radius:999px;padding:5px 12px}
+.prog-list a:hover{background:#f3d9cb}
+
+/* ── Формы ── */
+.panel{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:22px;margin-bottom:16px}
+.panel h2{font-size:17px;font-weight:600;color:var(--ink);margin-bottom:14px}
+.f-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.f{margin-bottom:14px}
+.f label{display:block;font-size:12.5px;font-weight:600;color:var(--ink);margin-bottom:5px}
+.f input,.f textarea,.f select{width:100%;padding:11px 14px;border-radius:10px;border:1px solid var(--line);
+  background:#fbfaf7;font-size:14px;color:var(--ink);outline:none;font-family:inherit;transition:.2s}
+.f input:focus,.f textarea:focus,.f select:focus{background:#fff;border-color:var(--terra);box-shadow:0 0 0 4px rgba(201,141,117,.1)}
+.f .hint{font-size:11.5px;color:var(--muted);margin-top:4px}
+.f .count{float:right;font-weight:400;color:var(--muted)}
+.hp{position:absolute;left:-9999px} /* honeypot */
+.save-row{display:flex;gap:10px;align-items:center}
+.save-row .saved{font-size:12.5px;color:var(--sage-d)}
+
+/* ── Фото ── */
+.gal-add{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.gal-add .cell{aspect-ratio:4/3;border-radius:10px;background:#efe8dc;border:1px dashed #d8cfc0;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:#b3a690;
+  font-size:11.5px;cursor:pointer;transition:.2s}
+.gal-add .cell:hover{border-color:var(--terra);color:var(--terra-d)}
+.gal-add .cell .ico{width:22px;height:22px}
+.gal-lim{font-size:12.5px;color:var(--muted);margin-bottom:12px}
+.gal-lim b{color:var(--ink)}
+
+/* ── Тарифы ── */
+.trials{font-size:13.5px;background:var(--sage-l);border:1px solid rgba(147,173,137,.35);border-radius:10px;padding:12px 16px;margin-bottom:16px;color:var(--body)}
+.trials b{color:var(--sage-d)}
+.tariff-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}
+.tariff{border:1px solid var(--line);border-radius:var(--r);padding:20px;background:var(--card);position:relative}
+.tariff.hot{border-color:rgba(201,141,117,.5);box-shadow:0 10px 28px rgba(201,141,117,.12)}
+.tariff .best{position:absolute;top:-10px;right:14px;font-size:9.5px;letter-spacing:1px;text-transform:uppercase;font-weight:700;color:#fff;background:linear-gradient(120deg,var(--terra),var(--terra-d));padding:3px 10px;border-radius:6px}
+.tariff h3{font-size:15px;font-weight:600;color:var(--ink)}
+.tariff .price{font-size:30px;font-weight:300;color:var(--ink);margin:6px 0 2px}
+.tariff .price small{font-size:13px;color:var(--muted);font-weight:400}
+.tariff ul{list-style:none;margin:12px 0 16px}
+.tariff li{font-size:12.5px;padding:4px 0;display:flex;gap:8px;align-items:center}
+.tariff li svg{width:14px;height:14px;stroke:var(--sage-d);stroke-width:2.4;fill:none;stroke-linecap:round;flex:none}
+.tariff .btn{width:100%}
+.periods{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap}
+.periods label{cursor:pointer}
+.periods input{display:none}
+.periods span{display:inline-block;padding:9px 16px;border-radius:10px;border:1px solid var(--line);background:var(--card);font-size:13.5px;color:var(--body);transition:.2s}
+.periods input:checked+span{border-color:var(--terra);color:var(--terra-d);background:var(--terra-l);font-weight:600}
+/* счёт-таблица */
+.inv-table{width:100%;border-collapse:collapse;font-size:13px}
+.inv-table th{text-align:left;font-size:11px;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);padding:8px 10px;border-bottom:1px solid var(--line)}
+.inv-table td{padding:11px 10px;border-bottom:1px solid var(--line);color:var(--body)}
+.inv-table .st{font-size:11px;font-weight:700;border-radius:999px;padding:3px 10px}
+.st.wait{color:#92400e;background:#fef3c7}
+.st.ok{color:var(--sage-d);background:var(--sage-l)}
+.st.reject{color:#b91c1c;background:#fee2e2}
+.inv-table .act a{color:var(--terra-d);font-weight:600;font-size:12.5px}
+
+/* ── Статистика ── */
+.stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:16px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:16px 18px}
+.stat .num{font-size:32px;font-weight:300;color:var(--ink);line-height:1}
+.stat .lbl{font-size:12px;color:var(--muted);margin-top:6px}
+.stat .delta{font-size:11.5px;font-weight:600;margin-top:6px;color:var(--sage-d)}
+.bars14{display:flex;align-items:flex-end;gap:5px;height:110px;background:var(--card);border:1px solid var(--line);
+  border-radius:var(--r);box-shadow:var(--shadow);padding:16px}
+.bars14 i{flex:1;border-radius:5px 5px 0 0;background:linear-gradient(180deg,var(--terra-l),var(--terra));min-height:6px}
+.bars14 i.peak{background:linear-gradient(180deg,#f3c3ab,var(--terra-d))}
+
+/* ── QR ── */
+.qr-block{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.qr-img{width:108px;height:108px;border-radius:10px;border:1px solid var(--line);background:#fff;padding:8px}
+.qr-img svg{width:100%;height:100%}
+.qr-txt b{font-size:13.5px;color:var(--ink);display:block;margin-bottom:4px}
+.qr-txt p{font-size:12px;color:var(--muted);max-width:300px;margin-bottom:10px}
+
+/* ── Auth-превью (вход / регистрация / 2FA) ── */
+.auth-row{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:36px}
+.auth-card{background:var(--card);border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--shadow);padding:22px}
+.auth-card h3{font-size:17px;font-weight:600;color:var(--ink);margin-bottom:14px}
+.auth-card .btn{width:100%}
+.auth-note{font-size:11.5px;color:var(--muted);margin-top:10px;text-align:center}
+.auth-note a{color:var(--terra-d);font-weight:600}
+
+@media(max-width:640px){
+  .f-row,.tariff-row,.stat-row,.auth-row{grid-template-columns:1fr}
+  .gal-add{grid-template-columns:repeat(2,1fr)}
+}
+@media print{ /* счёт печатается отдельно шаблоном bc-invoice — здесь не нужен */ }
+</style>
+</head>
+<body>
+
+<!-- Шапка ЛК (в проде header.php) -->
+<div class="wrap">
+
+  <!-- ── Шапка кабинета ── -->
+  <div class="lk-hdr">
+    <h1>Личный кабинет</h1>
+    <span class="status">Триал</span>
+    <span class="until">активен до 14.10.2026 · осталось 5 дней</span>
+    <!--Trial: до даты одобрения +7 (D15). После триала плашка «Продлить», карточка frozen→free -->
+  </div>
+
+  <div class="lk">
+
+    <!-- ═══ Навигация вкладок ═══ -->
+    <nav class="lk-nav">
+      <a class="on" href="#card" data-tab="card"><svg class="ico" style="width:18px;height:18px" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18M7 15h4"/></svg><span>Моя карточка</span></a>
+      <a href="#photo" data-tab="photo"><svg class="ico" style="width:18px;height:18px" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg><span>Фото</span></a>
+      <a href="#promo" data-tab="promo"><svg class="ico" style="width:18px;height:18px" viewBox="0 0 24 24"><path d="M20.6 13.4L11 3.8A2 2 0 0 0 9.6 3.2H4a1 1 0 0 0-1 1v5.6a2 2 0 0 0 .6 1.4l9.6 9.6a2 2 0 0 0 2.8 0l4.6-4.6a2 2 0 0 0 0-2.8z"/><circle cx="7.5" cy="7.5" r="1"/></svg><span>Акции</span><i class="n">1</i></a>
+      <a href="#tariff" data-tab="tariff"><svg class="ico" style="width:18px;height:18px" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg><span>Тариф и оплата</span></a>
+      <a href="#stats" data-tab="stats"><svg class="ico" style="width:18px;height:18px" viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg><span>Статистика</span></a>
+      <a class="off" href="#" title="Появится после запуска сторий (Этап 5)"><svg class="ico" style="width:18px;height:18px" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/></svg><span>Мои стории</span></a>
+    </nav>
+
+    <!-- ═══ КОНТЕНТ ═══ -->
+    <div class="lk-content">
+
+      <!-- ВКЛАДКА: Моя карточка -->
+      <div class="tab on" id="tab-card">
+        <!-- Прогресс заполнения (cabinet.md §17, Этап 3а) -->
+        <div class="prog">
+          <div class="prog-ring"><b>40%</b></div>
+          <div class="prog-txt">
+            <b>Карточка заполнена на 40%</b>
+            <p>Заполненные карточки получают в разы больше просмотров. Начните с самого простого:</p>
+            <div class="prog-list">
+              <a href="#">Загрузить фото (3)</a>
+              <a href="#">Добавить соцсети</a>
+              <a href="#">Расписать график</a>
+              <a href="#">Заполнить описание</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>Основные сведения</h2>
+          <div class="f-row">
+            <div class="f"><label>Название организации</label><input value="Пекарня «Хлеб и кофе»" disabled style="opacity:.6"><div class="hint">Меняется через поддержку — чтобы каталог оставался честным</div></div>
+            <div class="f"><label>Категория</label><select><option>Еда · Пекарня</option></select></div>
+          </div>
+          <div class="f-row">
+            <div class="f"><label>Телефон</label><input value="+7 (000) 000-00-00"><div class="hint">Показывается в каталоге и на карточке</div></div>
+            <div class="f"><label>Адрес</label><input value="ул. Абрикосовая, 12"><div class="hint">Улица и дом — как в реестре района</div></div>
+          </div>
+          <div class="f-row">
+            <div class="f"><label>Координаты (широта)</label><input value="55.995000"><div class="hint">ПКМ на Яндекс Картах → «что здесь?» → скопируйте (D27)</div></div>
+            <div class="f"><label>Координаты (долгота)</label><input value="92.870000"></div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>Контакты и соцсети <small style="font-weight:400;color:var(--muted)">· тариф Стандарт+</small></h2>
+          <div class="f-row">
+            <div class="f"><label>Сайт</label><input placeholder="https://…"></div>
+            <div class="f"><label>E-mail для клиентов</label><input placeholder="info@…"></div>
+            <div class="f"><label>WhatsApp</label><input placeholder="+7…"></div>
+            <div class="f"><label>Telegram</label><input placeholder="@…"></div>
+          </div>
+          <div class="f-row">
+            <div class="f"><label>ВКонтакте</label><input placeholder="vk.com/…"></div>
+            <div class="f"><label>График работы</label>
+              <select><option>Пн–Пт 8:00–21:00, Сб–Вс 9:00–20:00 (редактировать по дням)</option></select>
+              <div class="hint">По дням недели + особые дни («30 апреля — до 18:00»). Статус «Сейчас открыто» считается автоматически</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>О компании <span class="count">1 240 / 2 000 знаков</span></h2>
+          <div class="f"><textarea rows="6">Свежая выпечка каждое утро, кофе и завтраки весь день. Тесто ставим с ночи, круассаны — по французской технологии.</textarea>
+          <div class="hint">Это текст на вашей карточке. Пишите конкретно: что делаете, чем отличаетесь, что предложить в первый визит. Без «лучшие в городе»</div></div>
+          <div class="f"><label>Краткое описание (для каталога) <span class="count">118 / 300</span></label>
+          <input value="Свежая выпечка, кофе с собой и завтраки весь день. Своя пекарня."></div>
+          <div class="f"><label>Ключевые слова <span class="count">3 / 5 · тариф Стандарт</span></label>
+          <input value="круассаны, кофе с собой, завтраки">
+          <div class="hint">Помогают поиску на сайте. Проходят проверку администратора перед публикацией</div></div>
+          <div class="save-row">
+            <button class="btn btn-terra">Сохранить изменения</button>
+            <span class="saved">✓ Изменения сохранены 12:40</span>
+          </div>
+        </div>
+
+        <!-- QR (cabinet.md §18, тариф Стандарт+) -->
+        <div class="panel">
+          <h2>QR-код вашей карточки</h2>
+          <div class="qr-block">
+            <div class="qr-img"><svg viewBox="0 0 21 21" shape-rendering="crispEdges"><path fill="#2b332e" d="M0 0h7v7H0zM2 2h3v3H2zM14 0h7v7h-7zM16 2h3v3h-3zM0 14h7v7H0zM2 16h3v3H2zM10 0h1v2h-1zM12 1h1v3h-1zM9 4h2v1H9zM11 5h2v2h-2zM0 9h2v1H0zM3 10h3v1H3zM7 9h2v2H7zM10 9h3v1h-3zM14 9h2v2h-2zM17 10h2v2h-2zM19 13h2v2h-2zM9 12h1v3H9zM11 14h2v2h-2zM14 14h1v3h-1zM16 15h3v1h-3zM9 17h2v2H9zM12 18h2v2h-2zM15 19h2v2h-2zM19 19h2v2h-2z"/><path fill="#2b332e" opacity=".35" d="M7 8h2v1H7zM12 11h1v1h-1zM13 12h2v1h-2zM10 15h1v1h-1zM8 18h1v1H8zM14 8h1v1h-1z"/></svg></div>
+            <div class="qr-txt">
+              <b>Наклейка на дверь или витрину</b>
+              <p>Посетитель сканирует — попадает на вашу карточку. Скачайте PNG или готовый шаблон наклейки для печати.</p>
+              <a class="btn btn-glass btn-sm" href="#">Скачать PNG</a>
+              <a class="btn btn-glass btn-sm" href="#">Шаблон наклейки (печать)</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ВКЛАДКА: Фото -->
+      <div class="tab" id="tab-photo">
+        <div class="panel">
+          <h2>Галерея</h2>
+          <div class="gal-lim">Загружено <b>1 из 8</b> · тариф Стандарт. Фото: до 300 КБ, горизонтальные, первое — главное (обложка каталога).</div>
+          <div class="gal-add">
+            <span class="cell" style="border-style:solid;border-color:var(--terra)"><svg class="ico" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg>Обложка</span>
+            <span class="cell"><svg class="ico" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Добавить</span>
+            <span class="cell"><svg class="ico" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Добавить</span>
+            <span class="cell"><svg class="ico" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Добавить</span>
+            <span class="cell"><svg class="ico" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Добавить</span>
+            <span class="cell"><svg class="ico" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Добавить</span>
+            <span class="cell" style="opacity:.4"><svg class="ico" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Ещё 2</span>
+          </div>
+          <div class="hint" style="margin-top:12px">После 8-го фото кнопка добавления исчезает — лимит тарифа. Расширение — на вкладке «Тариф и оплата».</div>
+        </div>
+      </div>
+
+      <!-- ВКЛАДКА: Акции (активация — Этап 4, после CPT новостей) -->
+      <div class="tab" id="tab-promo">
+        <div class="panel">
+          <h2>Мои акции</h2>
+          <div class="gal-lim">Опубликовано <b>1 из 2</b> в этом месяце · тариф Стандарт</div>
+          <div class="inv-table"><table style="width:100%">
+            <tr><th>Акция</th><th>Статус</th><th>До</th></tr>
+            <tr><td>Круассан в подарок к напитку</td><td><span class="st ok">Опубликовано</span></td><td>21.10.2026</td></tr>
+          </table></div>
+          <button class="btn btn-terra btn-sm" style="margin-top:14px">+ Новая акция</button>
+          <div class="hint" style="margin-top:8px">Акция появляется в ленте района с пометкой. Редакция проверяет перед публикацией.</div>
+        </div>
+      </div>
+
+      <!-- ВКЛАДКА: Тариф и оплата -->
+      <div class="tab" id="tab-tariff">
+        <div class="trials">Триал активен до <b>14.10.2026</b> · осталось 5 дней. После триала карточка останется в каталоге в бесплатном виде — ничего не потеряется.</div>
+
+        <div class="periods">
+          <label><input type="radio" name="per" checked><span>Месяц</span></label>
+          <label><input type="radio" name="per"><span>3 месяца −5%</span></label>
+          <label><input type="radio" name="per"><span>Год −10%</span></label>
+        </div>
+
+        <div class="tariff-row">
+          <div class="tariff hot">
+            <span class="best">Популярный</span>
+            <h3>Стандарт</h3>
+            <div class="price">1 290 ₽ <small>/ мес</small></div>
+            <ul>
+              <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>8 фото, описание до 2 000 знаков</li>
+              <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>7 ярлыков + сайт и соцсети</li>
+              <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>2 акции в месяц</li>
+              <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>QR-код карточки</li>
+              <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>Ответы на отзывы</li>
+            </ul>
+            <button class="btn btn-terra">Подключить Стандарт</button>
+          </div>
+          <div class="tariff">
+            <h3>Премиум</h3>
+            <div class="price">3 690 ₽ <small>/ мес</small></div>
+            <ul>
+              <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>25 фото, описание до 5 000 знаков</li>
+              <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>Все ярлыки + свой ярлык</li>
+              <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>8 акций + 2 статьи в месяц</li>
+              <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>Первая в выдаче категории</li>
+              <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>Заявка «Перезвоните мне»</li>
+              <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>Метка на карте района</li>
+            </ul>
+            <button class="btn btn-glass">Подключить Премиум</button>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>Счета и платежи</h2>
+          <div class="inv-table"><table style="width:100%">
+            <tr><th>Счёт</th><th>Тариф</th><th>Сумма</th><th>Статус</th><th></th></tr>
+            <tr><td>БС-2026-014 · от 07.10</td><td>Стандарт · месяц</td><td><b>1 290 ₽</b></td><td><span class="st wait">Ожидает оплаты</span></td><td class="act"><a href="#">Смотреть счёт</a></td></tr>
+            <tr><td>БС-2026-009 · от 12.09</td><td>Стандарт · месяц</td><td>1 290 ₽</td><td><span class="st ok">Оплачен</span></td><td class="act"><a href="#">Счёт</a></td></tr>
+            <tr><td>БС-2026-004 · от 28.08</td><td>Премиум · год</td><td>7 300 ₽</td><td><span class="st reject">Отклонён</span></td><td class="act"><a href="#">Причина</a></td></tr>
+          </table></div>
+          <div class="save-row" style="margin-top:16px">
+            <button class="btn btn-terra">Я оплатил(а) счёт БС-2026-014</button>
+            <span class="hint" style="margin:0">Администратор подтвердит в течение рабочего дня</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ВКЛАДКА: Статистика -->
+      <div class="tab" id="tab-stats">
+        <div class="stat-row">
+          <div class="stat"><div class="num">214</div><div class="lbl">просмотров карточки · 7 дней</div><div class="delta">▲ +18% к прошлой неделе</div></div>
+          <div class="stat"><div class="num">38</div><div class="lbl">кликов по телефону</div><div class="delta">▲ +6</div></div>
+          <div class="stat"><div class="num">12</div><div class="lbl">переходов на сайт</div></div>
+        </div>
+        <div class="bars14">
+          <i style="height:30%"></i><i style="height:45%"></i><i style="height:38%"></i><i style="height:52%"></i>
+          <i style="height:40%"></i><i class="peak" style="height:88%"></i><i class="peak" style="height:100%"></i>
+          <i style="height:55%"></i><i style="height:48%"></i><i style="height:60%"></i><i style="height:44%"></i>
+          <i style="height:66%"></i><i style="height:58%"></i><i style="height:72%"></i>
+        </div>
+        <div class="hint" style="margin-top:10px">Просмотры карточки по дням · последние 14 дней. Выходные — пиковые.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══ ЭКРАНЫ ДОСТУПА (отдельные страницы в проде: /kabinet/ для гостя) ═══ -->
+  <div class="auth-row">
+    <div class="auth-card">
+      <h3>Вход</h3>
+      <div class="f"><label>E-mail</label><input placeholder="you@company.ru"></div>
+      <div class="f"><label>Пароль</label><input type="password" placeholder="••••••••"></div>
+      <a class="btn btn-terra" href="#">Войти</a>
+      <div class="auth-note">Забыли пароль? <a href="#">Восстановить</a></div>
+    </div>
+    <div class="auth-card">
+      <h3>Регистрация организации</h3>
+      <div class="f"><label>Название организации</label><input placeholder="Пекарня «…»"></div>
+      <div class="f"><label>Категория</label><select><option>Еда</option><option>Медицина</option><option>…</option></select></div>
+      <div class="f"><label>E-mail</label><input placeholder="you@company.ru"></div>
+      <div class="f"><label>Телефон</label><input placeholder="+7…"></div>
+      <div class="f"><label>Пароль</label><input type="password" placeholder="от 8 символов"></div>
+      <input class="hp" type="text" name="website" tabindex="-1" autocomplete="off"><!-- honeypot -->
+      <a class="btn btn-terra" href="#">Создать аккаунт</a>
+      <div class="auth-note">Подтвердите e-mail по ссылке из письма. Карточка публикуется после проверки администратором</div>
+    </div>
+    <div class="auth-card">
+      <h3>Двухфакторный вход</h3>
+      <div class="f"><label>Код из приложения (6 цифр)</label><input placeholder="000000" inputmode="numeric"></div>
+      <a class="btn btn-terra" href="#">Подтвердить</a>
+      <div class="auth-note">Включается в кабинете → Безопасность. Резервные коды — при включении</div>
+    </div>
+  </div>
+
+</div><!-- /.wrap -->
+
+<script>
+/* Демо-переключение вкладок (в проде — отдельные URL /kabinet/{tab}) */
+document.querySelectorAll('.lk-nav a[data-tab]').forEach(a=>{
+  a.onclick=e=>{e.preventDefault();
+    document.querySelectorAll('.lk-nav a').forEach(x=>x.classList.remove('on'));
+    document.querySelectorAll('.tab').forEach(x=>x.classList.remove('on'));
+    a.classList.add('on');
+    document.getElementById('tab-'+a.dataset.tab).classList.add('on');
+  };
+});
+</script>
+</body>
+</html>

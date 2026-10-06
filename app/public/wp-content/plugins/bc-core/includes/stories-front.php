@@ -102,3 +102,10 @@ function bc_stories_enqueue() {
 	}
 }
 add_action( 'wp_enqueue_scripts', 'bc_stories_enqueue' );
+
+/**
+ * Режим сторис организаций (stories.md §режимы): off | requests | self.
+ */
+function bc_stories_mode() {
+	return get_option( 'bc_stories_mode', 'requests' );
+}

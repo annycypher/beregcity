@@ -36,7 +36,11 @@ $until = ( $org_id && function_exists( 'get_field' ) ) ? get_field( 'field_bc_pl
 			<a class="<?php echo 'promo' === $tab ? 'on' : ''; ?>" href="/kabinet/promo/">Акции</a>
 			<a class="<?php echo 'billing' === $tab ? 'on' : ''; ?>" href="/kabinet/billing/">Тариф и оплата</a>
 			<a class="<?php echo 'stats' === $tab ? 'on' : ''; ?>" href="/kabinet/stats/">Статистика</a>
-			<a class="off" href="#" title="Появится после запуска сторий (Этап 5)">Мои стории</a>
+			<?php if ( function_exists( 'bc_stories_mode' ) && 'off' !== bc_stories_mode() ) : ?>
+			<a class="<?php echo 'stories' === $tab ? 'on' : ''; ?>" href="/kabinet/stories/">Мои стории</a>
+			<?php else : ?>
+			<a class="off" href="#" title="Стории выключены">Мои стории</a>
+			<?php endif; ?>
 		</nav>
 
 		<div class="lk-content">
@@ -52,8 +56,8 @@ $until = ( $org_id && function_exists( 'get_field' ) ) ? get_field( 'field_bc_pl
 				<div class="panel"><h2>Тариф и оплата</h2><p>Платежи и счета — в шаге 3а.5.</p></div>
 			<?php elseif ( 'stats' === $tab ) : ?>
 				<?php get_template_part( 'template-parts/lk-stats' ); ?>
-			<?php else : ?>
-				<div class="panel"><p>Вкладка не найдена.</p></div>
+			<?php elseif ( 'stories' === $tab ) : ?>
+				<?php get_template_part( 'template-parts/lk-stories' ); ?>
 			<?php endif; ?>
 		</div>
 	</div>

@@ -21,6 +21,7 @@
       <div class="f-links">
         <a href="/sitemap">Карта сайта</a>
         <a href="/privacy">Политика конфиденциальности</a>
+        <a href="/terms">Пользовательское соглашение</a>
         <a href="/reklama">Рекламодателям</a>
       </div>
       <div class="soc">

@@ -48,19 +48,27 @@ function bc_reklama_template_redirect() {
 	$err = '';
 
 	if ( isset( $_POST['bc_reklama_nonce'] ) && wp_verify_nonce( sanitize_key( wp_unslash( $_POST['bc_reklama_nonce'] ) ), 'bc_reklama' ) ) {
-		if ( ! empty( $_POST['website'] ) ) {
-			$msg = 'Заявка отправлена.'; // honeypot — тихий «успех»
+		$as = bc_antispam_check( 'reklama' );
+		if ( BC_AS_SILENT === $as ) {
+			$msg = 'Заявка отправлена.'; // silent-reject: бот, письмо не шлём
+		} elseif ( BC_AS_LIMIT === $as ) {
+			$err = 'Слишком много отправок, попробуйте позже.';
 		} else {
-			$name    = sanitize_text_field( wp_unslash( $_POST['name'] ?? '' ) );
-			$contact = sanitize_text_field( wp_unslash( $_POST['contact'] ?? '' ) );
-			$text    = sanitize_textarea_field( wp_unslash( $_POST['message'] ?? '' ) );
-			if ( ! $name || ! $contact ) {
-				$err = 'Укажите имя и контакт.';
+			if ( ! bc_consent_check() ) {
+				$err = 'Необходимо согласие на обработку персональных данных.';
 			} else {
-				$body = "Заявка «Разместить рекламу»\nИмя: {$name}\nКонтакт: {$contact}\nСообщение: {$text}";
-				wp_mail( get_option( 'admin_email' ), 'БерегСити: заявка на рекламу', $body );
-				bc_send_telegram( $body );
-				$msg = 'Заявка отправлена — свяжемся с вами.';
+				$name    = sanitize_text_field( wp_unslash( $_POST['name'] ?? '' ) );
+				$contact = sanitize_text_field( wp_unslash( $_POST['contact'] ?? '' ) );
+				$text    = sanitize_textarea_field( wp_unslash( $_POST['message'] ?? '' ) );
+				if ( ! $name || ! $contact ) {
+					$err = 'Укажите имя и контакт.';
+				} else {
+					$body = "Заявка «Разместить рекламу»\nИмя: {$name}\nКонтакт: {$contact}\nСообщение: {$text}";
+					wp_mail( get_option( 'admin_email' ), 'БерегСити: заявка на рекламу', $body );
+					bc_send_telegram( $body );
+					bc_consent_log( 'reklama', 0, array( 'contact' => $contact ) );
+					$msg = 'Заявка отправлена — свяжемся с вами.';
+				}
 			}
 		}
 	}
@@ -82,7 +90,8 @@ function bc_render_reklama_form( $msg = '', $err = '' ) {
 				<div class="f"><label>Имя / название организации</label><input name="name" required></div>
 				<div class="f"><label>Контакт (e-mail или телефон)</label><input name="contact" required></div>
 				<div class="f"><label>Что хотите разместить</label><textarea name="message" rows="4"></textarea></div>
-				<input class="hp" type="text" name="website" tabindex="-1" autocomplete="off">
+				<?php bc_consent_field(); ?>
+				<?php bc_antispam_field( 'reklama' ); ?>
 				<?php wp_nonce_field( 'bc_reklama', 'bc_reklama_nonce' ); ?>
 				<button class="btn btn-terra" type="submit">Отправить заявку</button>
 			</form>

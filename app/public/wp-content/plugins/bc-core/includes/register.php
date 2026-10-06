@@ -71,22 +71,17 @@ function bc_process_registration() {
 		return array( 'msg' => '', 'err' => 'Сессия устарела, обновите страницу.' );
 	}
 
-	if ( ! empty( $_POST['website'] ) ) {
-		return array( 'msg' => 'Если вы человек — проверьте почту для подтверждения.', 'err' => '' );
+	$as = bc_antispam_check( 'register' );
+	if ( BC_AS_SILENT === $as ) {
+		return array( 'msg' => 'Спасибо! Заявка получена.', 'err' => '' ); // silent-reject: бот, письмо не шлём
+	}
+	if ( BC_AS_LIMIT === $as ) {
+		return array( 'msg' => '', 'err' => 'Слишком много отправок, попробуйте позже.' );
 	}
 
-	$ts = isset( $_POST['bc_ts'] ) ? (int) $_POST['bc_ts'] : 0;
-	if ( $ts && ( time() - $ts ) < 3 ) {
-		return array( 'msg' => 'Форма заполнена слишком быстро. Повторите через несколько секунд.', 'err' => '' );
+	if ( ! bc_consent_check() ) {
+		return array( 'msg' => '', 'err' => 'Необходимо согласие на обработку персональных данных.' );
 	}
-
-	$ip  = bc_client_ip();
-	$key = 'bc_rl_' . md5( $ip );
-	$n   = (int) get_transient( $key );
-	if ( $n >= 5 ) {
-		return array( 'msg' => '', 'err' => 'Слишком много попыток с вашего адреса. Попробуйте позже.' );
-	}
-	set_transient( $key, $n + 1, HOUR_IN_SECONDS );
 
 	$org_name = sanitize_text_field( wp_unslash( $_POST['org_name'] ?? '' ) );
 	$email    = sanitize_email( wp_unslash( $_POST['email'] ?? '' ) );
@@ -126,6 +121,12 @@ function bc_process_registration() {
 	}
 	if ( function_exists( 'update_field' ) ) {
 		update_field( 'field_bc_phone', $phone, $post_id );
+	}
+	update_post_meta( $post_id, 'bc_reg_ip', bc_client_ip() );
+	bc_consent_log( 'register', $post_id );
+	update_post_meta( $post_id, 'bc_consent_version', BC_POLICY_VERSION );
+	if ( ! empty( $_POST['bc_newsletter'] ) ) {
+		update_user_meta( $user_id, 'bc_newsletter', 1 );
 	}
 
 	$vkey = wp_generate_password( 32, false );
@@ -183,8 +184,9 @@ function bc_render_register_form( $msg = '', $err = '' ) {
 					<div class="f"><label>E-mail</label><input type="email" name="email" required></div>
 					<div class="f"><label>Телефон</label><input name="phone" placeholder="+7…"></div>
 					<div class="f"><label>Пароль</label><input type="password" name="pass" minlength="8" required></div>
-					<input class="hp" type="text" name="website" tabindex="-1" autocomplete="off">
-					<input type="hidden" name="bc_ts" value="<?php echo time(); ?>">
+					<?php bc_consent_field(); ?>
+					<?php bc_consent_newsletter_field(); ?>
+					<?php bc_antispam_field( 'register' ); ?>
 					<?php wp_nonce_field( 'bc_register', 'bc_register_nonce' ); ?>
 					<button class="btn btn-terra" type="submit" style="width:100%">Создать аккаунт</button>
 					<div class="auth-note">Подтвердите e-mail по ссылке из письма. Карточка публикуется после проверки администратором</div>

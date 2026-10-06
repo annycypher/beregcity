@@ -97,6 +97,7 @@ if ( $bc_n % 10 === 1 && $bc_n % 100 !== 11 ) {
 			}
 			?>
 
+			<?php bc_disclaimer_short(); ?>
 			<?php
 			echo function_exists( 'bc_pager' ) ? bc_pager( $bc_query, $bc_paged ) : '';
 			?>

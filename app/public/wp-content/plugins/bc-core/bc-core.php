@@ -16,16 +16,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 require_once plugin_dir_path( __FILE__ ) . 'includes/shortcodes.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/taxonomies.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/fields.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/hints.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/seed.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/schedule.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/rewrite.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/filters.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/plans.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/roles.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/antispam.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/consent.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/register.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/lk-routes.php';
 require_once plugin_dir_path( __FILE__ ) . 'admin/class-bc-admin.php';
 require_once plugin_dir_path( __FILE__ ) . 'admin/class-bc-approval.php';
+require_once plugin_dir_path( __FILE__ ) . 'admin/admin-fraud.php';
 require_once plugin_dir_path( __FILE__ ) . 'admin/class-bc-payments.php';
 require_once plugin_dir_path( __FILE__ ) . 'admin/class-bc-stories.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/db.php';
@@ -40,6 +44,7 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/banners-front.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/forms.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/map.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/notify.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/reminders.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/seo.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/patterns.php';
 

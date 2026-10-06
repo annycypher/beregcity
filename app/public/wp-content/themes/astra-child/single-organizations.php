@@ -110,6 +110,7 @@ while ( have_posts() ) :
 	<section>
 		<h2 class="sec">О компании</h2>
 		<div class="org-desc"><?php the_content(); ?></div>
+		<?php bc_disclaimer_short(); ?>
 	</section>
 	<?php endif; ?>
 

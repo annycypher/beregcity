@@ -132,14 +132,14 @@ while ( have_posts() ) :
 		<a class="btn btn-glass btn-sm" href="#">Написать отзыв</a>
 	</section>
 
-	<!-- Карта (D27 — заглушка до BC_MAP_ON) -->
+	<!-- Карта (D27 — Яндекс под BC_MAP_ON) -->
 	<section>
 		<h2 class="sec">Как найти</h2>
-		<div class="map-ph">
-			<?php /* bc_map: Яндекс.Карта по BC_MAP_ON (D27); lat/lng в полях — сейчас SVG-заглушка */ ?>
-			<svg class="mark" viewBox="0 0 24 24" style="width:38px;height:38px"><path class="ico" style="width:38px;height:38px;stroke:currentColor;stroke-width:1.6;fill:none" d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle style="stroke:currentColor;stroke-width:1.6;fill:none" cx="12" cy="10" r="3"/></svg>
-			<a class="btn btn-glass" style="position:absolute;bottom:14px;left:14px" href="#">Маршрут</a>
-		</div>
+		<?php
+		$bc_lat = get_field( 'field_bc_lat' );
+		$bc_lng = get_field( 'field_bc_lng' );
+		echo function_exists( 'bc_map_markup' ) ? bc_map_markup( (float) $bc_lat, (float) $bc_lng, $bc_address ) : '';
+		?>
 	</section>
 
 	<!-- Похожие рядом (Патч 3: та же категория, без текущей, макс. 3; при недостатке — скрыть) -->

@@ -557,3 +557,22 @@ footer .f-links a:hover{color:var(--terra-d)}
   .hdr,footer,.inv-actions{display:none!important}
   .bc-invoice{box-shadow:none;border:none;padding:0}
 }
+
+/* ── Вьюер сторис (design/stories.html) ── */
+.overlay{position:fixed;inset:0;background:rgba(30,36,32,.94);z-index:100;display:none;align-items:center;justify-content:center}
+.overlay.open{display:flex}
+.viewer{position:relative;width:min(420px,100vw);height:min(92vh,177.8vw);aspect-ratio:9/16;background:#1c2620;border-radius:16px;overflow:hidden;touch-action:none;box-shadow:0 24px 60px rgba(0,0,0,.4)}
+.slide-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;user-select:none;-webkit-user-drag:none}
+.bars{position:absolute;top:10px;left:10px;right:10px;display:flex;gap:4px;z-index:5}
+.bar{flex:1;height:3px;border-radius:2px;background:rgba(255,255,255,.28);overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--terra-l)}
+.bar.done i{width:100%}
+.ad-tag{position:absolute;top:24px;left:12px;z-index:5;font-size:9.5px;letter-spacing:1px;text-transform:uppercase;color:#fff;background:rgba(176,117,92,.85);backdrop-filter:blur(6px);padding:4px 10px;border-radius:6px;display:none}
+.close{position:absolute;top:18px;right:10px;z-index:6;width:38px;height:38px;border-radius:50%;border:1px solid rgba(255,255,255,.25);background:rgba(20,28,24,.5);color:#fff;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.caption{position:absolute;left:16px;right:16px;bottom:92px;z-index:4;color:#fff;font-size:15px;font-weight:400;text-shadow:0 1px 6px rgba(0,0,0,.55);display:none}
+.slide-btn{position:absolute;left:14px;right:14px;bottom:20px;z-index:5;display:none;align-items:center;justify-content:center;gap:8px;padding:13px 18px;border-radius:12px;background:linear-gradient(165deg,rgba(240,150,110,.72),rgba(184,92,56,.62));color:#fff;font-weight:500;font-size:15px}
+.slide-btn:hover{box-shadow:inset 0 2px 5px rgba(255,255,255,.65),inset 0 -9px 16px rgba(150,60,30,.32)}
+.slide-btn svg{width:17px;height:17px;stroke:#fff;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.zone{position:absolute;top:0;bottom:0;width:30%;z-index:3}
+.zone.l{left:0}.zone.r{right:0}
+@media(max-width:480px){.viewer{border-radius:0;height:100vh;aspect-ratio:auto}}

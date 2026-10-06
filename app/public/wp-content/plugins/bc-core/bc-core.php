@@ -33,6 +33,7 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/stats.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/qr.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/cpt-news.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/cpt-stories.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/stories-front.php';
 
 function bc_activate() {
 	bc_seed_catalog();

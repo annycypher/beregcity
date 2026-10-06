@@ -101,7 +101,7 @@ function bc_sort_args( $sort ) {
 			// ФАКТ-ПРОВЕРКА: рейтинг из отзывов — Этап 4.
 		case 'premium':
 		default:
-			return array( 'orderby' => 'bc_plan', 'meta_key' => 'bc_plan', 'order' => 'DESC' );
+			return array( 'orderby' => 'bc_plan', 'order' => 'DESC' );
 	}
 }
 

@@ -162,7 +162,7 @@ function bc_plan_sort_orderby( $orderby, $query ) {
 	if ( 'bc_plan' === $query->get( 'orderby' ) ) {
 		global $wpdb;
 		$dir     = strtoupper( $query->get( 'order' ) ) === 'ASC' ? 'ASC' : 'DESC';
-		$orderby = "CASE {$wpdb->postmeta}.meta_value WHEN 'premium' THEN 3 WHEN 'standard' THEN 2 WHEN 'trial' THEN 1 ELSE 0 END {$dir}, {$wpdb->posts}.post_date {$dir}";
+		$orderby = "CASE (SELECT pm.meta_value FROM {$wpdb->postmeta} pm WHERE pm.post_id = {$wpdb->posts}.ID AND pm.meta_key = 'bc_plan') WHEN 'premium' THEN 3 WHEN 'standard' THEN 2 WHEN 'trial' THEN 1 ELSE 0 END {$dir}, {$wpdb->posts}.post_date {$dir}";
 	}
 	return $orderby;
 }

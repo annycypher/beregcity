@@ -35,6 +35,8 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/qr.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/cpt-news.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/cpt-stories.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/stories-front.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/cpt-banners.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/banners-front.php';
 
 function bc_activate() {
 	bc_seed_catalog();

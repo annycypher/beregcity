@@ -11,6 +11,10 @@ get_header();
 while ( have_posts() ) :
 	the_post();
 
+	if ( function_exists( 'bc_track_view' ) ) {
+		bc_track_view( get_the_ID() );
+	}
+
 	$bc_phone   = get_field( 'field_bc_phone' );
 	$bc_address = get_field( 'field_bc_address' );
 	$bc_website = get_field( 'field_bc_website' );
@@ -79,16 +83,16 @@ while ( have_posts() ) :
 			<?php endif; ?>
 
 			<?php if ( $bc_phone ) : ?>
-				<a class="btn btn-terra" href="tel:<?php echo esc_attr( $bc_tel_uri ); ?>"><?php echo esc_html( $bc_phone ); ?></a>
+				<a class="btn btn-terra" href="/go/<?php echo (int) get_the_ID(); ?>/phone/"><?php echo esc_html( $bc_phone ); ?></a>
 			<?php endif; ?>
 
 			<?php if ( $bc_website ) : ?>
-				<a class="btn btn-glass" style="margin-bottom:10px" href="<?php echo esc_url( $bc_website ); ?>" rel="nofollow noopener" target="_blank">Сайт организации</a>
+				<a class="btn btn-glass" style="margin-bottom:10px" href="/go/<?php echo (int) get_the_ID(); ?>/site/">Сайт организации</a>
 			<?php endif; ?>
 
 			<div class="org-links">
-				<?php if ( $bc_wa ) : ?><a class="btn btn-glass" href="<?php echo esc_url( $bc_wa ); ?>" rel="nofollow noopener" target="_blank">WhatsApp</a><?php endif; ?>
-				<?php if ( $bc_tg ) : ?><a class="btn btn-glass" href="<?php echo esc_url( $bc_tg ); ?>" rel="nofollow noopener" target="_blank">Telegram</a><?php endif; ?>
+				<?php if ( $bc_wa ) : ?><a class="btn btn-glass" href="/go/<?php echo (int) get_the_ID(); ?>/whatsapp/">WhatsApp</a><?php endif; ?>
+				<?php if ( $bc_tg ) : ?><a class="btn btn-glass" href="/go/<?php echo (int) get_the_ID(); ?>/telegram/">Telegram</a><?php endif; ?>
 				<?php /* bc_map: «Маршрут» — Яндекс.Карта под BC_MAP_ON (D27) */ ?>
 				<a class="btn btn-glass" href="#">Маршрут</a>
 			</div>
@@ -180,7 +184,7 @@ while ( have_posts() ) :
 <!-- Мобильная панель звонка -->
 <div class="callbar">
 	<?php if ( $bc_phone ) : ?>
-		<a class="btn btn-terra" href="tel:<?php echo esc_attr( $bc_tel_uri ); ?>">Позвонить</a>
+		<a class="btn btn-terra" href="/go/<?php echo (int) get_the_ID(); ?>/phone/">Позвонить</a>
 	<?php endif; ?>
 	<a class="btn btn-glass" href="#">Маршрут</a>
 </div>

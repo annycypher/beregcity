@@ -52,7 +52,7 @@ $until = ( $org_id && function_exists( 'get_field' ) ) ? get_field( 'field_bc_pl
 			<?php elseif ( 'billing' === $tab ) : ?>
 				<div class="panel"><h2>Тариф и оплата</h2><p>Платежи и счета — в шаге 3а.5.</p></div>
 			<?php elseif ( 'stats' === $tab ) : ?>
-				<div class="panel"><h2>Статистика</h2><p>Статистика — в шаге 3а.6.</p></div>
+				<?php get_template_part( 'template-parts/lk-stats' ); ?>
 			<?php else : ?>
 				<div class="panel"><p>Вкладка не найдена.</p></div>
 			<?php endif; ?>

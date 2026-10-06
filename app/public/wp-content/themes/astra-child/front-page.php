@@ -59,78 +59,51 @@ get_header();
   <div class="duo">
     <div class="panel">
       <h2 class="sec">Новости района <a class="pill" href="/news">Все новости</a></h2>
-
+      <?php
+      $bc_news = new WP_Query( array( 'post_type' => 'news', 'post_status' => 'publish', 'posts_per_page' => 3 ) );
+      if ( $bc_news->have_posts() ) :
+        while ( $bc_news->have_posts() ) : $bc_news->the_post();
+          $bc_ntype = get_field( 'news_type' );
+      ?>
       <article class="news-item">
-        <div class="thumb"><svg class="ico" viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/></svg></div>
+        <div class="thumb"><?php if ( has_post_thumbnail() ) { the_post_thumbnail( 'medium' ); } else { ?><svg class="ico" viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/></svg><?php } ?></div>
         <div>
-          <span class="tag">Еда</span>
-          <time>сегодня, 09:15</time>
-          <h3><a href="#">На Южном берегу открылась пекарня «Хлеб и кофе»</a></h3>
-          <p>Свежая выпечка, кофе с собой и завтраки весь день. Первую неделю — круассан в подарок.</p>
+          <span class="tag<?php echo ( $bc_ntype && 'news' !== $bc_ntype ) ? ' s' : ''; ?>"><?php echo esc_html( $bc_ntype ? $bc_ntype : 'Новость' ); ?></span>
+          <time><?php echo get_the_date( 'd.m.Y' ); ?></time>
+          <h3><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
+          <p><?php echo esc_html( wp_trim_words( get_the_excerpt(), 18 ) ); ?></p>
         </div>
       </article>
-
-      <article class="news-item">
-        <div class="thumb"><svg class="ico" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
-        <div>
-          <span class="tag s">Стройка</span>
-          <time>вчера, 18:40</time>
-          <h3><a href="#">Ремонт набережной: что изменится к июлю</a></h3>
-          <p>Новые дорожки, освещение и спуск к воде — ответы на главные вопросы жителей.</p>
-        </div>
-      </article>
-
-      <article class="news-item">
-        <div class="thumb"><svg class="ico" viewBox="0 0 24 24"><path d="M20.59 13.41L11 3.83A2 2 0 0 0 9.59 3.24H4a1 1 0 0 0-1 1v5.59a2 2 0 0 0 .59 1.41l9.58 9.59a2 2 0 0 0 2.83 0l4.59-4.59a2 2 0 0 0 0-2.83z"/><circle cx="7.5" cy="7.5" r="1"/></svg></div>
-        <div>
-          <span class="tag">Акция · реклама</span>
-          <time>вчера, 12:10</time>
-          <h3><a href="#">Пиццерия «Мармелад»: −20% по пятницам</a></h3>
-          <p>По промокоду БС24, на самовывоз. Заказ принимают до 21:00.</p>
-        </div>
-      </article>
+      <?php
+        endwhile;
+        wp_reset_postdata();
+      else :
+        echo '<p class="found">Новостей пока нет.</p>';
+      endif;
+      ?>
     </div>
 
     <div class="panel">
       <h2 class="sec">Афиша событий <a class="pill" href="/afisha">Все события</a></h2>
-
+      <?php
+      $bc_events = new WP_Query(array('post_type'=>'events','post_status'=>'publish','posts_per_page'=>3,'meta_key'=>'event_date','orderby'=>'meta_value','order'=>'ASC','meta_query'=>array(array('key'=>'event_date','value'=>current_time('Y-m-d'),'compare'=>'>=','type'=>'DATE'))));
+      if ($bc_events->have_posts()) : while ($bc_events->have_posts()) : $bc_events->the_post();
+        $bc_d=get_field('event_date'); $bc_t=get_field('event_time'); $bc_pl=get_field('event_place'); $bc_free=get_field('is_free'); $bc_price=get_field('event_price');
+        $bc_months=array('','янв','фев','мар','апр','май','июн','июл','авг','сен','окт','ноя','дек'); $bc_m=(int)date('n',strtotime($bc_d));
+      ?>
       <article class="ev">
-        <div class="dbox"><span>14</span><small>сб</small></div>
+        <div class="dbox"><span><?php echo $bc_d ? date('d', strtotime($bc_d)) : ''; ?></span><small><?php echo isset($bc_months[$bc_m]) ? $bc_months[$bc_m] : ''; ?></small></div>
         <div>
-          <h4><a href="#">Ярмарка выходного дня</a></h4>
+          <h4><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h4>
           <div class="meta">
-            <i><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> 10:00 – 14:00</i>
-            <i><svg class="ico" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> площадь у ДК</i>
+            <i><?php echo $bc_t ? esc_html($bc_t) : ''; ?><?php echo $bc_free ? ' · бесплатно' : ($bc_price ? ' · '.esc_html($bc_price) : ''); ?></i>
+            <i><?php echo esc_html($bc_pl); ?></i>
           </div>
         </div>
-        <div class="thumb"><svg class="ico" viewBox="0 0 24 24"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><path d="M12 22V7M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7zM12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg></div>
+        <div class="thumb"><?php if (has_post_thumbnail()) { the_post_thumbnail('medium'); } else { ?><svg class="ico" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="3"/><path d="M8 2v4M16 2v4M3 10h18"/></svg><?php } ?></div>
       </article>
-
-      <article class="ev">
-        <div class="dbox"><span>15</span><small>вс</small></div>
-        <div>
-          <h4><a href="#">Гончарный мастер-класс</a></h4>
-          <div class="meta">
-            <i><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> 12:00 · 600 ₽</i>
-            <i><svg class="ico" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> студия «Глина»</i>
-          </div>
-        </div>
-        <div class="thumb"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01"/></svg></div>
-      </article>
-
-      <article class="ev">
-        <div class="dbox"><span>15</span><small>вс</small></div>
-        <div>
-          <h4><a href="#">Дворовый концерт</a></h4>
-          <div class="meta">
-            <i><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> 18:00 · бесплатно</i>
-            <i><svg class="ico" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> двор ЖК «Волна»</i>
-          </div>
-        </div>
-        <div class="thumb"><svg class="ico" viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div>
-      </article>
-
-      <a class="green-banner" href="/dobavit-sobytie">
+      <?php endwhile; wp_reset_postdata(); else : echo '<p class="found">Событий пока нет.</p>'; endif; ?>
+    </div><a class="green-banner" href="/dobavit-sobytie">
         <svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 12.5l2.5 2.5L16 9.5"/></svg>
         <span><b>Организуете событие в районе?</b>
         <span>Анонс бесплатно — афиша живёт от ваших новостей</span></span>

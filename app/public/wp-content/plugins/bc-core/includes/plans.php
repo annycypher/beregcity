@@ -59,7 +59,12 @@ function bc_plan_can_features( $post_id ) {
  * Есть ли описание в карточке (free — без описания).
  */
 function bc_plan_can_description( $post_id ) {
-	return 'free' !== bc_plan( $post_id );
+	if ( 'free' !== bc_plan( $post_id ) ) {
+		return true;
+	}
+	// Free: витринная карточка (без владельца) — без описания;
+	// клейменная (автор org_manager) — описание в лимите free.
+	return function_exists( 'bc_is_claimed' ) ? bc_is_claimed( $post_id ) : false;
 }
 
 /**

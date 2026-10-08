@@ -16,8 +16,10 @@ $bc_premium  = function_exists( 'bc_plan_is_premium' ) ? bc_plan_is_premium( get
 $bc_can_feat = function_exists( 'bc_plan_can_features' ) ? bc_plan_can_features( get_the_ID() ) : true;
 $bc_can_desc = function_exists( 'bc_plan_can_description' ) ? bc_plan_can_description( get_the_ID() ) : true;
 $bc_verified = (bool) get_field( 'field_bc_is_verified', get_the_ID() );
+$bc_plan_now = function_exists( 'bc_plan' ) ? bc_plan( get_the_ID() ) : 'free';
+$bc_plan_cls = ' is-' . $bc_plan_now;
 ?>
-<article class="org-card<?php echo $bc_premium ? ' is-premium' : ''; ?>">
+<article class="org-card<?php echo esc_attr( $bc_plan_cls ); ?>">
 	<div class="org-cover">
 		<?php if ( has_post_thumbnail() ) : ?>
 			<?php the_post_thumbnail( 'medium_large' ); ?>

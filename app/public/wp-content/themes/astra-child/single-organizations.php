@@ -26,6 +26,8 @@ while ( have_posts() ) :
 	$bc_cat     = ( $bc_cats && ! is_wp_error( $bc_cats ) ) ? $bc_cats[0] : null;
 	$bc_feats   = get_the_terms( get_the_ID(), 'features' );
 	$bc_tel_uri = preg_replace( '/[^0-9+]/', '', (string) $bc_phone );
+	$bc_plan_now = function_exists( 'bc_plan' ) ? bc_plan( get_the_ID() ) : 'free';
+	$bc_plan_cls = ' is-' . $bc_plan_now;
 ?>
 <div class="wrap">
 
@@ -35,7 +37,7 @@ while ( have_posts() ) :
 		<?php the_title(); ?>
 	</div>
 
-	<div class="org-head">
+	<div class="org-head<?php echo esc_attr( $bc_plan_cls ); ?>">
 
 		<div class="gal">
 			<div class="gal-main">
@@ -47,7 +49,7 @@ while ( have_posts() ) :
 					<svg class="ico" viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/></svg>
 				<?php endif; ?>
 			</div>
-			<?php if ( $bc_gal && is_array( $bc_gal ) && count( $bc_gal ) > 1 ) : ?>
+			<?php if ( 'free' !== $bc_plan_now && $bc_gal && is_array( $bc_gal ) && count( $bc_gal ) > 1 ) : ?>
 			<div class="gal-thumbs">
 				<?php foreach ( $bc_gal as $bc_gi => $bc_img ) : ?>
 					<span class="<?php echo 0 === $bc_gi ? 'on' : ''; ?>"><?php echo wp_get_attachment_image( $bc_img, 'thumbnail' ); ?></span>
@@ -104,6 +106,9 @@ while ( have_posts() ) :
 			<?php endif; ?>
 		</div>
 	</div>
+
+	<?php /* Клейминг (D38, 3б): кнопка «Заявить права» на витринной карточке */ ?>
+	<?php echo do_shortcode( '[bc_claim]' ); ?>
 
 	<!-- Описание -->
 	<?php if ( trim( get_the_content() ) ) : ?>

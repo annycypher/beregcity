@@ -14,6 +14,21 @@ if ( ! $org_id ) {
 
 $prog = function_exists( 'bc_progress' ) ? bc_progress( $org_id ) : array( 'percent' => 0, 'missing' => array() );
 ?>
+<?php
+	$bc_plan_now    = function_exists( 'bc_plan' ) ? bc_plan( $org_id ) : 'free';
+	$bc_plan_labels = array( 'trial' => 'Триал', 'free' => 'Free', 'standard' => 'Стандарт', 'premium' => 'Премиум' );
+	?>
+	<!-- Моя организация (D38) -->
+	<div class="panel" id="my-org">
+		<div class="lk-hdr" style="margin:0 0 12px">
+			<h1 style="font-size:20px"><?php echo esc_html( get_the_title( $org_id ) ); ?></h1>
+			<span class="status"><?php echo esc_html( isset( $bc_plan_labels[ $bc_plan_now ] ) ? $bc_plan_labels[ $bc_plan_now ] : $bc_plan_now ); ?></span>
+		</div>
+		<a class="btn btn-terra btn-sm" href="/kabinet/card/">Редактировать карточку</a>
+		<?php if ( 'free' === $bc_plan_now && function_exists( 'bc_is_claimed' ) && bc_is_claimed( $org_id ) ) : ?>
+			<div class="hint" style="margin-top:10px">Расширенные возможности — на тарифе Стандарт: сайт и соцсети, ярлыки, акции, QR. <a href="/kabinet/billing/">Повысить тариф</a>.</div>
+		<?php endif; ?>
+	</div>
 <div class="prog">
 	<div class="prog-ring" style="background:conic-gradient(var(--terra) 0 <?php echo (int) $prog['percent']; ?>%,#eee7db <?php echo (int) $prog['percent']; ?>% 100%)"><b><?php echo (int) $prog['percent']; ?>%</b></div>
 	<div class="prog-txt">

@@ -352,6 +352,11 @@ footer .f-links a:hover{color:var(--terra-d)}
 .vbadge svg{width:12px;height:12px;stroke:var(--sage-d);stroke-width:2.4;fill:none;stroke-linecap:round}
 .org-cover .ribbon{position:absolute;top:10px;left:10px}
 .org-cover .vbadge{position:absolute;top:10px;right:10px}
+/* Free-тариф: фото в тёплом ч/б (D39) — фильтр на выводе, файлы не перезаписываются */
+.org-card.is-free .org-cover img,
+.org-card.is-free .gal-main img,
+.sim .org-card.is-free .org-cover img,
+.org-head.is-free .gal-main img { filter:grayscale(1) sepia(.45) saturate(.7) brightness(1.04); }
 .org-body{padding:14px 16px 16px;display:flex;flex-direction:column;gap:8px;flex:1}
 .org-body h3{font-size:16.5px;font-weight:500;color:var(--ink);line-height:1.3}
 .org-body h3 a:hover{color:var(--terra-d)}

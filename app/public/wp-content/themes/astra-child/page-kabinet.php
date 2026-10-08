@@ -51,11 +51,28 @@ $until = ( $org_id && function_exists( 'get_field' ) ) ? get_field( 'field_bc_pl
 			<?php elseif ( 'card' === $tab ) : ?>
 				<?php get_template_part( 'template-parts/lk-card' ); ?>
 			<?php elseif ( 'photo' === $tab ) : ?>
-				<div class="panel"><h2>Фото</h2><div class="hint"><?php echo esc_html( bc_hint( 'org_photo' ) ); ?>. Горизонтальные, первое — обложка.</div><p>Загрузка фотографий — в следующем шаге.</p></div>
+				<div class="panel"><h2>Фото</h2>
+					<div class="hint"><?php echo esc_html( bc_hint( 'org_photo' ) ); ?>. Горизонтальные, первое — обложка.</div>
+					<?php if ( 'free' === $plan ) : ?>
+					<div class="hint" style="color:#8f6a33">Ваши фото показываются в тёплом ч/б — цветные открываются на тарифе Стандарт. <a href="/kabinet/billing/">Повысить тариф</a>.</div>
+					<?php endif; ?>
+					<p>Загрузка фотографий — в следующем шаге.</p>
+				</div>
 			<?php elseif ( 'promo' === $tab ) : ?>
 				<?php get_template_part( 'template-parts/lk-promo' ); ?>
 			<?php elseif ( 'billing' === $tab ) : ?>
-				<div class="panel"><h2>Тариф и оплата</h2><div class="hint">Здесь будут счета и продление тарифа. Пока оплата — по договорённости с редакцией.</div><p>Платежи и счета — в шаге 3а.5.</p></div>
+				<div class="panel"><h2>Тариф и оплата</h2>
+					<div class="hint">Здесь будут счета и продление тарифа. Пока оплата — по договорённости с редакцией.</div>
+					<?php if ( class_exists( 'BC_Plans' ) ) : ?>
+					<div class="inv-table"><table style="width:100%">
+						<tr><th>Возможность</th><th>Free</th><th>Стандарт</th><th>Премиум</th></tr>
+						<tr><td>Фото</td><td><?php echo (int) BC_Plans::limit( 'free', 'photos' ); ?></td><td><?php echo (int) BC_Plans::limit( 'standard', 'photos' ); ?></td><td><?php echo (int) BC_Plans::limit( 'premium', 'photos' ); ?></td></tr>
+						<tr><td>Цветные фото</td><td>✕</td><td>✓</td><td>✓</td></tr>
+						<tr><td>Описание, знаков</td><td>до <?php echo (int) BC_Plans::limit( 'free', 'desc' ); ?></td><td>до <?php echo (int) BC_Plans::limit( 'standard', 'desc' ); ?></td><td>до <?php echo (int) BC_Plans::limit( 'premium', 'desc' ); ?></td></tr>
+					</table></div>
+					<?php endif; ?>
+					<p>Платежи и счета — в шаге 3а.5.</p>
+				</div>
 			<?php elseif ( 'stats' === $tab ) : ?>
 				<?php get_template_part( 'template-parts/lk-stats' ); ?>
 			<?php elseif ( 'stories' === $tab ) : ?>

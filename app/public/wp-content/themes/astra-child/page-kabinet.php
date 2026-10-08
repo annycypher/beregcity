@@ -39,9 +39,9 @@ $until = ( $org_id && function_exists( 'get_field' ) ) ? get_field( 'field_bc_pl
 			<a class="<?php echo 'billing' === $tab ? 'on' : ''; ?>" href="/kabinet/billing/">Тариф и оплата</a>
 			<a class="<?php echo 'stats' === $tab ? 'on' : ''; ?>" href="/kabinet/stats/">Статистика</a>
 			<?php if ( function_exists( 'bc_stories_mode' ) && 'off' !== bc_stories_mode() ) : ?>
-			<a class="<?php echo 'stories' === $tab ? 'on' : ''; ?>" href="/kabinet/stories/">Мои стории</a>
+			<a class="<?php echo 'stories' === $tab ? 'on' : ''; ?>" href="/kabinet/stories/">Мои сторис</a>
 			<?php else : ?>
-			<a class="off" href="#" title="Стории выключены">Мои стории</a>
+			<a class="off" href="#" title="Сторис выключены">Мои сторис</a>
 			<?php endif; ?>
 		</nav>
 

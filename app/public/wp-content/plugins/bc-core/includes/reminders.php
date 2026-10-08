@@ -100,7 +100,7 @@ function bc_reminders_admin() {
 			<ul style="margin:0 0 12px;padding-left:18px">
 				<li>Карточки на утверждении: <b><?php echo (int) $pending; ?></b></li>
 				<li>Платежи к подтверждению: <b><?php echo (int) $payments; ?></b></li>
-				<li>Стории на модерации: <b><?php echo (int) $stories; ?></b></li>
+				<li>Сторис на модерации: <b><?php echo (int) $stories; ?></b></li>
 				<?php if ( $expiring ) : ?>
 					<?php foreach ( $expiring as $e ) : ?>
 					<li style="color:#b3261e">Тариф «<?php echo esc_html( $e['title'] ); ?>» истекает через <?php echo (int) $e['days']; ?> дн. (до <?php echo esc_html( $e['until'] ); ?>)</li>
@@ -230,7 +230,7 @@ function bc_weekly_digest() {
 	$body .= "Очереди:\n";
 	$body .= "- карточки на утверждении: {$pending}\n";
 	$body .= "- платежи к подтверждению: {$payments}\n";
-	$body .= "- стории на модерации: {$stories}\n\n";
+	$body .= "- сторис на модерации: {$stories}\n\n";
 	$body .= "Ритуалы:\n";
 	$body .= "- недельный: " . bc_ritual_text( 'weekly', 7 ) . "\n";
 	$body .= "- месячный: " . bc_ritual_text( 'monthly', 35 ) . "\n\n";

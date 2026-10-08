@@ -27,6 +27,7 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/antispam.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/consent.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/register.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/claim.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/reviews.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/lk-routes.php';
 require_once plugin_dir_path( __FILE__ ) . 'admin/class-bc-admin.php';
 require_once plugin_dir_path( __FILE__ ) . 'admin/class-bc-approval.php';

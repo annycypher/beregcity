@@ -2,7 +2,7 @@
 /**
  * CPT «сторис» + ACF-поля (Этап 5.1, stories.md §64–66).
  *
- * Стория: title, owner (post_author), слайды (repeater), показ (show_until), sort_order.
+ * Сторис: title, owner (post_author), слайды (repeater), показ (show_until), sort_order.
  * Слайд: image 1080×1920, caption ≤90, btn_text ≤20, link_url, is_ad, erid.
  *
  * @package BC_Core
@@ -18,7 +18,7 @@ function bc_register_cpt_stories() {
 		array(
 			'labels'       => array(
 				'name'          => 'Сторис',
-				'singular_name' => 'Стория',
+				'singular_name' => 'Сторис',
 			),
 			'public'       => false,
 			'show_ui'      => true,

@@ -13,9 +13,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Данные сторий.
+ * Данные сторис.
  *
- * @param int $org_id 0 — редакция; иначе — стории организации (post_author).
+ * @param int $org_id 0 — редакция; иначе — сторис организации (post_author).
  * @return array
  */
 function bc_stories_data( $org_id = 0 ) {

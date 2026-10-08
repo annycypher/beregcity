@@ -1,6 +1,6 @@
 <?php
 /**
- * Вкладка «Мои стории» ЛК (Этап 5.4): режимы ВЫКЛ/Заявки/Самостоятельные.
+ * Вкладка «Мои сторис» ЛК (Этап 5.4): режимы ВЫКЛ/Заявки/Самостоятельные.
  *
  * @package BC
  */
@@ -19,7 +19,7 @@ if ( isset( $_POST['bc_story_nonce'] ) && wp_verify_nonce( sanitize_key( wp_unsl
 	$title = sanitize_text_field( wp_unslash( $_POST['story_title'] ?? '' ) );
 	$desc  = sanitize_textarea_field( wp_unslash( $_POST['story_desc'] ?? '' ) );
 	if ( ! $title ) {
-		$err = 'Укажите название стории.';
+		$err = 'Укажите название сторис.';
 	} else {
 		$story_id = wp_insert_post(
 			array(
@@ -30,20 +30,20 @@ if ( isset( $_POST['bc_story_nonce'] ) && wp_verify_nonce( sanitize_key( wp_unsl
 			)
 		);
 		update_post_meta( $story_id, 'bc_story_request', $desc );
-		wp_mail( get_option( 'admin_email' ), 'БерегСити: заявка на сторию', 'Организация просит сторию: «' . $title . '». Описание: ' . $desc );
-		$ok = 'Заявка отправлена — редакция соберёт сторию из ваших материалов.';
+		wp_mail( get_option( 'admin_email' ), 'БерегСити: заявка на сторис', 'Организация просит сторис: «' . $title . '». Описание: ' . $desc );
+		$ok = 'Заявка отправлена — редакция соберёт сторис из ваших материалов.';
 	}
 }
 
 $my_stories = get_posts( array( 'post_type' => 'stories', 'author' => $user->ID, 'post_status' => 'any', 'numberposts' => -1 ) );
 ?>
 <div class="panel">
-	<h2>Мои стории</h2>
+	<h2>Мои сторис</h2>
 	<?php if ( $err ) : ?><div style="background:#fbeae5;border-radius:10px;padding:10px 14px;margin-bottom:14px;font-size:13px;color:#b0755c"><?php echo esc_html( $err ); ?></div><?php endif; ?>
 	<?php if ( $ok ) : ?><div style="background:#f1f5ec;border-radius:10px;padding:10px 14px;margin-bottom:14px;font-size:13px;color:#2b332e"><?php echo esc_html( $ok ); ?></div><?php endif; ?>
 
 	<?php if ( 'self' === $mode && function_exists( 'acf_form' ) ) : ?>
-		<p class="gal-lim">Загрузите фото (1080×1920, до 5 слайдов). Стория уйдёт на модерацию редакции.</p>
+		<p class="gal-lim">Загрузите фото (1080×1920, до 5 слайдов). Сторис уйдёт на модерацию редакции.</p>
 		<?php
 		acf_form(
 			array(
@@ -51,15 +51,15 @@ $my_stories = get_posts( array( 'post_type' => 'stories', 'author' => $user->ID,
 				'new_post'        => array( 'post_type' => 'stories', 'post_status' => 'pending' ),
 				'fields'          => array( 'field_bc_slides' ),
 				'submit_value'    => 'Отправить на модерацию',
-				'updated_message' => 'Стория отправлена на модерацию',
+				'updated_message' => 'Сторис отправлено на модерацию',
 			)
 		);
 		?>
 	<?php else : ?>
-		<p class="gal-lim">Подайте заявку — редакция соберёт сторию из ваших материалов (фото приложите в описании или передайте редакции).</p>
+		<p class="gal-lim">Подайте заявку — редакция соберёт сторис из ваших материалов (фото приложите в описании или передайте редакции).</p>
 		<form method="post">
-			<div class="f"><label>Название стории</label><input name="story_title" required><div class="hint">Внутреннее название — что будет в стории.</div></div>
-			<div class="f"><label>Что показать (описание)</label><textarea name="story_desc" rows="3"></textarea><div class="hint"><?php echo esc_html( bc_hint( 'story_slide' ) ); ?>. Опишите идею — редакция соберёт сторию.</div></div>
+			<div class="f"><label>Название сторис</label><input name="story_title" required><div class="hint">Внутреннее название — что будет в сторис.</div></div>
+			<div class="f"><label>Что показать (описание)</label><textarea name="story_desc" rows="3"></textarea><div class="hint"><?php echo esc_html( bc_hint( 'story_slide' ) ); ?>. Опишите идею — редакция соберёт сторис.</div></div>
 			<?php wp_nonce_field( 'bc_story', 'bc_story_nonce' ); ?>
 			<button class="btn btn-terra" type="submit">Подать заявку</button>
 		</form>
@@ -67,10 +67,10 @@ $my_stories = get_posts( array( 'post_type' => 'stories', 'author' => $user->ID,
 </div>
 
 <div class="panel">
-	<h2>Мои заявки и стории</h2>
-	<?php if ( ! $my_stories ) : ?><p class="found">Сторий пока нет.</p><?php else : ?>
+	<h2>Мои заявки и сторис</h2>
+	<?php if ( ! $my_stories ) : ?><p class="found">Сторис пока нет.</p><?php else : ?>
 	<table class="inv-table">
-		<thead><tr><th>Стория</th><th>Статус</th><th>Дата</th></tr></thead>
+		<thead><tr><th>Сторис</th><th>Статус</th><th>Дата</th></tr></thead>
 		<tbody>
 		<?php foreach ( $my_stories as $s ) : $st = get_post_status( $s->ID ); ?>
 			<tr>

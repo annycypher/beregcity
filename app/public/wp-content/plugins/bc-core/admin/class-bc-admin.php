@@ -17,6 +17,7 @@ function bc_admin_menu() {
 	add_submenu_page( 'beregcity', 'Дашборд', 'Дашборд', 'manage_options', 'beregcity', 'bc_dashboard_page' );
 	add_submenu_page( 'beregcity', 'Утверждение карточек', 'Утверждение карточек', 'manage_options', 'bc-approval', 'bc_approval_page' );
 	add_submenu_page( 'beregcity', 'Заявки на права', 'Заявки на права', 'manage_options', 'bc-claims', 'bc_claims_page' );
+add_submenu_page( 'beregcity', 'Отзывы', 'Отзывы', 'manage_options', 'bc-reviews', 'bc_reviews_page' );
 	add_submenu_page( 'beregcity', 'Платежи и счета', 'Платежи и счета', 'manage_options', 'bc-payments', 'bc_payments_page' );
 }
 add_action( 'admin_menu', 'bc_admin_menu' );
@@ -48,15 +49,15 @@ function bc_dashboard_page() {
 	$claims  = bc_claims_queue_count();
 	$stale   = function_exists( 'bc_claims_stale_count' ) ? bc_claims_stale_count() : 0;
 	$stories = 0;
-	$reviews = 0;
+	$reviews = function_exists( 'bc_reviews_queue_count' ) ? bc_reviews_queue_count() : 0;
 	$total   = $pending + $payments + $claims + $stories + $reviews;
 
 	$cards = array(
 		array( 'n' => $pending, 'label' => 'Карточки на утверждении', 'page' => 'bc-approval', 'sub' => '' ),
 		array( 'n' => $claims, 'label' => 'Заявки на права', 'page' => 'bc-claims', 'sub' => ( $stale ? 'просрочено: ' . $stale : '' ) ),
 		array( 'n' => $payments, 'label' => 'Платежи к подтверждению', 'page' => 'bc-payments', 'sub' => '' ),
-		array( 'n' => $stories, 'label' => 'Стории на модерации', 'page' => '', 'sub' => '' ),
-		array( 'n' => $reviews, 'label' => 'Отзывы', 'page' => '', 'sub' => '' ),
+		array( 'n' => $stories, 'label' => 'Сторис на модерации', 'page' => '', 'sub' => '' ),
+		array( 'n' => $reviews, 'label' => 'Отзывы на модерации', 'page' => 'bc-reviews', 'sub' => '' ),
 	);
 	?>
 	<div class="wrap">
@@ -314,4 +315,60 @@ function bc_claims_render_orgs( $showcase ) {
 		echo '<tr><td colspan="5">Нет карточек в этом состоянии.</td></tr>';
 	}
 	echo '</tbody></table>';
+}
+
+/**
+ * Экран «Отзывы	 — модерация отзывов организаций (Этап 4.5, D40).
+ */
+function bc_reviews_page() {
+	global $wpdb;
+	$notice = '';
+	if ( isset( $_GET['bc_review_action'], $_GET['crid'], $_GET['_wpnonce'] ) && wp_verify_nonce( sanitize_key( wp_unslash( $_GET['_wpnonce'] ) ), 'bc_review_admin' ) ) {
+		$crid   = (int) $_GET['crid'];
+		$action = sanitize_key( wp_unslash( $_GET['bc_review_action'] ) );
+		if ( get_comment( $crid ) ) {
+			if ( 'approve' === $action ) {
+				wp_set_comment_status( $crid, 'approve' );
+				$notice = 'Отзыв одобрен и опубликован.';
+			} elseif ( 'reject' === $action ) {
+				wp_set_comment_status( $crid, 'trash' );
+				$notice = 'Отзыв отклонён.';
+			}
+		}
+	}
+	$rows  = $wpdb->get_results( "SELECT c.* FROM {$wpdb->comments} c INNER JOIN {$wpdb->posts} p ON p.ID = c.comment_post_ID WHERE p.post_type = 'organizations' AND c.comment_approved = '0' ORDER BY c.comment_date DESC LIMIT 100" );
+	$nonce = wp_create_nonce( 'bc_review_admin' );
+	$base  = admin_url( 'admin.php?page=bc-reviews' );
+	echo '<div class="wrap"><h1>Отзывы на модерации</h1>';
+	if ( $notice ) {
+		echo '<div class="notice notice-success is-dismissible"><p>' . esc_html( $notice ) . '</p></div>';
+	}
+	echo '<div style="background:#f6f7f7;border:1px solid #dcdcde;border-radius:8px;padding:14px 16px;margin:12px 0">';
+	echo '<strong style="font-size:14px">Отзывы — как модерировать</strong>';
+	echo '<ul style="margin:8px 0 0;padding-left:18px;color:#50575e">';
+	echo '<li style="margin:3px 0">«Одобрить» публикует отзыв на карточке, «Отклонить» — в корзину.</li>';
+	echo '<li style="margin:3px 0">Организация на тарифе Стандарт+ может ответить на отзыв — ответ виден под отзывом.</li>';
+	echo '<li style="margin:3px 0">Оценка 1–5 идёт в средний рейтинг карточки.</li>';
+	echo '</ul></div>';
+	if ( ! $rows ) {
+		echo '<p>Очередь пуста — отзывов на модерации нет.</p>';
+	} else {
+		echo '<table class="widefat striped"><thead><tr><th>Организация</th><th>Автор</th><th>Оценка</th><th>Отзыв</th><th>Дата</th><th>Действия</th></tr></thead><tbody>';
+		foreach ( $rows as $r ) {
+			$title = get_the_title( (int) $r->comment_post_ID );
+			$rate  = function_exists( 'bc_review_rating' ) ? bc_review_rating( $r->comment_ID ) : 0;
+			$appr  = add_query_arg( array( 'bc_review_action' => 'approve', 'crid' => $r->comment_ID, '_wpnonce' => $nonce ), $base );
+			$rej   = add_query_arg( array( 'bc_review_action' => 'reject', 'crid' => $r->comment_ID, '_wpnonce' => $nonce ), $base );
+			echo '<tr>';
+			echo '<td><a href="' . esc_url( get_edit_post_link( (int) $r->comment_post_ID ) ) . '" target="_blank">' . esc_html( $title ) . '</a></td>';
+			echo '<td>' . esc_html( $r->comment_author ) . '</td>';
+			echo '<td>' . ( $rate ? esc_html( $rate . ' / 5' ) : '—' ) . '</td>';
+			echo '<td>' . esc_html( wp_trim_words( $r->comment_content, 25 ) ) . '</td>';
+			echo '<td>' . esc_html( mysql2date( 'd.m.Y H:i', $r->comment_date ) ) . '</td>';
+			echo '<td><a class="button button-primary" href="' . esc_url( $appr ) . '">Одобрить</a> <a class="button" href="' . esc_url( $rej ) . '">Отклонить</a></td>';
+			echo '</tr>';
+		}
+		echo '</tbody></table>';
+	}
+	echo '</div>';
 }

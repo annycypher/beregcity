@@ -1,6 +1,6 @@
 <?php
 /**
- * Админ «Сторис» (Этап 5.3): модерация сторий организаций.
+ * Админ «Сторис» (Этап 5.3): модерация сторис организаций.
  *
  * Статусы организаций: pending → publish (одобрено) | draft + причина (отклонено).
  *
@@ -36,7 +36,7 @@ function bc_stories_moderation_page() {
 			if ( 'approve' === $action ) {
 				if ( bc_stories_validate_erid( $post_id ) ) {
 					wp_update_post( array( 'ID' => $post_id, 'post_status' => 'publish' ) );
-					echo '<div class="notice notice-success"><p>Стория одобрена и опубликована.</p></div>';
+					echo '<div class="notice notice-success"><p>Сторис одобрено и опубликовано.</p></div>';
 				} else {
 					echo '<div class="notice notice-error"><p>Нельзя одобрить: рекламный слайд без erid (§9 stories.md).</p></div>';
 				}
@@ -46,9 +46,9 @@ function bc_stories_moderation_page() {
 				update_post_meta( $post_id, 'bc_reject_reason', $reason );
 				$email = get_the_author_meta( 'user_email', (int) get_post_field( 'post_author', $post_id ) );
 				if ( $email ) {
-					wp_mail( $email, 'БерегСити: стория отклонена', 'Ваша стория отклонена. Причина: ' . ( $reason ? $reason : 'не указана' ) . '.' );
+					wp_mail( $email, 'БерегСити: сторис отклонено', 'Сторис отклонено. Причина: ' . ( $reason ? $reason : 'не указана' ) . '.' );
 				}
-				echo '<div class="notice notice-success"><p>Стория отклонена.</p></div>';
+				echo '<div class="notice notice-success"><p>Сторис отклонено.</p></div>';
 			}
 		}
 	}
@@ -58,9 +58,9 @@ function bc_stories_moderation_page() {
 	echo '<div class="wrap"><h1>Сторис — модерация</h1>';
 	bc_info_block( 'stories' );
 	if ( ! $q->have_posts() ) {
-		echo '<p>Очередь пуста — сторий на модерации нет.</p>';
+		echo '<p>Очередь пуста — сторис на модерации нет.</p>';
 	} else {
-		echo '<table class="widefat striped"><thead><tr><th>Стория</th><th>Автор</th><th>Слайды</th><th>Предпросмотр</th><th>Действия</th></tr></thead><tbody>';
+		echo '<table class="widefat striped"><thead><tr><th>Сторис</th><th>Автор</th><th>Слайды</th><th>Предпросмотр</th><th>Действия</th></tr></thead><tbody>';
 		while ( $q->have_posts() ) {
 			$q->the_post();
 			$id     = get_the_ID();

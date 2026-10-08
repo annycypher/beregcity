@@ -121,9 +121,9 @@ while ( have_posts() ) :
 
 	<?php /* bc_promo: акция (.org-promo) — Этап 6.1, сейчас не выводится */ ?>
 
-	<!-- Стории компании (Этап 5.4в — якорь) -->
+	<!-- Сторис организации (Этап 5.4в — якорь) -->
 	<section>
-		<h2 class="sec">Стории компании</h2>
+		<h2 class="sec">Сторис организации</h2>
 		<?php echo do_shortcode( '[bc_stories org="' . get_the_ID() . '"]' ); ?>
 	</section>
 

@@ -75,13 +75,14 @@ function bc_antispam_field( $form_id ) {
  * Возвращает:
  *   BC_AS_SILENT — бот (токен невалиден / honeypot заполнен / быстрее 3 сек).
  *                  Обработчик отвечает «спасибо» и НЕ создаёт письмо/запись.
- *   BC_AS_LIMIT  — превышен лимит 5 сабмитов / час / IP (показываем сообщение).
+ *   BC_AS_LIMIT  — превышен лимит сабмитов / час / IP (показываем сообщение).
  *   BC_AS_OK     — можно обрабатывать (окно rate-limit инкрементируется).
  *
  * @param string $form_id Идентификатор формы.
+ * @param int    $limit   Максимум сабмитов / час / IP (по умолчанию 5; форма отзыва — 1).
  * @return string Одна из констант BC_AS_*.
  */
-function bc_antispam_check( $form_id ) {
+function bc_antispam_check( $form_id, $limit = 5 ) {
 	$token = isset( $_POST['bc_as_token'] ) ? sanitize_text_field( wp_unslash( $_POST['bc_as_token'] ) ) : '';
 	if ( ! bc_antispam_token_valid( $form_id, $token ) ) {
 		return BC_AS_SILENT;
@@ -96,7 +97,7 @@ function bc_antispam_check( $form_id ) {
 		return BC_AS_SILENT;
 	}
 
-	// Скользящее окно: max 5 сабмитов / час / IP / форма.
+	// Скользящее окно: max $limit сабмитов / час / IP / форма.
 	$ip     = function_exists( 'bc_client_ip' ) ? bc_client_ip() : '0.0.0.0';
 	$key    = 'bc_rl_' . md5( $form_id . '|' . $ip );
 	$stamps = get_transient( $key );
@@ -106,7 +107,7 @@ function bc_antispam_check( $form_id ) {
 		return ( $now - $t ) < HOUR_IN_SECONDS;
 	} ) );
 
-	if ( count( $stamps ) >= 5 ) {
+	if ( count( $stamps ) >= $limit ) {
 		set_transient( $key, $stamps, HOUR_IN_SECONDS );
 		return BC_AS_LIMIT;
 	}

@@ -127,15 +127,10 @@ while ( have_posts() ) :
 		<?php echo do_shortcode( '[bc_stories org="' . get_the_ID() . '"]' ); ?>
 	</section>
 
-	<!-- Отзывы (Этап 4 — якорь) -->
+	<!-- Отзывы (Этап 4.5, D40) -->
 	<section>
 		<h2 class="sec">Отзывы</h2>
-		<?php /* bc_reviews: живые отзывы — Этап 4 */ ?>
-		<div class="rev-sum">
-			<span class="num">—</span>
-			<span>Отзывы появятся после модерации</span>
-		</div>
-		<a class="btn btn-glass btn-sm" href="#">Написать отзыв</a>
+		<?php echo do_shortcode( '[bc_reviews]' ); ?>
 	</section>
 
 	<!-- Карта (D27 — Яндекс под BC_MAP_ON) -->

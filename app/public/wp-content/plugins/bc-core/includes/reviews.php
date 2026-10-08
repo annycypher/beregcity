@@ -116,6 +116,7 @@ function bc_reviews_block( $post_id ) {
 		'limit'   => array( 'err', 'Слишком много отправок, попробуйте позже.' ),
 		'consent' => array( 'err', 'Отметьте согласие на обработку персональных данных.' ),
 		'invalid' => array( 'err', 'Заполните имя, оценку и текст отзыва.' ),
+		'short'   => array( 'err', 'Отзыв слишком короткий — расскажите подробнее (минимум 30 символов).' ),
 		'session' => array( 'err', 'Сессия устарела, обновите страницу.' ),
 	);
 	$code    = isset( $_GET['bc_review'] ) ? sanitize_key( wp_unslash( $_GET['bc_review'] ) ) : '';
@@ -166,7 +167,7 @@ function bc_reviews_block( $post_id ) {
 						<?php endfor; ?>
 					</select>
 				</div>
-				<div class="f"><label>Отзыв <b>*</b></label><textarea name="bc_review_text" rows="4" required></textarea></div>
+				<div class="f"><label>Отзыв <b>*</b></label><textarea name="bc_review_text" rows="4" required></textarea><div class="hint">Минимум 30 символов. Конкретика ценнее общих слов: что купили, как обслужили, вернётесь ли</div></div>
 				<?php bc_consent_field(); ?>
 				<?php bc_antispam_field( 'review' ); ?>
 				<?php wp_nonce_field( 'bc_review', 'bc_review_nonce' ); ?>
@@ -230,7 +231,7 @@ function bc_review_template_redirect() {
 	if ( ! wp_verify_nonce( sanitize_key( wp_unslash( $_POST['bc_review_nonce'] ) ), 'bc_review' ) ) {
 		bc_review_redirect( $post_id, 'session' );
 	}
-	$as = bc_antispam_check( 'review' );
+	$as = bc_antispam_check( 'review', 1 );
 	if ( BC_AS_SILENT === $as ) {
 		bc_review_redirect( $post_id, 'ok' );
 	}
@@ -246,6 +247,10 @@ function bc_review_template_redirect() {
 	if ( '' === $name || $rating < 1 || $rating > 5 || '' === $text ) {
 		bc_review_redirect( $post_id, 'invalid' );
 	}
+	if ( mb_strlen( trim( $text ) ) < 30 ) {
+		bc_review_redirect( $post_id, 'short' );
+	}
+
 	$cid = wp_insert_comment(
 		array(
 			'comment_post_ID'   => $post_id,
@@ -273,3 +278,57 @@ function bc_review_template_redirect() {
 	bc_review_redirect( $post_id, 'ok' );
 }
 add_action( 'template_redirect', 'bc_review_template_redirect' );
+
+/**
+ * JSON-LD карточки организации: LocalBusiness с вложенными aggregateRating/review.
+ * Выводится только при >=1 одобренном отзыве (без отзывов — пустого рейтинга нет).
+ */
+function bc_reviews_jsonld() {
+	if ( ! is_singular( 'organizations' ) ) {
+		return;
+	}
+	$post_id = (int) get_the_ID();
+	$list    = get_comments( array( 'post_id' => $post_id, 'status' => 'approve', 'type' => 'comment' ) );
+	$sum     = bc_reviews_summary( $post_id );
+	if ( ! $list || $sum['count'] < 1 ) {
+		return;
+	}
+	$reviews = array();
+	foreach ( $list as $cm ) {
+		$item = array(
+			'@type'         => 'Review',
+			'author'        => array( '@type' => 'Person', 'name' => $cm->comment_author ),
+			'reviewBody'    => $cm->comment_content,
+			'datePublished' => get_comment_date( 'c', $cm ),
+		);
+		$r = bc_review_rating( $cm->comment_ID );
+		if ( $r ) {
+			$item['reviewRating'] = array( '@type' => 'Rating', 'ratingValue' => $r, 'bestRating' => 5, 'worstRating' => 1 );
+		}
+		$reviews[] = $item;
+	}
+	$data = array(
+		'@context'        => 'https://schema.org',
+		'@type'           => 'LocalBusiness',
+		'name'            => get_the_title( $post_id ),
+		'url'             => get_permalink( $post_id ),
+		'aggregateRating' => array(
+			'@type'       => 'AggregateRating',
+			'ratingValue' => $sum['avg'],
+			'reviewCount' => $sum['count'],
+			'bestRating'  => 5,
+			'worstRating' => 1,
+		),
+		'review'          => $reviews,
+	);
+	$phone = get_field( 'field_bc_phone', $post_id );
+	if ( $phone ) {
+		$data['telephone'] = $phone;
+	}
+	$addr = get_field( 'field_bc_address', $post_id );
+	if ( $addr ) {
+		$data['address'] = array( '@type' => 'PostalAddress', 'streetAddress' => $addr, 'addressLocality' => 'Красноярск', 'addressCountry' => 'RU' );
+	}
+	echo '<script type="application/ld+json">' . wp_json_encode( $data, JSON_UNESCAPED_UNICODE ) . '</script>' . "\n";
+}
+add_action( 'wp_head', 'bc_reviews_jsonld' );

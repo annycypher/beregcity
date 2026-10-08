@@ -318,7 +318,7 @@ function bc_claims_render_orgs( $showcase ) {
 }
 
 /**
- * Экран «Отзывы	 — модерация отзывов организаций (Этап 4.5, D40).
+ * Экран «Отзывы» — модерация отзывов организаций (Этап 4.5, D40).
  */
 function bc_reviews_page() {
 	global $wpdb;

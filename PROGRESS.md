@@ -95,6 +95,7 @@
 - [✅] 4.3 Живые блоки главной: «Новости района» (3 последних news) и «Афиша» (3 предстоящих events) из БД в `front-page.php`
 - [✅] 4.4 Вкладка ЛК «Акции» (создание акции + лимит + модерация) + Гутенберг-паттерны (3 шаблона статей организаций: статья / фото+текст / акция с CTA) — `patterns.php`
 - [✅] 4.5 Отзывы (D40): форма на карточке (`bc_antispam_*`('review') + согласие), модерация комментариев (hold→approve), сводка+список+звёзды, ответ организации (Стандарт+) — `reviews.php` (new), `class-bc-admin.php`, `single-organizations.php`
+- [✅] 4.6 Сортировка каталога по рейтингу (orderby `bc_rating`): средний рейтинг по одобренным отзывам, без отзывов — в конец — `filters.php`
 ## Этап 5. Сторис
 - [✅] 5.1 Данные: CPT `stories` + ACF (repeater слайдов: image/caption/btn_text/link_url/is_ad/erid, show_until, sort_order) — `cpt-stories.php`
 - [✅] 5.2 Вывод: `[bc_stories]`/`[bc_stories org="ID"]` (данные STORIES) + вьюер `stories.js` (5.3 КБ ≤40, bc_seen, жесты/автоплей 6с) + стили вьюера

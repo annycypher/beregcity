@@ -86,7 +86,7 @@ function bc_filters( $cat_id = 0 ) {
 
 /**
  * Аргументы сортировки по параметру sort.
- * premium/rating — заглушки (реальная логика на 3.4/4).
+ * premium — по тарифу (см. plans.php); rating — по среднему рейтингу отзывов.
  *
  * @param string $sort Ключ сортировки.
  * @return array WP_Query order args.
@@ -98,12 +98,27 @@ function bc_sort_args( $sort ) {
 		case 'new':
 			return array( 'orderby' => 'date', 'order' => 'DESC' );
 		case 'rating':
-			// ФАКТ-ПРОВЕРКА: рейтинг из отзывов — Этап 4.
+			return array( 'orderby' => 'bc_rating', 'order' => 'DESC' );
 		case 'premium':
 		default:
 			return array( 'orderby' => 'bc_plan', 'order' => 'DESC' );
 	}
 }
+
+/**
+ * Сортировка каталога по среднему рейтингу отзывов (orderby 'bc_rating').
+ * Рейтинг = AVG(commentmeta.bc_rating) по одобренным комментариям организации;
+ * без отзывов — 0 (уходят в конец при DESC).
+ */
+function bc_rating_sort_orderby( $orderby, $query ) {
+	if ( 'bc_rating' === $query->get( 'orderby' ) ) {
+		global $wpdb;
+		$dir     = 'ASC' === strtoupper( $query->get( 'order' ) ) ? 'ASC' : 'DESC';
+		$orderby = "(SELECT COALESCE(AVG(cm.meta_value + 0), 0) FROM {$wpdb->comments} c INNER JOIN {$wpdb->commentmeta} cm ON cm.comment_id = c.comment_ID AND cm.meta_key = 'bc_rating' WHERE c.comment_post_ID = {$wpdb->posts}.ID AND c.comment_approved = '1') {$dir}, {$wpdb->posts}.post_date DESC";
+	}
+	return $orderby;
+}
+add_filter( 'posts_orderby', 'bc_rating_sort_orderby', 10, 2 );
 
 /**
  * Пагинация .pager по референсу (design/catalog.html).

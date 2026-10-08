@@ -62,7 +62,10 @@ $until = ( $org_id && function_exists( 'get_field' ) ) ? get_field( 'field_bc_pl
 				<?php get_template_part( 'template-parts/lk-promo' ); ?>
 			<?php elseif ( 'billing' === $tab ) : ?>
 				<div class="panel"><h2>Тариф и оплата</h2>
-					<div class="hint">Здесь будут счета и продление тарифа. Пока оплата — по договорённости с редакцией.</div>
+					<?php if ( isset( $_GET['bc_paid'] ) ) : ?>
+					<div class="hint" style="color:#2f6b33">Заявка на оплату создана — редакция подтвердит её в течение рабочего дня, и тариф активируется.</div>
+					<?php endif; ?>
+					<div class="hint">Выберите тариф и период, переведите сумму и нажмите «Я оплатил(а)». Оплата — по договорённости с редакцией.</div>
 					<?php if ( class_exists( 'BC_Plans' ) ) : ?>
 					<div class="inv-table"><table style="width:100%">
 						<tr><th>Возможность</th><th>Free</th><th>Стандарт</th><th>Премиум</th></tr>
@@ -70,8 +73,46 @@ $until = ( $org_id && function_exists( 'get_field' ) ) ? get_field( 'field_bc_pl
 						<tr><td>Цветные фото</td><td>✕</td><td>✓</td><td>✓</td></tr>
 						<tr><td>Описание, знаков</td><td>до <?php echo (int) BC_Plans::limit( 'free', 'desc' ); ?></td><td>до <?php echo (int) BC_Plans::limit( 'standard', 'desc' ); ?></td><td>до <?php echo (int) BC_Plans::limit( 'premium', 'desc' ); ?></td></tr>
 					</table></div>
+					<form method="post" action="<?php echo esc_url( home_url( '/kabinet/billing/' ) ); ?>" class="bc-pay-form" style="margin-top:16px">
+						<label style="display:block;margin-bottom:6px">Тариф
+							<select name="bc_pay_plan">
+								<option value="standard">Стандарт — <?php echo (int) BC_Plans::price( 'standard', 'month' ); ?> ₽/мес</option>
+								<option value="premium">Премиум — <?php echo (int) BC_Plans::price( 'premium', 'month' ); ?> ₽/мес</option>
+							</select>
+						</label>
+						<label style="display:block;margin:8px 0 12px">Период
+							<select name="bc_pay_period">
+								<option value="month">месяц</option>
+								<option value="quarter">3 месяца (−5%)</option>
+								<option value="year">год (−10%)</option>
+							</select>
+						</label>
+						<?php wp_nonce_field( 'bc_pay_create', 'bc_pay_nonce' ); ?>
+						<button class="btn btn-terra" type="submit">Я оплатил(а)</button>
+					</form>
 					<?php endif; ?>
-					<p>Платежи и счета — в шаге 3а.5.</p>
+					<?php
+					$bc_pay = array();
+					if ( $org_id > 0 && function_exists( 'bc_payments_table' ) ) {
+						global $wpdb;
+						$bc_pay = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . bc_payments_table() . ' WHERE org_id = %d ORDER BY id DESC LIMIT 20', $org_id ) );
+					}
+					if ( $bc_pay ) :
+						$bc_st = array( 'created' => 'Ожидает оплаты', 'paid' => 'Оплачен', 'rejected' => 'Отклонён' );
+						?>
+					<div class="inv-table" style="margin-top:18px"><table style="width:100%">
+						<tr><th>Счёт</th><th>Тариф</th><th>Сумма</th><th>Статус</th><th></th></tr>
+						<?php foreach ( $bc_pay as $bc_r ) : ?>
+						<tr>
+							<td><?php echo esc_html( bc_invoice_number( $bc_r->id ) ); ?><br><span class="hint"><?php echo esc_html( mysql2date( 'd.m.Y', $bc_r->created_at ) ); ?></span></td>
+							<td><?php echo esc_html( bc_plan_label( $bc_r->plan ) . ' · ' . bc_period_label( $bc_r->period ) ); ?></td>
+							<td><b><?php echo (int) $bc_r->amount; ?> ₽</b></td>
+							<td><?php echo esc_html( isset( $bc_st[ $bc_r->status ] ) ? $bc_st[ $bc_r->status ] : $bc_r->status ); ?></td>
+							<td><a href="<?php echo esc_url( bc_invoice_url( $bc_r->token ) ); ?>">Счёт</a></td>
+						</tr>
+						<?php endforeach; ?>
+					</table></div>
+					<?php endif; ?>
 				</div>
 			<?php elseif ( 'stats' === $tab ) : ?>
 				<?php get_template_part( 'template-parts/lk-stats' ); ?>

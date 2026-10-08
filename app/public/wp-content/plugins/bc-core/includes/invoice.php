@@ -117,3 +117,58 @@ function bc_send_invoice_email( $org_id, $invoice ) {
 	$body   .= '<p>Просмотреть и оплатить: <a href="' . esc_url( $link ) . '">' . esc_html( $link ) . '</a></p>';
 	wp_mail( $email, $subject, $body, array( 'Content-Type: text/html; charset=UTF-8' ) );
 }
+
+/**
+ * «Я оплатил(а)» в ЛК (D25, Этап 3а.5): создаёт счёт/платёж (status=created)
+ * для организации текущего org_manager; подтверждение — в админке.
+ */
+function bc_invoice_handle_pay() {
+	if ( 'cabinet' !== get_query_var( 'bc_lk' ) || ! is_user_logged_in() ) {
+		return;
+	}
+	if ( empty( $_POST['bc_pay_nonce'] ) ) {
+		return;
+	}
+	if ( ! wp_verify_nonce( sanitize_key( wp_unslash( $_POST['bc_pay_nonce'] ) ), 'bc_pay_create' ) ) {
+		return;
+	}
+
+	$user = wp_get_current_user();
+	$role = (array) $user->roles;
+	if ( ! in_array( 'org_manager', $role, true ) && ! in_array( 'administrator', $role, true ) ) {
+		return;
+	}
+
+	$orgs = get_posts(
+		array(
+			'post_type'   => 'organizations',
+			'author'      => $user->ID,
+			'post_status' => 'any',
+			'numberposts' => 1,
+			'fields'      => 'ids',
+		)
+	);
+	if ( ! $orgs ) {
+		return;
+	}
+	$org_id = (int) $orgs[0];
+
+	$plan   = isset( $_POST['bc_pay_plan'] ) ? sanitize_key( wp_unslash( $_POST['bc_pay_plan'] ) ) : 'standard';
+	$period = isset( $_POST['bc_pay_period'] ) ? sanitize_key( wp_unslash( $_POST['bc_pay_period'] ) ) : 'month';
+	if ( ! in_array( $plan, array( 'standard', 'premium' ), true ) ) {
+		$plan = 'standard';
+	}
+	$periods = ( class_exists( 'BC_Plans' ) ) ? array_keys( BC_Plans::PERIODS ) : array( 'month', 'quarter', 'year' );
+	if ( ! in_array( $period, $periods, true ) ) {
+		$period = 'month';
+	}
+
+	$invoice = bc_create_invoice( $org_id, $plan, $period );
+	if ( ! empty( $invoice['id'] ) && function_exists( 'bc_send_invoice_email' ) ) {
+		bc_send_invoice_email( $org_id, $invoice );
+	}
+
+	wp_safe_redirect( add_query_arg( 'bc_paid', '1', home_url( '/kabinet/billing/' ) ) );
+	exit;
+}
+add_action( 'template_redirect', 'bc_invoice_handle_pay', 5 );

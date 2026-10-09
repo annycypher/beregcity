@@ -85,3 +85,19 @@ function bc_set_404() {
 	status_header( 404 );
 	nocache_headers();
 }
+
+/**
+ * Сброс rewrite-правил при изменении их набора (D25).
+ * Нужен после правок regex: иначе WP отдаёт закэшированный набор из опции
+ * `rewrite_rules` (на Local — сразу, на проде — после деплоя).
+ */
+const BC_REWRITE_VERSION = '2026-10-08-invoice-token-case';
+
+function bc_maybe_flush_rewrite() {
+	if ( get_option( 'bc_rewrite_version' ) === BC_REWRITE_VERSION ) {
+		return;
+	}
+	flush_rewrite_rules( false );
+	update_option( 'bc_rewrite_version', BC_REWRITE_VERSION );
+}
+add_action( 'init', 'bc_maybe_flush_rewrite', 99 );

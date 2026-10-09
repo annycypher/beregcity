@@ -73,7 +73,7 @@ function bc_render_invoice( $row ) {
 	<?php
 }
 function bc_invoice_rewrite() {
-	add_rewrite_rule( '^kabinet/invoice/([a-z0-9]+)/?$', 'index.php?bc_invoice=$matches[1]', 'top' );
+	add_rewrite_rule( '^kabinet/invoice/([A-Za-z0-9]+)/?$', 'index.php?bc_invoice=$matches[1]', 'top' );
 }
 add_action( 'init', 'bc_invoice_rewrite' );
 

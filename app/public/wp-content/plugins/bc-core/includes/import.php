@@ -281,8 +281,13 @@ function bc_import_run( $path, $dry_run = false ) {
  */
 function bc_import_cli( $args, $assoc ) {
 	$file = isset( $assoc['file'] ) ? (string) $assoc['file'] : '';
+	if ( '' === $file && isset( $args[0] ) ) {
+		// Поддержка «wp bc-import organizations.csv» и «wp bc-import file=…»
+		// (WP-CLI кладёт не-dashed «file=…» в позиционные аргументы).
+		$file = preg_replace( '/^file=/', '', (string) $args[0] );
+	}
 	if ( '' === $file ) {
-		WP_CLI::error( 'Укажите файл: wp bc-import file=organizations.csv [--dry-run]' );
+		WP_CLI::error( 'Укажите файл: wp bc-import --file=organizations.csv [--dry-run]' );
 	}
 	$dry = isset( $assoc['dry-run'] );
 	$r   = bc_import_run( $file, $dry );

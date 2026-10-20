@@ -199,4 +199,12 @@
 - Живые проверки на `https://beregcity.ru`: `/` 200 (head: `theme-color #F48671`, manifest, `favicon.ico/32/16` с `?v=2`, apple-touch 180, `msapplication-TileImage`), `/bc-manifest.json` 200 (4 иконки с `?v=2`, `#F48671`), `/favicon.ico` 200 `image/vnd.microsoft.icon` 8 068 B, `/favicon-32.png` 200, `/favicon-16.png` 200, `icon-192-maskable.png?v=2` 200, `icon-180.png?v=2` 200, `/bc-sw.js` 200 (`2026-10-20-icons`), `/katalog/` 200, PHP-ошибок 0.
 - Лого в шапке (и футере — тот же класс `.logo .mark`): градиент `#f9a78f → #F48671` вместо `#dda38b → #c48067`, тень `rgba(244,134,113,.3)`. `theme.css` задеплоен (SHA256 совпал), LiteSpeed сброшен, CSS отдаётся с новым `?ver=1792462171`. Скриншоты: `_sys\shots\logo-prod-1440.png`, `logo-prod-390.png`.
 
+## 2026-10-20 — гигиена репозитория и бэкапы
+
+- Коммит **5d5e397**: 75 файлов, +6196/−291 (иконки, сторис, OSM/VK, карта, контакты, видео-баннер, мобильный пак, docs). Тег **2026-10-20-icons-stories**. Запушено в `origin/main` (GitHub, `annycypher/beregcity`), рабочее дерево чистое.
+- `.gitignore`: добавлен `/design/backup-icons/` — бэкапы иконок и копии кода остаются локально.
+- Удалён мусор: `design\icon-192 (1).png`, `design\apple-touch-icon-180 (1).png`, `design\Неподтверждено 16412.crdownload`; в `_sys` — `bc-db-probe.php`, `bc-purge.php`, `enrich-dry.log`. Оставлены: мастера `design\1025.png`/`1026.png`, `design\icons\`, `design\icons-preview.html`, `make_icons_set.py`, тест-харнессы `bc-pwa-test.php`/`bc-story-test.php`, `bc-set-site-icon.php`.
+- Бэкап БД прода после OSM-дозаполнения: `~/backup/db-after-osm-2026-10-20.sql.gz` (420 КБ).
+- Осталось: VK-токен (`BC_VK_TOKEN`) для `wp bc-vk enrich`; Lighthouse после контентных правок.
+
 

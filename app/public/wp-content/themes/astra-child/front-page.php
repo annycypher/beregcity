@@ -6,6 +6,8 @@ get_header();
 
 <div class="wrap">
 
+  <?php echo bc_ad_slot( 'under_header' ); ?>
+
   <!-- Быстрые карточки -->
   <?php /* bc_quickcards: 4 карточки-заглушки (ссылки статикой) — оживление позже */ ?>
   <div class="qrow">
@@ -34,13 +36,8 @@ get_header();
   <!-- Сторис -->
   <?php echo do_shortcode( '[bc_stories]' ); ?>
 
-  <!-- Реклама -->
-  <?php /* bc_banner: на Этапе 6.1 заменить на [bc_banner zone="wide"] и [bc_banner zone="duo-1|duo-2"] */ ?>
-  <div class="ad ad-wide">Баннер 970×90 — широкий слот</div>
-  <div class="ad-duo">
-    <div class="ad">Баннер 470×120 — слот 1</div>
-    <div class="ad">Баннер 470×120 — слот 2</div>
-  </div>
+  <!-- Реклама: позиции из админки, пустые позиции не выводятся -->
+  <?php echo bc_ad_slot( 'after_hero' ); ?>
 
   <!-- Категории -->
   <?php echo do_shortcode( '[bc_cats]' ); ?>
@@ -101,7 +98,8 @@ get_header();
         <svg class="ico arr" style="width:18px;height:18px" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
       </a>
     </div>
-  </div>
+
+  <?php echo bc_ad_slot( 'after_sections' ); ?>
 
   <!-- О районе + карта + контакты -->
   <div class="trio">
@@ -111,6 +109,10 @@ get_header();
       <a class="btn btn-glass" href="/o-raione">Подробнее о районе</a>
     </div>
     <?php /* bc_map: Яндекс.Карта под флагом BC_MAP_ON (D11); сейчас SVG-заглушка из референса */ ?>
+    <?php $bc_map_ad = bc_ad_slot( 'map' ); ?>
+    <?php if ( '' !== $bc_map_ad ) : ?>
+      <div class="map-slot"><?php echo $bc_map_ad; ?></div>
+    <?php else : ?>
     <div class="map-ph">
       <svg viewBox="0 0 400 260" preserveAspectRatio="none">
         <path d="M150 40 L260 30 L310 90 L290 180 L210 230 L130 190 L110 100 Z"
@@ -119,22 +121,8 @@ get_header();
       </svg>
       <a class="btn btn-glass" style="position:absolute;bottom:14px;left:14px" href="/karta">Открыть карту</a>
     </div>
-    <div class="contacts">
-      <h3>Контакты</h3>
-      <div class="crow">
-        <svg class="ico" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-        <span><b>+7 (000) 000-00-00</b><span>реклама и сотрудничество [ФАКТ-ПРОВЕРКА]</span></span>
-      </div>
-      <div class="crow">
-        <svg class="ico" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6l-10 7L2 6"/></svg>
-        <span><b>hello@beregcity.ru</b><span>ответим в течение дня</span></span>
-      </div>
-      <div class="crow">
-        <svg class="ico" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-        <span><b>Красноярск, Советский район</b><span>микрорайон Южный берег</span></span>
-      </div>
-      <a class="btn btn-terra" href="/contacts" style="width:100%;justify-content:center">Написать нам</a>
-    </div>
+    <?php endif; ?>
+    <?php echo bc_contacts_block(); ?>
   </div>
 
   <!-- CTA бизнес -->
@@ -147,6 +135,8 @@ get_header();
   </div>
 
 <?php // .wrap закрывается в footer.php ?>
+  <?php echo bc_ad_slot( 'home_end' ); ?>
+
 <?php get_footer(); ?>
 
 

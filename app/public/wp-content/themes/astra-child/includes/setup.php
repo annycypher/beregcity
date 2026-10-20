@@ -53,26 +53,7 @@ function bc_logo_mark( $size = 22 ) {
 		. bc_logo_paths() . '</svg>';
 }
 
-/**
- * Favicon — inline SVG (Этап 2.5-б): форма логотипа из design/favicon.svg
- * в бренд-стиле (терракотовый градиент + белый знак). Выводится через wp_head.
- * Если владелец задаст WP Site Icon — не дублируем.
- */
-function bc_favicon_svg() {
-	if ( function_exists( 'has_site_icon' ) && has_site_icon() ) {
-		return;
-	}
+// Favicon (19.10.2026): файловый набор — /favicon.ico, favicon-16/32.png в корне
+// сайта и apple-touch-icon из assets/pwa/. Выводит bc_pwa_head() (includes/pwa.php).
+// Inline-SVG favicon удалён, иначе браузер продолжал выбирать старую иконку.
 
-	$svg = "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'>"
-		. "<defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'>"
-		. "<stop offset='0' stop-color='%23dda38b'/><stop offset='1' stop-color='%23c48067'/>"
-		. '</linearGradient></defs>'
-		. "<circle cx='50' cy='50' r='48' fill='url(%23g)'/>"
-		. "<g transform='translate(19.65 23.6) scale(10.5)' fill='white'>"
-		. bc_logo_paths()
-		. '</g>'
-		. '</svg>';
-
-	printf( '<link rel="icon" href="%s">' . "\n", esc_attr( 'data:image/svg+xml,' . $svg ) );
-}
-add_action( 'wp_head', 'bc_favicon_svg' );

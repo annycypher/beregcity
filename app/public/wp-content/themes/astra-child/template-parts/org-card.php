@@ -24,7 +24,7 @@ $bc_plan_cls = ' is-' . $bc_plan_now;
 		<?php if ( has_post_thumbnail() ) : ?>
 			<?php the_post_thumbnail( 'medium_large' ); ?>
 		<?php else : ?>
-			<svg class="ico" viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/></svg>
+			<div class="org-cover-ph"><span><?php echo esc_html( get_the_title() ); ?></span></div>
 		<?php endif; ?>
 		<?php if ( $bc_premium ) : ?><span class="ribbon">Премиум</span><?php endif; ?>
 		<?php if ( $bc_premium && $bc_verified ) : ?><span class="vbadge"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>Проверено</span><?php endif; ?>

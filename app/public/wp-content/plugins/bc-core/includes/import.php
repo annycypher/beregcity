@@ -4,7 +4,8 @@
  *
  * Только WP-CLI: `wp bc-import file=organizations.csv [--dry-run]`.
  * Логика вынесена в bc_import_run() (тестируется отдельно).
- * Организации создаются в статусе pending и проходят утверждение (D24).
+ * Организации создаются в статусе draft по умолчанию: wp bc-import file=... [--status=draft|pending|publish].
+ * Координаты не требуются (карта показывает обзор района), телефон необязателен.
  *
  * @package BC_Core
  */
@@ -127,7 +128,7 @@ function bc_import_find_duplicate( $phone, $title, $address ) {
  * @param bool   $dry_run Только отчёт, без записи.
  * @return array
  */
-function bc_import_run( $path, $dry_run = false ) {
+function bc_import_run( $path, $dry_run = false, $status = 'draft' ) {
 	$report = array(
 		'total'      => 0,
 		'created'    => 0,
@@ -160,8 +161,8 @@ function bc_import_run( $path, $dry_run = false ) {
 		$address  = isset( $row['address'] ) ? $row['address'] : '';
 		$phone    = isset( $row['phone'] ) ? $row['phone'] : '';
 
-		if ( '' === $title || '' === $category || '' === $address || '' === $phone ) {
-			$report['errors'][] = array( 'line' => $line, 'reason' => 'обязательные поля title/category/address/phone' );
+		if ( '' === $title || '' === $category || '' === $address ) {
+			$report['errors'][] = array( 'line' => $line, 'reason' => 'обязательные поля title/category/address' );
 			continue;
 		}
 
@@ -172,7 +173,7 @@ function bc_import_run( $path, $dry_run = false ) {
 		}
 
 		$phone_norm = bc_import_norm_phone( $phone );
-		if ( strlen( preg_replace( '/[^0-9]/', '', $phone_norm ) ) < 5 ) {
+		if ( '' !== $phone && strlen( preg_replace( '/[^0-9]/', '', $phone_norm ) ) < 5 ) {
 			$report['errors'][] = array( 'line' => $line, 'reason' => 'некорректный телефон: ' . $phone );
 			continue;
 		}
@@ -182,9 +183,8 @@ function bc_import_run( $path, $dry_run = false ) {
 			'address'  => $address,
 			'phone'    => $phone_norm,
 			'website'  => isset( $row['website'] ) ? $row['website'] : '',
-			'lat'      => isset( $row['lat'] ) ? $row['lat'] : '',
-			'lng'      => isset( $row['lng'] ) ? $row['lng'] : '',
 			'excerpt'  => isset( $row['excerpt'] ) ? $row['excerpt'] : '',
+			'source_category' => isset( $row['source_category'] ) ? $row['source_category'] : '',
 			'schedule' => isset( $row['schedule_text'] ) ? $row['schedule_text'] : '',
 			'cat_id'   => (int) $cats[ $cat_key ],
 			'feat_ids' => array(),
@@ -206,13 +206,6 @@ function bc_import_run( $path, $dry_run = false ) {
 			$entry['feat_ids'] = array_values( array_unique( $entry['feat_ids'] ) );
 		}
 
-		if ( '' !== $entry['lat'] || '' !== $entry['lng'] ) {
-			$lf = (float) str_replace( ',', '.', $entry['lat'] );
-			$nf = (float) str_replace( ',', '.', $entry['lng'] );
-			if ( ! ( $lf >= 55.5 && $lf <= 56.5 && $nf >= 92.3 && $nf <= 93.3 ) ) {
-				$report['warnings'][] = array( 'line' => $line, 'reason' => 'проверить координаты: ' . $entry['lat'] . ',' . $entry['lng'] );
-			}
-		}
 
 		$digits = preg_replace( '/[^0-9]/', '', $phone_norm );
 		$ta_key = mb_strtolower( $title . '|' . $address );
@@ -238,7 +231,7 @@ function bc_import_run( $path, $dry_run = false ) {
 		$post_id = wp_insert_post(
 			array(
 				'post_type'    => 'organizations',
-				'post_status'  => 'pending',
+				'post_status'  => $status,
 				'post_title'   => $title,
 				'post_author'  => $admin_id,
 				'post_content' => '',
@@ -253,11 +246,8 @@ function bc_import_run( $path, $dry_run = false ) {
 		update_field( 'field_bc_phone', $entry['phone'], $post_id );
 		update_field( 'field_bc_address', $entry['address'], $post_id );
 		update_field( 'field_bc_website', $entry['website'], $post_id );
-		if ( '' !== $entry['lat'] ) {
-			update_field( 'field_bc_lat', str_replace( ',', '.', $entry['lat'] ), $post_id );
-		}
-		if ( '' !== $entry['lng'] ) {
-			update_field( 'field_bc_lng', str_replace( ',', '.', $entry['lng'] ), $post_id );
+		if ( '' !== $entry['source_category'] ) {
+			update_post_meta( $post_id, 'bc_source_category', $entry['source_category'] );
 		}
 		if ( '' !== $entry['excerpt'] ) {
 			update_field( 'field_bc_excerpt', mb_substr( $entry['excerpt'], 0, 300 ), $post_id );
@@ -290,7 +280,11 @@ function bc_import_cli( $args, $assoc ) {
 		WP_CLI::error( 'Укажите файл: wp bc-import --file=organizations.csv [--dry-run]' );
 	}
 	$dry = isset( $assoc['dry-run'] );
-	$r   = bc_import_run( $file, $dry );
+	$status = isset( $assoc['status'] ) ? (string) $assoc['status'] : 'draft';
+	if ( ! in_array( $status, array( 'draft', 'pending', 'publish' ), true ) ) {
+		$status = 'draft';
+	}
+	$r   = bc_import_run( $file, $dry, $status );
 	if ( isset( $r['errors'][0] ) && 0 === $r['errors'][0]['line'] ) {
 		WP_CLI::error( $r['errors'][0]['reason'] );
 	}
@@ -308,7 +302,7 @@ function bc_import_cli( $args, $assoc ) {
 	foreach ( $r['warnings'] as $e ) {
 		WP_CLI::log( sprintf( '  предупреждение — строка %d: %s', $e['line'], $e['reason'] ) );
 	}
-	WP_CLI::success( $dry ? 'Dry-run завершён (записи в БД не было).' : 'Импорт завершён. Карточки — в очереди утверждения (pending).' );
+	WP_CLI::success( $dry ? 'Dry-run завершён (записи в БД не было).' : 'Импорт завершён. Статус новых карточек: ' . $status . '.' );
 }
 
 if ( defined( 'WP_CLI' ) && WP_CLI ) {

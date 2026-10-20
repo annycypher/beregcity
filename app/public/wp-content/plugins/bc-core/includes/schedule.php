@@ -54,6 +54,12 @@ function bc_schedule_status( $post_id ) {
 	}
 
 	if ( ! $today || empty( $today['time_from'] ) || empty( $today['time_to'] ) ) {
+		// Графика в ACF нет — показываем текстовый график (импорт/OSM), без статуса open/closed.
+		$text = trim( (string) get_post_meta( $post_id, 'bc_schedule_text', true ) );
+		if ( '' !== $text ) {
+			return array( 'open' => false, 'text' => 'График: ' . $text, 'note' => true );
+		}
+
 		return array( 'open' => false, 'text' => 'Сегодня закрыто' );
 	}
 

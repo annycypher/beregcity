@@ -12,7 +12,7 @@
 <head>
 <meta charset="<?php bloginfo( 'charset' ); ?>">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#fcfaf6">
+<meta name="theme-color" content="<?php echo esc_attr( function_exists( 'bc_pwa_theme_color' ) ? bc_pwa_theme_color() : '#c48067' ); ?>">
 <?php wp_head(); ?>
 </head>
 <body <?php body_class(); ?>>
@@ -45,6 +45,7 @@
       <input type="search" placeholder="Поиск по району…">
       <svg class="ico" style="width:19px;height:19px" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
     </div>
+    <?php do_action( 'bc_header_actions' ); // PWA-кнопка «Установить» (includes/pwa.php) и другие действия шапки. ?>
     <nav class="hicons">
       <a href="/afisha"><svg class="ico" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="3"/><path d="M8 2v4M16 2v4M3 10h18"/></svg><span>Афиша</span></a>
       <a href="/karta"><svg class="ico" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><span>Карта</span></a>

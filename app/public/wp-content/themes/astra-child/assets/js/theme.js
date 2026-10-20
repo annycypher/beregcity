@@ -19,8 +19,23 @@
 			slides[i].scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
 			dots.forEach(function (d, n) { d.classList.toggle('on', n === i); });
 		};
-		var stop = function () { clearInterval(timer); };
-		var play = function () { timer = setInterval(function () { go(i + 1); }, 6000); };
+		var stop = function () { clearInterval(timer); timer = null; };
+
+		/* Слайд с видео не листаем автоматически — ролик должен доиграть.
+		   Проверка «жёсткая»: если файла нет или он не загрузился, всё работает как раньше. */
+		var hasVideo = function () {
+			var el = slides[i] && slides[i].querySelector('video.bc-slide-video');
+			return !!(el && !el.classList.contains('is-failed'));
+		};
+
+		var play = function () {
+			stop();
+			if (hasVideo()) { return; }
+			timer = setInterval(function () {
+				if (hasVideo()) { stop(); return; }
+				go(i + 1);
+			}, 6000);
+		};
 
 		var prev = document.querySelector('.prev');
 		var next = document.querySelector('.next');

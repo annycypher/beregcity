@@ -14,15 +14,27 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * [bc_slider] — hero-слайдер главной: 3 слайда-заглушки, стрелки, точки.
+ * [bc_slider] — hero-слайдер главной.
+ *
+ * Слайды берутся из баннеров зоны hero (админка → «Баннеры»). Если hero-баннеров
+ * нет — показываются прежние 3 слайда-заглушки, чтобы главная не опустела.
+ * Количество точек равно количеству слайдов (theme.js работает по индексу).
  *
  * @return string HTML.
  */
 function bc_shortcode_slider() {
-	ob_start();
-	?>
+$heroes = function_exists( 'bc_banner_heroes' ) ? bc_banner_heroes() : array();
+$count  = $heroes ? count( $heroes ) : 3;
+
+ob_start();
+?>
 <div class="hero wrap">
   <div class="track" id="track">
+<?php if ( $heroes ) : ?>
+<?php foreach ( $heroes as $bc_slide_index => $bc_banner_id ) : ?>
+<?php echo bc_banner_slide( (int) $bc_banner_id, true, (int) $bc_slide_index ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML слайда уже экранирован. ?>
+<?php endforeach; ?>
+<?php else : ?>
     <div class="slide sl-photo">
       <span class="tag-ad">Реклама</span>
       <div>
@@ -52,15 +64,16 @@ function bc_shortcode_slider() {
         <div class="row"><a class="btn btn-terra" href="/dobavit">Добавить организацию</a></div>
       </div>
     </div>
+<?php endif; ?>
   </div>
   <div class="arrows">
     <button class="prev" aria-label="Назад"><svg class="ico" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
     <button class="next" aria-label="Вперёд"><svg class="ico" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
   </div>
-  <div class="dots"><span class="dot on"></span><span class="dot"></span><span class="dot"></span></div>
+  <div class="dots"><?php for ( $bc_i = 0; $bc_i < $count; $bc_i++ ) : ?><button type="button" class="dot<?php echo 0 === $bc_i ? ' on' : ''; ?>" aria-label="<?php echo esc_attr( sprintf( 'Слайд %d', $bc_i + 1 ) ); ?>"<?php echo 0 === $bc_i ? ' aria-current="true"' : ''; ?>></button><?php endfor; ?></div>
 </div>
-	<?php
-	return ob_get_clean();
+<?php
+return ob_get_clean();
 }
 add_shortcode( 'bc_slider', 'bc_shortcode_slider' );
 

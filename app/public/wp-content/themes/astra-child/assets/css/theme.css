@@ -1,5 +1,6 @@
 /* ═══ ПАЛИТРА v3.3 — правится только здесь ═══ */
 :root{
+  --bc-pad-x:18px;
   --bg:#fcfaf6; --card:#ffffff;
   --ink:#2b332e; --body:#4d564f; --muted:#8d968e; --icon:#5e685f;
   --terra:#c98d75; --terra-d:#b0755c; --terra-l:#f9ece6;
@@ -19,7 +20,7 @@ body{font-family:-apple-system,"Segoe UI",Roboto,Arial,sans-serif;font-weight:40
     var(--bg)}
 a{color:inherit;text-decoration:none}
 img,svg{display:block}
-.wrap{max-width:1200px;margin:0 auto;padding:0 18px}
+.wrap{max-width:1200px;margin:0 auto;padding:0 var(--bc-pad-x)}
 .ico{width:24px;height:24px;stroke:currentColor;stroke-width:1.6;fill:none;stroke-linecap:round;stroke-linejoin:round;flex:none}
 
 /* ═══ КНОПКИ: ГЕЛЬ (primary ~30%) + КРИСТАЛЛ (secondary ~70%) ═══
@@ -96,8 +97,8 @@ h2.sec .pill:hover{background:rgba(255,255,255,.5)}
 .burger:hover{border-color:var(--terra);color:var(--terra-d)}
 .logo{display:flex;align-items:center;gap:10px;white-space:nowrap}
 .logo .mark{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;
-  background:linear-gradient(140deg,#dda38b,#c48067);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 4px 12px rgba(196,124,99,.25)}
+  background:linear-gradient(140deg,#f9a78f,#F48671);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 4px 12px rgba(244,134,113,.3)}
 .logo b{font-size:18px;font-weight:600;color:var(--ink);display:block;line-height:1.15}
 .logo small{font-size:10.5px;font-weight:400;color:var(--muted);display:block}
 nav.main{display:flex;gap:0;margin-left:6px}
@@ -179,6 +180,11 @@ nav.main a:hover{background:var(--glass-2);color:var(--terra-d)}
 .story:hover .in{color:var(--terra-d)}
 .story .in .ico{width:26px;height:26px}
 .story b{font-size:11.5px;font-weight:500;color:var(--ink);text-align:center;line-height:1.25}
+.story .in img{width:100%;height:100%;object-fit:cover;border-radius:50%;display:block}
+/* Рамка показа сторис 9:16: фото целиком (object-fit:contain), края — размытая подложка */
+.story-frame{position:relative;aspect-ratio:9/16;overflow:hidden;border-radius:14px;background:#1c2620;max-width:220px}
+.story-frame .story-bg{position:absolute;inset:-8%;width:116%;height:116%;object-fit:cover;filter:blur(22px) brightness(.55);opacity:.9}
+.story-frame .story-img{position:relative;z-index:2;width:100%;height:100%;object-fit:contain;display:block}
 
 /* ── Рекламные зоны ── */
 .ad{position:relative;border:1.5px dashed rgba(176,117,92,.30);border-radius:var(--r);
@@ -352,11 +358,7 @@ footer .f-links a:hover{color:var(--terra-d)}
 .vbadge svg{width:12px;height:12px;stroke:var(--sage-d);stroke-width:2.4;fill:none;stroke-linecap:round}
 .org-cover .ribbon{position:absolute;top:10px;left:10px}
 .org-cover .vbadge{position:absolute;top:10px;right:10px}
-/* Free-тариф: фото в тёплом ч/б (D39) — фильтр на выводе, файлы не перезаписываются */
-.org-card.is-free .org-cover img,
-.org-card.is-free .gal-main img,
-.sim .org-card.is-free .org-cover img,
-.org-head.is-free .gal-main img { filter:grayscale(1) sepia(.45) saturate(.7) brightness(1.04); }
+/* Free-тариф: фото в исходном цвете (D39 «тёплое ч/б» отменён 19.10.2026) */
 .org-body{padding:14px 16px 16px;display:flex;flex-direction:column;gap:8px;flex:1}
 .org-body h3{font-size:16.5px;font-weight:500;color:var(--ink);line-height:1.3}
 .org-body h3 a:hover{color:var(--terra-d)}
@@ -567,7 +569,8 @@ footer .f-links a:hover{color:var(--terra-d)}
 .overlay{position:fixed;inset:0;background:rgba(30,36,32,.94);z-index:100;display:none;align-items:center;justify-content:center}
 .overlay.open{display:flex}
 .viewer{position:relative;width:min(420px,100vw);height:min(92vh,177.8vw);aspect-ratio:9/16;background:#1c2620;border-radius:16px;overflow:hidden;touch-action:none;box-shadow:0 24px 60px rgba(0,0,0,.4)}
-.slide-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;user-select:none;-webkit-user-drag:none}
+.slide-img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;z-index:2;user-select:none;-webkit-user-drag:none}
+.vw-bg{position:absolute;inset:-10%;width:120%;height:120%;object-fit:cover;filter:blur(26px) brightness(.5);z-index:1}
 .bars{position:absolute;top:10px;left:10px;right:10px;display:flex;gap:4px;z-index:5}
 .bar{flex:1;height:3px;border-radius:2px;background:rgba(255,255,255,.28);overflow:hidden}
 .bar i{display:block;height:100%;width:0;background:var(--terra-l)}
@@ -592,3 +595,73 @@ footer .f-links a:hover{color:var(--terra-d)}
 .cookie-banner a{color:#8f6a33;font-weight:600;white-space:nowrap}
 .cookie-banner .btn{flex:none;white-space:nowrap}
 @media(max-width:560px){.cookie-banner{flex-direction:column;align-items:stretch;text-align:left}.cookie-banner .btn{width:100%}}
+/* ═══ Единые отступы и мобильная сетка разделов (bc-core / astra-child) ═══ */
+@media (max-width: 767px) {
+  :root { --bc-pad-x: 16px; }
+
+  /* Astra-страницы (Карта, Политика и т.п.) — тот же отступ, что и у .wrap */
+  .ast-container { padding-left: var(--bc-pad-x); padding-right: var(--bc-pad-x); }
+
+  /* Карточки разделов: 2 × 2, равная высота */
+  .qrow { grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 18px; }
+  .qcard { height: 100%; padding: 14px; gap: 10px; }
+  .qcard b { font-size: 15px; line-height: 1.25; }
+  .qcard span span {
+    font-size: 12.5px; line-height: 1.35;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+    overflow: hidden; overflow-wrap: break-word;
+  }
+  .qcard .qic { width: 40px; height: 40px; border-radius: 10px; }
+  .qcard .qic svg, .qcard .qic .ico { width: 22px; height: 22px; }
+  .qcard .arr { display: none; }
+}
+
+@media (max-width: 440px) {
+  /* отменяем прежнюю одну колонку: на телефоне держим 2 × 2 */
+  .qrow { grid-template-columns: repeat(2, 1fr); }
+}
+/* ═══ Заглушка вместо фото: плитка с названием организации ═══ */
+.org-cover-ph {
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px;
+  text-align: center;
+  background: linear-gradient(135deg, #efe7db 0%, #f7f1e8 45%, #ecefdf 100%);
+}
+.org-cover-ph span {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.25;
+  letter-spacing: -.2px;
+  color: var(--ink);
+}
+.org-cover-ph--single { min-height: 300px; padding: 24px; }
+.org-cover-ph--single span { font-size: 22px; -webkit-line-clamp: 4; }
+.gal-main .org-cover-ph { min-height: 100%; }
+@media (max-width: 767px) {
+  .org-cover-ph span { font-size: 14px; }
+  .org-cover-ph--single { min-height: 210px; padding: 16px; }
+  .org-cover-ph--single span { font-size: 18px; }
+}
+
+/* --- Контакты организации (этап 4: дозаполнение из OSM/VK) --- */
+.org-phones { display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px; }
+.org-phones .btn { margin-bottom: 0; }
+.org-phones .btn:nth-child(n+2) { background: var(--card) !important; border: 1.5px solid var(--terra) !important; color: var(--terra-d) !important; }
+.sched.note { color: var(--body); }
+.sched.note .dot { background: #9aa3ad; box-shadow: 0 0 0 3px rgba(154, 163, 173, .18); }
+@media (max-width: 680px) {
+  .org-phones .btn { font-size: 13.5px; padding: 11px 10px; }
+  .org-links .btn { flex: 1 1 45%; }
+}
+@media (max-width: 390px) {
+  .org-phones .btn { font-size: 13px; }
+}

@@ -40,6 +40,9 @@
 /app/public/wp-content/plugins/*
 !/app/public/wp-content/plugins/bc-core/
 
+# --- Бэкапы иконок и кода: только локально ---
+/design/backup-icons/
+
 # --- Секреты и служебное: запрет на всякий случай ---
 wp-config.php
 **/wp-config.php

@@ -41,20 +41,8 @@ function bc_acf_org_fields() {
 				),
 				array(
 					'key'   => 'field_bc_address',
-					'label' => 'Адрес',
+					'label' => 'Адрес дома',
 					'name'  => 'bc_address',
-					'type'  => 'text',
-				),
-				array(
-					'key'   => 'field_bc_lat',
-					'label' => 'Широта (lat)',
-					'name'  => 'bc_lat',
-					'type'  => 'text',
-				),
-				array(
-					'key'   => 'field_bc_lng',
-					'label' => 'Долгота (lng)',
-					'name'  => 'bc_lng',
 					'type'  => 'text',
 				),
 				array(

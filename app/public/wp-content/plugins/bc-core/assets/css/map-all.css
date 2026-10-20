@@ -1,0 +1,175 @@
+/* ═══ [bc_map_all] — карта всех организаций ═══
+   Только контейнер и текст заглушки; палитра — из :root темы (с фолбэками). */
+
+.bc-map-all {
+  position: relative;
+  width: 100%;
+  height: 480px;
+  overflow: hidden;
+  border: 1px solid var(--line, rgba(43, 51, 46, .08));
+  border-radius: var(--r, 14px);
+  background: var(--bg, #fcfaf6);
+}
+
+.bc-map-all-canvas {
+  width: 100%;
+  height: 100%;
+}
+
+/* Заглушка внутри контейнера: рамку и радиус даёт сам контейнер */
+.bc-map-all .map-ph {
+  height: 100%;
+  min-height: 0;
+  border: 0;
+  border-radius: 0;
+}
+
+.map-ph-text {
+  position: absolute;
+  left: 50%;
+  top: calc(44% + 46px);
+  transform: translateX(-50%);
+  max-width: 340px;
+  padding: 0 18px;
+  text-align: center;
+  font-size: 14.5px;
+  line-height: 1.45;
+  color: var(--muted, #8d968e);
+}
+
+@media (max-width: 680px) {
+  .bc-map-all {
+    height: 380px;
+  }
+}
+
+/* ─── Метки и попапы JavaScript API 3.0 (свой DOM вместо пресетов v2) ─── */
+
+.bc-map-pin {
+  display: block;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: 2px solid #fff;
+  border-radius: 50% 50% 50% 0;
+  background: var(--terra-d, #b0755c);
+  box-shadow: 0 3px 8px rgba(90, 60, 40, .35);
+  transform: rotate(-45deg);
+  cursor: pointer;
+  transition: transform .15s, background .15s;
+}
+
+.bc-map-pin:hover,
+.bc-map-pin:focus-visible {
+  background: var(--terra, #c98d75);
+  transform: rotate(-45deg) scale(1.08);
+  outline: none;
+}
+
+.bc-map-pin-dot {
+  display: block;
+  width: 8px;
+  height: 8px;
+  margin: 7px auto 0;
+  border-radius: 50%;
+  background: #fff;
+}
+
+.bc-map-pin--static {
+  cursor: default;
+}
+
+.bc-map-cluster {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  background: var(--terra-d, #b0755c);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: 0 3px 10px rgba(90, 60, 40, .35);
+}
+
+/* Попап вместо балуна v2 */
+.bc-map-popup {
+  position: absolute;
+  left: 14px;
+  bottom: 14px;
+  z-index: 80;
+  max-width: min(320px, calc(100% - 28px));
+  padding: 12px 34px 12px 14px;
+  border: 1px solid var(--line, rgba(43, 51, 46, .08));
+  border-radius: 12px;
+  background: var(--card, #fff);
+  box-shadow: var(--shadow, 0 8px 24px rgba(90, 75, 60, .18));
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--body, #4d564f);
+}
+
+.bc-map-popup[hidden] {
+  display: none;
+}
+
+.bc-map-popup-title {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 15px;
+  color: var(--ink, #2b332e);
+}
+
+.bc-map-popup-addr {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--muted, #8d968e);
+  font-size: 13px;
+}
+
+.bc-map-popup-link {
+  color: var(--terra-d, #b0755c);
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.bc-map-popup-close {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--muted, #8d968e);
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+/* Одиночная карта в карточке организации */
+.bc-map-single {
+  width: 100%;
+  height: 300px;
+  overflow: hidden;
+  border: 1px solid var(--line, rgba(43, 51, 46, .08));
+  border-radius: var(--r, 14px);
+  background: var(--bg, #fcfaf6);
+}
+
+.bc-map-single .map-ph {
+  height: 100%;
+  min-height: 0;
+  border: 0;
+  border-radius: 0;
+}
+
+@media (max-width: 680px) {
+  .bc-map-single {
+    height: 240px;
+  }
+}

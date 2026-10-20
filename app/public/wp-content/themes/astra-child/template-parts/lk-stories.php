@@ -15,6 +15,16 @@ $mode = function_exists( 'bc_stories_mode' ) ? bc_stories_mode() : 'requests';
 $ok   = '';
 $err  = '';
 
+// Лимиты: сколько сторис организация держит на модерации и в публикации.
+$limits    = function_exists( 'bc_story_limits' ) ? bc_story_limits() : array( 'pending' => 1, 'publish' => 3 );
+$pending   = get_posts( array( 'post_type' => 'stories', 'author' => $user->ID, 'post_status' => 'pending', 'numberposts' => -1, 'fields' => 'ids' ) );
+$published = get_posts( array( 'post_type' => 'stories', 'author' => $user->ID, 'post_status' => 'publish', 'numberposts' => -1, 'fields' => 'ids' ) );
+$can_upload = count( $pending ) < (int) $limits['pending'] && count( $published ) < (int) $limits['publish'];
+
+if ( isset( $_GET['bc_sent'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	$ok = 'Фото отправлено на модерацию — редакция проверит и опубликует.';
+}
+
 if ( isset( $_POST['bc_story_nonce'] ) && wp_verify_nonce( sanitize_key( wp_unslash( $_POST['bc_story_nonce'] ) ), 'bc_story' ) ) {
 	$title = sanitize_text_field( wp_unslash( $_POST['story_title'] ?? '' ) );
 	$desc  = sanitize_textarea_field( wp_unslash( $_POST['story_desc'] ?? '' ) );
@@ -43,18 +53,28 @@ $my_stories = get_posts( array( 'post_type' => 'stories', 'author' => $user->ID,
 	<?php if ( $ok ) : ?><div style="background:#f1f5ec;border-radius:10px;padding:10px 14px;margin-bottom:14px;font-size:13px;color:#2b332e"><?php echo esc_html( $ok ); ?></div><?php endif; ?>
 
 	<?php if ( 'self' === $mode && function_exists( 'acf_form' ) ) : ?>
-		<p class="gal-lim">Загрузите фото (1080×1920, до 5 слайдов). Сторис уйдёт на модерацию редакции.</p>
-		<?php
-		acf_form(
-			array(
-				'post_id'         => 'new_post',
-				'new_post'        => array( 'post_type' => 'stories', 'post_status' => 'pending' ),
-				'fields'          => array( 'field_bc_slides' ),
-				'submit_value'    => 'Отправить на модерацию',
-				'updated_message' => 'Сторис отправлено на модерацию',
-			)
-		);
-		?>
+		<p class="gal-lim">Одно вертикальное фото: <?php echo esc_html( function_exists( 'bc_hint' ) ? bc_hint( 'story_slide' ) : '1080×1920 (вертикаль)' ); ?>. Фото не обрезается — в рамке 9:16 края заполнит размытая подложка.</p>
+		<?php if ( ! $can_upload ) : ?>
+			<div class="hint" style="color:#8f6a33">Лимит: <?php echo (int) $limits['pending']; ?> на модерации и до <?php echo (int) $limits['publish']; ?> опубликованных. Дождитесь проверки редакции.</div>
+		<?php else : ?>
+			<?php
+			acf_form(
+				array(
+					'post_id'            => 'new_post',
+					'new_post'           => array(
+						'post_type'   => 'stories',
+						'post_status' => 'pending',
+						'post_author' => $user->ID,
+						'post_title'  => get_the_title( $org_id ) . ' — ' . date_i18n( 'd.m.Y' ),
+					),
+					'fields'             => array( 'field_bc_story_image', 'field_bc_story_caption', 'field_bc_story_link', 'field_bc_story_btn' ),
+					'submit_value'       => 'Отправить на модерацию',
+					'return'             => add_query_arg( 'bc_sent', 1, home_url( '/kabinet/stories/' ) ),
+					'html_before_fields' => '<div class="hint">Рамка показа — 9:16 (вертикаль). Подпись, ссылка и кнопка — по желанию.</div>',
+				)
+			);
+			?>
+		<?php endif; ?>
 	<?php else : ?>
 		<p class="gal-lim">Подайте заявку — редакция соберёт сторис из ваших материалов (фото приложите в описании или передайте редакции).</p>
 		<form method="post">
@@ -72,10 +92,23 @@ $my_stories = get_posts( array( 'post_type' => 'stories', 'author' => $user->ID,
 	<table class="inv-table">
 		<thead><tr><th>Сторис</th><th>Статус</th><th>Дата</th></tr></thead>
 		<tbody>
-		<?php foreach ( $my_stories as $s ) : $st = get_post_status( $s->ID ); ?>
+		<?php
+		$bc_labels = array( 'publish' => 'Опубликовано', 'pending' => 'На модерации', 'draft' => 'Отклонено' );
+		foreach ( $my_stories as $s ) :
+			$st  = get_post_status( $s->ID );
+			$img = function_exists( 'bc_story_single_slide' ) ? bc_story_single_slide( $s->ID ) : null;
+			?>
 			<tr>
-				<td><?php echo esc_html( $s->post_title ); ?></td>
-				<td><span class="st <?php echo 'publish' === $st ? 'ok' : ( 'pending' === $st ? 'wait' : 'reject' ); ?>"><?php echo esc_html( $st ); ?></span></td>
+				<td>
+					<?php if ( $img && ! empty( $img['thumb'] ) ) : ?>
+						<img src="<?php echo esc_url( $img['thumb'] ); ?>" alt="" style="width:36px;height:64px;object-fit:cover;border-radius:4px;vertical-align:middle;margin-right:8px">
+					<?php endif; ?>
+					<?php echo esc_html( $s->post_title ); ?>
+					<?php if ( 'draft' === $st && get_post_meta( $s->ID, 'bc_reject_reason', true ) ) : ?>
+						<div class="hint">Причина: <?php echo esc_html( get_post_meta( $s->ID, 'bc_reject_reason', true ) ); ?></div>
+					<?php endif; ?>
+				</td>
+				<td><span class="st <?php echo 'publish' === $st ? 'ok' : ( 'pending' === $st ? 'wait' : 'reject' ); ?>"><?php echo esc_html( isset( $bc_labels[ $st ] ) ? $bc_labels[ $st ] : $st ); ?></span></td>
 				<td><?php echo get_the_date( 'd.m.Y', $s->ID ); ?></td>
 			</tr>
 		<?php endforeach; ?>

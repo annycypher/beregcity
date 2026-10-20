@@ -64,3 +64,43 @@ function bc_acf_stories_fields() {
 	);
 }
 add_action( 'acf/init', 'bc_acf_stories_fields' );
+
+/**
+ * Одно вертикальное фото + подпись (ACF free: repeater недоступен).
+ *
+ * Организация грузит фото из личного кабинета → статус pending → модерация
+ * редакции → publish. Показ в рамке 9:16 с подложкой (bc_story_frame()).
+ */
+function bc_acf_story_single_fields() {
+	if ( ! function_exists( 'acf_add_local_field_group' ) ) {
+		return;
+	}
+	acf_add_local_field_group(
+		array(
+			'key'      => 'group_bc_story_single',
+			'title'    => 'Сторис: фото и подпись',
+			'fields'   => array(
+				array(
+					'key'           => 'field_bc_story_image',
+					'label'         => 'Вертикальное фото',
+					'name'          => 'bc_story_image',
+					'type'          => 'image',
+					'return_format' => 'id',
+					'preview_size'  => 'medium',
+					'required'      => 1,
+					'mime_types'    => 'jpg,jpeg,png,webp',
+					'instructions'  => 'Любая вертикаль (рекомендуем 1080×1920). В рамке 9:16 покажем с подложкой — без обрезки.',
+				),
+				array( 'key' => 'field_bc_story_caption', 'label' => 'Подпись (≤90)', 'name' => 'bc_story_caption', 'type' => 'text', 'maxlength' => 90 ),
+				array( 'key' => 'field_bc_story_link', 'label' => 'Ссылка', 'name' => 'bc_story_link', 'type' => 'url' ),
+				array( 'key' => 'field_bc_story_btn', 'label' => 'Текст кнопки (≤20)', 'name' => 'bc_story_btn', 'type' => 'text', 'maxlength' => 20 ),
+				array( 'key' => 'field_bc_story_ad', 'label' => 'Рекламная сторис', 'name' => 'bc_story_ad', 'type' => 'true_false' ),
+				array( 'key' => 'field_bc_story_erid', 'label' => 'erid (для рекламы)', 'name' => 'bc_story_erid', 'type' => 'text' ),
+			),
+			'location' => array( array( array( 'param' => 'post_type', 'operator' => '==', 'value' => 'stories' ) ) ),
+			'position' => 'normal',
+		)
+	);
+}
+add_action( 'acf/init', 'bc_acf_story_single_fields' );
+

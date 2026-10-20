@@ -28,6 +28,38 @@ while ( have_posts() ) :
 	$bc_tel_uri = preg_replace( '/[^0-9+]/', '', (string) $bc_phone );
 	$bc_plan_now = function_exists( 'bc_plan' ) ? bc_plan( get_the_ID() ) : 'free';
 	$bc_plan_cls = ' is-' . $bc_plan_now;
+
+	// Контакты: телефоны (JSON bc_phones + основной bc_phone), соцсети, точка на карте.
+	$bc_phones_raw = get_post_meta( get_the_ID(), 'bc_phones', true );
+	$bc_phones     = array();
+	if ( $bc_phones_raw ) {
+		$bc_decoded = json_decode( (string) $bc_phones_raw, true );
+		if ( is_array( $bc_decoded ) ) {
+			$bc_phones = array_values( array_filter( array_map( 'strval', $bc_decoded ) ) );
+		}
+	}
+	if ( $bc_phone ) {
+		array_unshift( $bc_phones, $bc_phone );
+	}
+	$bc_phones = array_values( array_unique( array_filter( $bc_phones ) ) );
+
+	$bc_socials = json_decode( (string) get_post_meta( get_the_ID(), 'bc_socials', true ), true );
+	if ( ! is_array( $bc_socials ) ) {
+		$bc_socials = array();
+	}
+	if ( empty( $bc_socials['vk'] ) && $bc_vk ) {
+		$bc_socials['vk'] = $bc_vk;
+	}
+	if ( empty( $bc_socials['telegram'] ) && $bc_tg ) {
+		$bc_socials['telegram'] = $bc_tg;
+	}
+	if ( empty( $bc_socials['whatsapp'] ) && $bc_wa ) {
+		$bc_socials['whatsapp'] = $bc_wa;
+	}
+
+	$bc_lat   = (float) get_post_meta( get_the_ID(), 'bc_lat', true );
+	$bc_lng   = (float) get_post_meta( get_the_ID(), 'bc_lng', true );
+	$bc_route = ( $bc_lat && $bc_lng ) ? 'https://yandex.ru/maps/?rtext=~' . $bc_lat . ',' . $bc_lng . '&rtt=auto' : '';
 ?>
 <div class="wrap">
 
@@ -46,7 +78,7 @@ while ( have_posts() ) :
 				<?php elseif ( has_post_thumbnail() ) : ?>
 					<?php the_post_thumbnail( 'large' ); ?>
 				<?php else : ?>
-					<svg class="ico" viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/></svg>
+					<div class="org-cover-ph org-cover-ph--single"><span><?php echo esc_html( get_the_title() ); ?></span></div>
 				<?php endif; ?>
 			</div>
 			<?php if ( 'free' !== $bc_plan_now && $bc_gal && is_array( $bc_gal ) && count( $bc_gal ) > 1 ) : ?>
@@ -80,30 +112,39 @@ while ( have_posts() ) :
 			<?php
 			$bc_sched = function_exists( 'bc_schedule_status' ) ? bc_schedule_status( get_the_ID() ) : array( 'open' => false, 'text' => '' );
 			if ( ! empty( $bc_sched['text'] ) ) :
+				$bc_sched_cls = ! empty( $bc_sched['note'] ) ? ' note' : ( ! empty( $bc_sched['open'] ) ? '' : ' closed' );
 			?>
-			<div class="sched<?php echo ! empty( $bc_sched['open'] ) ? '' : ' closed'; ?>"><span class="dot"></span><?php echo esc_html( $bc_sched['text'] ); ?></div>
+			<div class="sched<?php echo esc_attr( $bc_sched_cls ); ?>"><span class="dot"></span><?php echo esc_html( $bc_sched['text'] ); ?></div>
 			<?php endif; ?>
 
-			<?php if ( $bc_phone ) : ?>
-				<a class="btn btn-terra" href="/go/<?php echo (int) get_the_ID(); ?>/phone/"><?php echo esc_html( $bc_phone ); ?></a>
+			<?php if ( $bc_phones ) : ?>
+			<div class="org-phones">
+				<?php foreach ( $bc_phones as $bc_p ) : ?>
+					<a class="btn btn-terra" href="tel:<?php echo esc_attr( preg_replace( '/[^0-9+]/', '', $bc_p ) ); ?>"><?php echo esc_html( $bc_p ); ?></a>
+				<?php endforeach; ?>
+			</div>
 			<?php endif; ?>
 
 			<?php if ( $bc_website ) : ?>
-				<a class="btn btn-glass" style="margin-bottom:10px" href="/go/<?php echo (int) get_the_ID(); ?>/site/">Сайт организации</a>
+				<a class="btn btn-glass" href="<?php echo esc_url( $bc_website ); ?>" target="_blank" rel="nofollow noopener">Сайт организации</a>
 			<?php endif; ?>
 
 			<div class="org-links">
-				<?php if ( $bc_wa ) : ?><a class="btn btn-glass" href="/go/<?php echo (int) get_the_ID(); ?>/whatsapp/">WhatsApp</a><?php endif; ?>
-				<?php if ( $bc_tg ) : ?><a class="btn btn-glass" href="/go/<?php echo (int) get_the_ID(); ?>/telegram/">Telegram</a><?php endif; ?>
-				<?php /* bc_map: «Маршрут» — Яндекс.Карта под BC_MAP_ON (D27) */ ?>
-				<a class="btn btn-glass" href="#">Маршрут</a>
+				<?php if ( ! empty( $bc_socials['vk'] ) ) : ?>
+					<a class="btn btn-glass" href="<?php echo esc_url( $bc_socials['vk'] ); ?>" target="_blank" rel="nofollow noopener">ВКонтакте</a>
+				<?php endif; ?>
+				<?php if ( ! empty( $bc_socials['telegram'] ) ) : ?>
+					<?php $bc_tg_url = preg_match( '#^https?://#i', $bc_socials['telegram'] ) ? $bc_socials['telegram'] : 'https://t.me/' . ltrim( $bc_socials['telegram'], '@' ); ?>
+					<a class="btn btn-glass" href="<?php echo esc_url( $bc_tg_url ); ?>" target="_blank" rel="nofollow noopener">Telegram</a>
+				<?php endif; ?>
+				<?php if ( ! empty( $bc_socials['whatsapp'] ) ) : ?>
+					<?php $bc_wa_url = preg_match( '#^https?://#i', $bc_socials['whatsapp'] ) ? $bc_socials['whatsapp'] : 'https://wa.me/' . preg_replace( '/[^0-9]/', '', $bc_socials['whatsapp'] ); ?>
+					<a class="btn btn-glass" href="<?php echo esc_url( $bc_wa_url ); ?>" target="_blank" rel="nofollow noopener">WhatsApp</a>
+				<?php endif; ?>
+				<?php if ( $bc_route ) : ?>
+					<a class="btn btn-glass" href="<?php echo esc_url( $bc_route ); ?>" target="_blank" rel="nofollow noopener">Маршрут</a>
+				<?php endif; ?>
 			</div>
-
-			<?php if ( $bc_vk ) : ?>
-			<div class="soc-mini">
-				<a href="<?php echo esc_url( $bc_vk ); ?>" aria-label="ВКонтакте" rel="nofollow noopener" target="_blank"><svg viewBox="0 0 24 24"><path d="M3 8c1.5 6 5 9.5 9 10v-4c2 .5 3.5 2 4.5 4H20c-.7-3-2.5-5-4-6 1.5-1.5 3-3.5 3.5-6h-3.3c-.8 2.3-2.3 4.3-4.2 5V6H9v7C6.5 11.5 5 9.5 4.5 8z"/></svg></a>
-			</div>
-			<?php endif; ?>
 		</div>
 	</div>
 
@@ -121,11 +162,16 @@ while ( have_posts() ) :
 
 	<?php /* bc_promo: акция (.org-promo) — Этап 6.1, сейчас не выводится */ ?>
 
-	<!-- Сторис организации (Этап 5.4в — якорь) -->
+	<!-- Сторис организации (Этап 5.4в): секция выводится только при наличии опубликованных сторис -->
+	<?php
+	$bc_stories = function_exists( 'bc_stories_data' ) ? bc_stories_data( get_the_ID() ) : array();
+	if ( $bc_stories && ( ! function_exists( 'bc_stories_mode' ) || 'off' !== bc_stories_mode() ) ) :
+		?>
 	<section>
 		<h2 class="sec">Сторис организации</h2>
 		<?php echo do_shortcode( '[bc_stories org="' . get_the_ID() . '"]' ); ?>
 	</section>
+	<?php endif; ?>
 
 	<!-- Отзывы (Этап 4.5, D40) -->
 	<section>
@@ -137,9 +183,7 @@ while ( have_posts() ) :
 	<section>
 		<h2 class="sec">Как найти</h2>
 		<?php
-		$bc_lat = get_field( 'field_bc_lat' );
-		$bc_lng = get_field( 'field_bc_lng' );
-		echo function_exists( 'bc_map_markup' ) ? bc_map_markup( (float) $bc_lat, (float) $bc_lng, $bc_address ) : '';
+		echo function_exists( 'bc_map_markup' ) ? bc_map_markup( $bc_lat, $bc_lng, $bc_address ) : '';
 		?>
 	</section>
 
@@ -179,10 +223,12 @@ while ( have_posts() ) :
 
 <!-- Мобильная панель звонка -->
 <div class="callbar">
-	<?php if ( $bc_phone ) : ?>
+	<?php if ( $bc_phones ) : ?>
 		<a class="btn btn-terra" href="/go/<?php echo (int) get_the_ID(); ?>/phone/">Позвонить</a>
 	<?php endif; ?>
-	<a class="btn btn-glass" href="#">Маршрут</a>
+	<?php if ( $bc_route ) : ?>
+		<a class="btn btn-glass" href="<?php echo esc_url( $bc_route ); ?>" target="_blank" rel="nofollow noopener">Маршрут</a>
+	<?php endif; ?>
 </div>
 
 <?php endwhile; ?>

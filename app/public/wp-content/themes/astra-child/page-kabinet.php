@@ -53,9 +53,7 @@ $until = ( $org_id && function_exists( 'get_field' ) ) ? get_field( 'field_bc_pl
 			<?php elseif ( 'photo' === $tab ) : ?>
 				<div class="panel"><h2>Фото</h2>
 					<div class="hint"><?php echo esc_html( bc_hint( 'org_photo' ) ); ?>. Горизонтальные, первое — обложка.</div>
-					<?php if ( 'free' === $plan ) : ?>
-					<div class="hint" style="color:#8f6a33">Ваши фото показываются в тёплом ч/б — цветные открываются на тарифе Стандарт. <a href="/kabinet/billing/">Повысить тариф</a>.</div>
-					<?php endif; ?>
+					<?php /* Free-тариф: фото показываются в исходном цвете (D39 отменён 19.10.2026) */ ?>
 					<p>Загрузка фотографий — в следующем шаге.</p>
 				</div>
 			<?php elseif ( 'promo' === $tab ) : ?>
@@ -70,7 +68,6 @@ $until = ( $org_id && function_exists( 'get_field' ) ) ? get_field( 'field_bc_pl
 					<div class="inv-table"><table style="width:100%">
 						<tr><th>Возможность</th><th>Free</th><th>Стандарт</th><th>Премиум</th></tr>
 						<tr><td>Фото</td><td><?php echo (int) BC_Plans::limit( 'free', 'photos' ); ?></td><td><?php echo (int) BC_Plans::limit( 'standard', 'photos' ); ?></td><td><?php echo (int) BC_Plans::limit( 'premium', 'photos' ); ?></td></tr>
-						<tr><td>Цветные фото</td><td>✕</td><td>✓</td><td>✓</td></tr>
 						<tr><td>Описание, знаков</td><td>до <?php echo (int) BC_Plans::limit( 'free', 'desc' ); ?></td><td>до <?php echo (int) BC_Plans::limit( 'standard', 'desc' ); ?></td><td>до <?php echo (int) BC_Plans::limit( 'premium', 'desc' ); ?></td></tr>
 					</table></div>
 					<form method="post" action="<?php echo esc_url( home_url( '/kabinet/billing/' ) ); ?>" class="bc-pay-form" style="margin-top:16px">

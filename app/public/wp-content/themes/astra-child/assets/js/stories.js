@@ -14,6 +14,7 @@
 		'<div class="bars" id="bc-bars"></div>' +
 		'<span class="ad-tag" id="bc-ad">Реклама</span>' +
 		'<button class="close" id="bc-close" aria-label="Закрыть">✕</button>' +
+		'<img class="vw-bg" id="bc-bg" alt="" aria-hidden="true">' +
 		'<img class="slide-img" id="bc-img" alt="">' +
 		'<div class="caption" id="bc-cap"></div>' +
 		'<a class="slide-btn" id="bc-btn" target="_blank" rel="nofollow noopener"><span id="bc-btnText">Узнать больше</span></a>' +
@@ -24,6 +25,7 @@
 	var vw = document.getElementById('bc-vw');
 	var bars = document.getElementById('bc-bars');
 	var img = document.getElementById('bc-img');
+	var bg = document.getElementById('bc-bg');
 	var cap = document.getElementById('bc-cap');
 	var btn = document.getElementById('bc-btn');
 	var btnText = document.getElementById('bc-btnText');
@@ -58,6 +60,7 @@
 		pi = j; prog = 0; playing = true;
 		var sl = st.slides[j];
 		img.src = sl.img; img.alt = st.title;
+		if (bg) { bg.src = sl.img; }
 		cap.textContent = sl.caption || '';
 		cap.style.display = sl.caption ? 'block' : 'none';
 		btn.href = sl.link || '#';

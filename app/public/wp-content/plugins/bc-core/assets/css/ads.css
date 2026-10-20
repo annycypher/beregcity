@@ -1,0 +1,31 @@
+/* Рекламные слоты: рамок и заглушек нет — пустая позиция не выводится вовсе. */
+
+.bc-ad {
+margin: 20px 0;
+}
+
+.bc-ad__link {
+display: block;
+text-decoration: none;
+}
+
+.bc-ad__img {
+display: block;
+width: 100%;
+height: auto;
+border-radius: 14px;
+}
+
+.bc-ad--catalog_sidebar {
+margin: 0 0 16px;
+}
+
+@media (max-width: 767px) {
+.bc-ad {
+margin: 16px 0;
+}
+
+.bc-ad__img {
+border-radius: 12px;
+}
+}

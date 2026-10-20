@@ -88,10 +88,23 @@ function bc_invoice_template_redirect() {
 	if ( ! $token ) {
 		return;
 	}
+
+	// Доступ только владельцу организации или админу (D42): публичных токен-ссылок нет.
+	if ( ! is_user_logged_in() ) {
+		wp_die(
+			'Счёт доступен только владельцу организации.<br><br><a href="' . esc_url( home_url( '/kabinet/' ) ) . '">Войти в личный кабинет</a> и открыть счёт в разделе «Тариф и оплата».',
+			'Доступ к счёту закрыт',
+			array( 'response' => 403 )
+		);
+	}
+
 	global $wpdb;
 	$row = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . bc_payments_table() . ' WHERE token = %s', $token ) );
 	if ( ! $row ) {
-		wp_die( 'Счёт не найден или ссылка недействительна.' );
+		wp_die( 'Счёт не найден или ссылка недействительна.', 'Счёт не найден', array( 'response' => 404 ) );
+	}
+	if ( ! current_user_can( 'manage_options' ) && get_current_user_id() !== (int) get_post_field( 'post_author', $row->org_id ) ) {
+		wp_die( 'Этот счёт принадлежит другой организации.', 'Доступ к счёту закрыт', array( 'response' => 403 ) );
 	}
 	get_header();
 	echo '<div class="wrap" style="max-width:720px;margin:36px auto">';

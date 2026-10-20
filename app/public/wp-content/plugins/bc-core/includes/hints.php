@@ -67,6 +67,7 @@ function bc_acf_field_hints() {
 		'field_bc_website'        => 'Полный адрес с https://.',
 		'field_bc_whatsapp'       => 'Номер +7… или ссылка wa.me.',
 		'field_bc_telegram'       => 'Имя с @ или ссылка t.me.',
+		'field_bc_max'            => 'Имя, @ник или полная ссылка max.ru.',
 		'field_bc_vk'             => 'Ссылка на страницу или сообщество.',
 		'field_bc_plan'           => 'Тариф: free — без снипетов и соцсетей.',
 		'field_bc_plan_until'     => 'Дата окончания тарифа. Пусто — бессрочно.',

@@ -21,6 +21,7 @@ while ( have_posts() ) :
 	$bc_wa      = get_field( 'field_bc_whatsapp' );
 	$bc_tg      = get_field( 'field_bc_telegram' );
 	$bc_vk      = get_field( 'field_bc_vk' );
+	$bc_max     = get_field( 'field_bc_max' );
 	$bc_gal     = get_field( 'field_bc_gallery' );
 	$bc_cats    = get_the_terms( get_the_ID(), 'bc_cat' );
 	$bc_cat     = ( $bc_cats && ! is_wp_error( $bc_cats ) ) ? $bc_cats[0] : null;
@@ -55,6 +56,9 @@ while ( have_posts() ) :
 	}
 	if ( empty( $bc_socials['whatsapp'] ) && $bc_wa ) {
 		$bc_socials['whatsapp'] = $bc_wa;
+	}
+	if ( empty( $bc_socials['max'] ) && $bc_max ) {
+		$bc_socials['max'] = $bc_max;
 	}
 
 	$bc_lat   = (float) get_post_meta( get_the_ID(), 'bc_lat', true );
@@ -136,6 +140,10 @@ while ( have_posts() ) :
 				<?php if ( ! empty( $bc_socials['telegram'] ) ) : ?>
 					<?php $bc_tg_url = preg_match( '#^https?://#i', $bc_socials['telegram'] ) ? $bc_socials['telegram'] : 'https://t.me/' . ltrim( $bc_socials['telegram'], '@' ); ?>
 					<a class="btn btn-glass" href="<?php echo esc_url( $bc_tg_url ); ?>" target="_blank" rel="nofollow noopener">Telegram</a>
+				<?php endif; ?>
+				<?php if ( ! empty( $bc_socials['max'] ) ) : ?>
+					<?php $bc_max_url = preg_match( '#^https?://#i', $bc_socials['max'] ) ? $bc_socials['max'] : 'https://max.ru/' . ltrim( $bc_socials['max'], '@' ); ?>
+					<a class="btn btn-glass" href="<?php echo esc_url( $bc_max_url ); ?>" target="_blank" rel="nofollow noopener">MAX</a>
 				<?php endif; ?>
 				<?php if ( ! empty( $bc_socials['whatsapp'] ) ) : ?>
 					<?php $bc_wa_url = preg_match( '#^https?://#i', $bc_socials['whatsapp'] ) ? $bc_socials['whatsapp'] : 'https://wa.me/' . preg_replace( '/[^0-9]/', '', $bc_socials['whatsapp'] ); ?>

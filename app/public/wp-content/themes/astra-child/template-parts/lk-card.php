@@ -49,7 +49,7 @@ $prog = function_exists( 'bc_progress' ) ? bc_progress( $org_id ) : array( 'perc
 		acf_form(
 			array(
 				'post_id'         => $org_id,
-				'fields'          => array( 'field_bc_phone', 'field_bc_address', 'field_bc_lat', 'field_bc_lng', 'field_bc_website', 'field_bc_whatsapp', 'field_bc_telegram', 'field_bc_vk', 'field_bc_excerpt', 'field_bc_keywords' ),
+				'fields'          => array( 'field_bc_phone', 'field_bc_address', 'field_bc_lat', 'field_bc_lng', 'field_bc_website', 'field_bc_whatsapp', 'field_bc_telegram', 'field_bc_max', 'field_bc_vk', 'field_bc_excerpt', 'field_bc_keywords' ),
 				'submit_value'    => 'Сохранить изменения',
 				'updated_message' => 'Изменения сохранены',
 			)

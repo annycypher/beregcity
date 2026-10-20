@@ -125,6 +125,12 @@ function bc_acf_org_fields() {
 					'type'  => 'text',
 				),
 				array(
+					'key'   => 'field_bc_max',
+					'label' => 'MAX',
+					'name'  => 'bc_max',
+					'type'  => 'text',
+				),
+				array(
 					'key'   => 'field_bc_vk',
 					'label' => 'ВКонтакте',
 					'name'  => 'bc_vk',

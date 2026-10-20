@@ -81,7 +81,7 @@ class BC_Plans {
 	);
 
 	// Цены и периоды (СПРАВОЧНИК §2; скидки [ФАКТ-ПРОВЕРКА период]).
-	const PRICES         = array( 'standard' => 1290, 'premium' => 3690 );
+	const PRICES         = array( 'standard' => 490, 'premium' => 690 );
 	const PERIODS        = array( 'month' => 1, 'quarter' => 3, 'year' => 12 );
 	const PERIOD_DISCOUNT = array( 'month' => 0, 'quarter' => 0.05, 'year' => 0.10 );
 

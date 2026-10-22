@@ -34,6 +34,8 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/osm.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/vk.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/lk-routes.php';
 require_once plugin_dir_path( __FILE__ ) . 'admin/class-bc-admin.php';
+require_once plugin_dir_path( __FILE__ ) . 'admin/class-bc-houses.php';
+
 require_once plugin_dir_path( __FILE__ ) . 'admin/class-bc-approval.php';
 require_once plugin_dir_path( __FILE__ ) . 'admin/admin-fraud.php';
 require_once plugin_dir_path( __FILE__ ) . 'admin/class-bc-payments.php';

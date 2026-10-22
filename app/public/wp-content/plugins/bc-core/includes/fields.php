@@ -46,6 +46,41 @@ function bc_acf_org_fields() {
 					'type'  => 'text',
 				),
 				array(
+					'key'     => 'field_bc_street',
+					'label'   => 'Улица',
+					'name'    => 'bc_street',
+					'type'    => 'select',
+					'choices' => array(
+						'Капитанская'      => 'Капитанская',
+						'Навигационная'    => 'Навигационная',
+						'Парусная'         => 'Парусная',
+						'Регатная'         => 'Регатная',
+						'Южная набережная' => 'Южная набережная',
+					),
+					'allow_null' => 1,
+					'ui'         => 1,
+				),
+				array(
+					'key'     => 'field_bc_house',
+					'label'   => 'Дом',
+					'name'    => 'bc_house',
+					'type'    => 'select',
+					'choices' => array(
+						'1' => '1', '2' => '2', '3' => '3', '4' => '4', '5' => '5',
+						'6' => '6', '7' => '7', '8' => '8', '9' => '9', '10' => '10',
+						'12' => '12', '14' => '14', '16' => '16',
+					),
+					'allow_null' => 1,
+					'ui'         => 1,
+				),
+				array(
+					'key'   => 'field_bc_floor',
+					'label' => 'Этаж / помещение',
+					'name'  => 'bc_floor',
+					'type'  => 'text',
+				),
+
+				array(
 					'key'          => 'field_bc_schedule',
 					'label'        => 'График работы',
 					'name'         => 'bc_schedule',

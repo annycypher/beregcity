@@ -39,11 +39,16 @@ function bc_import_read_csv( $path ) {
 	$raw   = preg_replace( '/^\xEF\xBB\xBF/', '', $raw );
 	$lines = preg_split( '/\r\n|\n|\r/', $raw );
 	$rows  = array();
+	$delim = ';';
 	foreach ( $lines as $ln ) {
 		if ( '' === trim( $ln ) ) {
 			continue;
 		}
-		$rows[] = str_getcsv( $ln, ';' );
+		if ( ! $rows ) {
+			// Разделитель по первой строке: «;» (D41) или «,» (база южка).
+			$delim = substr_count( $ln, ';' ) >= substr_count( $ln, ',' ) ? ';' : ',';
+		}
+		$rows[] = str_getcsv( $ln, $delim );
 	}
 	if ( count( $rows ) < 2 ) {
 		return array( 'rows' => array(), 'error' => 'CSV пуст или нет строк данных (нужна строка-заголовок).' );
@@ -156,8 +161,9 @@ function bc_import_run( $path, $dry_run = false, $status = 'draft' ) {
 		$line = $idx + 2;
 		$report['total']++;
 
-		$title    = isset( $row['title'] ) ? $row['title'] : '';
-		$category = isset( $row['category'] ) ? $row['category'] : '';
+		// Алиасы колонок: D41 (title/category) и «база южка» (name/bc_cat).
+		$title    = isset( $row['title'] ) ? $row['title'] : ( isset( $row['name'] ) ? $row['name'] : '' );
+		$category = isset( $row['category'] ) ? $row['category'] : ( isset( $row['bc_cat'] ) ? $row['bc_cat'] : '' );
 		$address  = isset( $row['address'] ) ? $row['address'] : '';
 		$phone    = isset( $row['phone'] ) ? $row['phone'] : '';
 
@@ -182,10 +188,18 @@ function bc_import_run( $path, $dry_run = false, $status = 'draft' ) {
 			'title'    => $title,
 			'address'  => $address,
 			'phone'    => $phone_norm,
-			'website'  => isset( $row['website'] ) ? $row['website'] : '',
-			'excerpt'  => isset( $row['excerpt'] ) ? $row['excerpt'] : '',
+			'website'  => isset( $row['website'] ) ? $row['website'] : ( isset( $row['site'] ) ? $row['site'] : '' ),
+			'excerpt'  => isset( $row['excerpt'] ) ? $row['excerpt'] : ( isset( $row['keywords'] ) ? $row['keywords'] : '' ),
 			'source_category' => isset( $row['source_category'] ) ? $row['source_category'] : '',
-			'schedule' => isset( $row['schedule_text'] ) ? $row['schedule_text'] : '',
+			'schedule' => isset( $row['schedule_text'] ) ? $row['schedule_text'] : ( isset( $row['schedule'] ) ? $row['schedule'] : '' ),
+			'street'   => isset( $row['street'] ) ? $row['street'] : '',
+			'house'    => isset( $row['house'] ) ? $row['house'] : '',
+			'floor'    => isset( $row['floor'] ) ? $row['floor'] : '',
+			'plan'     => isset( $row['plan'] ) ? $row['plan'] : '',
+			'whatsapp' => isset( $row['whatsapp'] ) ? $row['whatsapp'] : '',
+			'telegram' => isset( $row['telegram'] ) ? $row['telegram'] : '',
+			'vk'       => isset( $row['vk'] ) ? $row['vk'] : '',
+			'keywords' => isset( $row['keywords'] ) ? $row['keywords'] : '',
 			'cat_id'   => (int) $cats[ $cat_key ],
 			'feat_ids' => array(),
 		);
@@ -208,20 +222,27 @@ function bc_import_run( $path, $dry_run = false, $status = 'draft' ) {
 
 
 		$digits = preg_replace( '/[^0-9]/', '', $phone_norm );
-		$ta_key = mb_strtolower( $title . '|' . $address );
-		if ( $digits && isset( $seen_phones[ $digits ] ) ) {
+		$has_place = ( '' !== $entry['street'] && '' !== $entry['house'] );
+		// Ключ дубля: «название|улица|дом» (база южка), иначе «название|адрес» (D41).
+		$ta_key = mb_strtolower(
+			$title . '|' . ( $has_place ? $entry['street'] . '|' . $entry['house'] : $address )
+		);
+		if ( ! $has_place && $digits && isset( $seen_phones[ $digits ] ) ) {
 			$dup = 'дубликат по телефону (в файле)';
 		} elseif ( isset( $seen_ta[ $ta_key ] ) ) {
 			$dup = 'дубликат по названию и адресу (в файле)';
 		} else {
-			$dup = bc_import_find_duplicate( $phone_norm, $title, $address );
+			// Для карточек с улицей+домом телефон не признак дубля: это филиалы сети.
+			$dup = bc_import_find_duplicate( $has_place ? '' : $phone_norm, $title, $address );
 		}
+		// Регистрируем ключи и для пропущенных строк: иначе повторный прогон
+		// создаст «второй» вариант адреса того же дубля.
+		$seen_phones[ $digits ] = 1;
+		$seen_ta[ $ta_key ]     = 1;
 		if ( '' !== $dup ) {
 			$report['duplicates'][] = array( 'line' => $line, 'reason' => $dup . ': ' . $title );
 			continue;
 		}
-		$seen_phones[ $digits ] = 1;
-		$seen_ta[ $ta_key ]     = 1;
 
 		if ( $dry_run ) {
 			$report['created']++;
@@ -246,6 +267,22 @@ function bc_import_run( $path, $dry_run = false, $status = 'draft' ) {
 		update_field( 'field_bc_phone', $entry['phone'], $post_id );
 		update_field( 'field_bc_address', $entry['address'], $post_id );
 		update_field( 'field_bc_website', $entry['website'], $post_id );
+		foreach ( array(
+			'street'   => 'bc_street',
+			'house'    => 'bc_house',
+			'floor'    => 'bc_floor',
+			'keywords' => 'bc_keywords',
+			'whatsapp' => 'bc_whatsapp',
+			'telegram' => 'bc_telegram',
+			'vk'       => 'bc_vk',
+		) as $src => $meta ) {
+			if ( '' !== $entry[ $src ] ) {
+				update_post_meta( $post_id, $meta, $entry[ $src ] );
+			}
+		}
+		if ( in_array( $entry['plan'], array( 'free', 'standard', 'premium', 'trial' ), true ) ) {
+			update_post_meta( $post_id, 'bc_plan', $entry['plan'] );
+		}
 		if ( '' !== $entry['source_category'] ) {
 			update_post_meta( $post_id, 'bc_source_category', $entry['source_category'] );
 		}
